@@ -33,6 +33,15 @@ final class AppEnvironment {
     /// Programmatic navigation across tabs.
     let navigationRouter: NavigationRouter
 
+    /// StoreKit 2 課金管理（クレジットパック＆サブスクリプション）
+    let storeKitManager: StoreKitManager
+
+    /// 日次ローカル通知管理
+    let notificationManager: NotificationManager
+
+    /// 連続利用日数（ストリーク）の追跡
+    let streakManager: StreakManager
+
     // MARK: - Onboarding State
 
     /// `true` after the user completes the first-run onboarding flow.
@@ -53,6 +62,9 @@ final class AppEnvironment {
         self.featureFlags = FeatureFlagManager()
         self.pricingConfig = PricingConfig()
         self.navigationRouter = NavigationRouter()
+        self.storeKitManager = StoreKitManager()
+        self.notificationManager = NotificationManager()
+        self.streakManager = StreakManager()
         self.isOnboardingComplete = UserDefaults.standard.bool(forKey: Keys.onboardingComplete)
     }
 
@@ -66,6 +78,11 @@ final class AppEnvironment {
             hasBloodType: userProfileService.currentProfile?.bloodType != nil,
             consentedToAI: userProfileService.currentProfile?.hasConsentedToAI ?? false
         ))
+
+        // オンボーディング完了後に通知許可をリクエスト
+        Task {
+            await notificationManager.requestAuthorization()
+        }
     }
 
     /// Resets onboarding (useful during development / testing).

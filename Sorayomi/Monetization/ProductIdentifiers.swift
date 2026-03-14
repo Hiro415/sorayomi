@@ -17,6 +17,20 @@ enum ProductIdentifiers {
     /// 24クレジットパック
     static let pack24 = "com.sorayomi.credits.pack24"
 
+    // MARK: - Subscriptions
+
+    /// 週間無制限パス
+    static let weeklyUnlimited = "com.sorayomi.sub.weekly"
+
+    /// 月間無制限パス
+    static let monthlyUnlimited = "com.sorayomi.sub.monthly"
+
+    /// 全サブスクリプションのプロダクトID配列
+    static let allSubscriptions: [String] = [
+        weeklyUnlimited,
+        monthlyUnlimited
+    ]
+
     // MARK: - All Packs
 
     /// 全クレジットパックのプロダクトID配列
@@ -25,6 +39,9 @@ enum ProductIdentifiers {
         pack12,
         pack24
     ]
+
+    /// 全プロダクトID
+    static let allProducts: [String] = allSubscriptions + allCreditPacks
 
     // MARK: - Credit Mapping
 

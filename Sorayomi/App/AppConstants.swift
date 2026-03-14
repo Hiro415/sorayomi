@@ -46,18 +46,15 @@ enum AppConstants {
 
     static let longAnimationDuration: Double = 0.6
 
-    // MARK: - AI API (開発用)
+    // MARK: - Firebase Cloud Functions
 
-    /// Anthropic Claude API キー
-    /// ⚠️ 本番では Firebase Cloud Functions 経由に移行すること。
-    /// アプリバイナリへの直接埋め込みはセキュリティリスクです。
-    static let anthropicAPIKey: String = "" // ← ここに開発用APIキーを設定
+    /// Firebase Cloud Functions のベースURL
+    /// デプロイ後に `https://<region>-<project>.cloudfunctions.net` に設定する。
+    /// 空文字の場合はモック応答にフォールバック（開発用）。
+    static let cloudFunctionBaseURL: String = "" // ← デプロイ後に設定
 
-    /// 使用する Claude モデル
-    static let anthropicModel: String = "claude-sonnet-4-20250514"
-
-    /// AI応答の最大トークン数
-    static let anthropicMaxTokens: Int = 1024
+    /// Cloud Function 名
+    static let cloudFunctionName: String = "generateReading"
 
     /// 鑑定ローディング最低表示時間（秒）
     static let minimumLoadingDuration: TimeInterval = 5.0

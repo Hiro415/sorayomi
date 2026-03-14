@@ -43,6 +43,8 @@ final class ReadingViewModel {
     var userInput: String = ""
     var isGenerating = false
     var showPaywall = false
+    var showShareSheet = false
+    var lastReadingText: String = ""
     var errorMessage: String?
     var sessionStage: ReadingSessionStage = .idle
 
@@ -80,7 +82,7 @@ final class ReadingViewModel {
     func startReading(system: FortuneSystem, env: AppEnvironment) async {
         guard !isGenerating else { return }
 
-        if system.creditCost > 0 && !env.creditWalletService.canAfford(system.creditCost) {
+        if system.creditCost > 0 && !env.creditWalletService.canAfford(system.creditCost, isSubscribed: env.storeKitManager.isSubscribed) {
             showPaywall = true
             return
         }
@@ -162,7 +164,7 @@ final class ReadingViewModel {
 
         do {
             if system.creditCost > 0 {
-                try await env.creditWalletService.deductCredits(system.creditCost)
+                try await env.creditWalletService.deductCredits(system.creditCost, isSubscribed: env.storeKitManager.isSubscribed)
             }
 
             let startTime = Date()
@@ -180,6 +182,7 @@ final class ReadingViewModel {
             }
 
             messages.append(.assistantMessage(response, presentation: .readingResult))
+            lastReadingText = response
             sessionStage = .completed
 
             env.analyticsService.track(.readingCompleted(

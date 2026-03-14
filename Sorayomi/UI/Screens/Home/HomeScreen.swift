@@ -12,6 +12,7 @@ struct HomeScreen: View {
             ScrollView {
                 VStack(spacing: Spacing.lg) {
                     welcomeHero
+                    streakCard
                     primaryActions
                     todaySection
                     shortcutDeck
@@ -37,6 +38,7 @@ struct HomeScreen: View {
         }
         .task {
             await viewModel.loadDailyFortune(env: env)
+            env.streakManager.recordActivity()
         }
     }
 
@@ -64,6 +66,52 @@ struct HomeScreen: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .sorayomiPanel(tone: .night, padding: Spacing.lg)
+    }
+
+    private var streakCard: some View {
+        HStack(spacing: Spacing.sm) {
+            Image(systemName: "flame.fill")
+                .font(.title2)
+                .foregroundStyle(
+                    env.streakManager.currentStreak > 0
+                        ? Color.orange
+                        : Color.sorayomiTextSecondary.opacity(0.5)
+                )
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(env.streakManager.streakDisplayText)
+                    .font(SorayomiTypography.headline)
+                    .foregroundStyle(Color.sorayomiTextPrimary)
+
+                if let next = env.streakManager.nextMilestoneInfo {
+                    Text("あと\(next.days - env.streakManager.currentStreak)日で+\(next.credits)クレジット")
+                        .font(SorayomiTypography.caption)
+                        .foregroundStyle(Color.sorayomiTextSecondary)
+                }
+            }
+
+            Spacer()
+
+            if env.streakManager.currentStreak > 0 {
+                Text("\(env.streakManager.currentStreak)")
+                    .font(SorayomiTypography.metricNumber)
+                    .foregroundStyle(Color.orange)
+            }
+        }
+        .sorayomiPanel(tone: .elevated, padding: Spacing.md)
+        .alert(
+            "ストリーク報酬",
+            isPresented: Binding(
+                get: { env.streakManager.pendingMilestoneCredits != nil },
+                set: { if !$0 { env.streakManager.clearPendingMilestone() } }
+            )
+        ) {
+            Button("受け取る") { env.streakManager.clearPendingMilestone() }
+        } message: {
+            if let credits = env.streakManager.pendingMilestoneCredits {
+                Text("\(env.streakManager.currentStreak)日連続達成！\(credits)クレジットを獲得しました 🎉")
+            }
+        }
     }
 
     private var primaryActions: some View {

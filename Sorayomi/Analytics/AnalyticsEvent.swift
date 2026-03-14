@@ -83,6 +83,31 @@ enum AnalyticsEvent {
         classification: String
     )
 
+    // MARK: - Engagement
+
+    /// ストリーク更新
+    case streakUpdated(
+        currentStreak: Int,
+        longestStreak: Int
+    )
+    /// ストリークマイルストーン達成
+    case streakMilestoneReached(
+        days: Int,
+        creditsAwarded: Int
+    )
+    /// 鑑定結果をシェア
+    case readingShared(
+        system: String
+    )
+    /// 通知を有効化
+    case notificationsEnabled
+    /// 通知を無効化
+    case notificationsDisabled
+    /// サブスクリプション開始
+    case subscriptionStarted(
+        productId: String
+    )
+
     // MARK: - Navigation
 
     /// タブを切り替え
@@ -109,6 +134,12 @@ enum AnalyticsEvent {
         case .monetizationPurchaseCompleted:  return "purchase_completed"
         case .monetizationPurchaseFailed:     return "purchase_failed"
         case .monetizationPurchaseRestored:   return "purchase_restored"
+        case .streakUpdated:                   return "streak_updated"
+        case .streakMilestoneReached:          return "streak_milestone_reached"
+        case .readingShared:                   return "reading_shared"
+        case .notificationsEnabled:            return "notifications_enabled"
+        case .notificationsDisabled:           return "notifications_disabled"
+        case .subscriptionStarted:             return "subscription_started"
         case .safetyCrisisDetected:           return "crisis_detected"
         case .safetySafeRefusalShown:         return "safe_refusal_shown"
         case .navigationTabSwitched:          return "tab_switched"
@@ -183,6 +214,30 @@ enum AnalyticsEvent {
 
         case .monetizationPurchaseRestored:
             return [:]
+
+        case .streakUpdated(let currentStreak, let longestStreak):
+            return [
+                "current_streak": String(currentStreak),
+                "longest_streak": String(longestStreak)
+            ]
+
+        case .streakMilestoneReached(let days, let creditsAwarded):
+            return [
+                "days": String(days),
+                "credits_awarded": String(creditsAwarded)
+            ]
+
+        case .readingShared(let system):
+            return ["system": system]
+
+        case .notificationsEnabled:
+            return [:]
+
+        case .notificationsDisabled:
+            return [:]
+
+        case .subscriptionStarted(let productId):
+            return ["product_id": productId]
 
         case .safetyCrisisDetected(let crisisType):
             return ["crisis_type": crisisType]

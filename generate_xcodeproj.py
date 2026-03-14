@@ -37,7 +37,7 @@ def collect_swift_files(root_dir: str):
 
 def collect_resource_files(root_dir: str):
     """Collect non-swift resource files (plist, json, etc.)."""
-    resource_exts = {'.plist', '.json', '.storekit', '.xcassets'}
+    resource_exts = {'.plist', '.json', '.storekit', '.xcassets', '.xcprivacy', '.entitlements'}
     resources = []
     for dirpath, dirnames, filenames in os.walk(root_dir):
         dirnames[:] = [d for d in dirnames if not d.startswith('.')]

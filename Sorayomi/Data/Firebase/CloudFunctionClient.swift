@@ -2,14 +2,14 @@ import Foundation
 
 // MARK: - CloudFunctionError
 
-/// Cloud Function / AI API 呼び出し時のエラー
+/// Cloud Function 呼び出し時のエラー
 enum CloudFunctionError: Error, LocalizedError {
     case networkError
     case invalidResponse
     case rateLimited
     case serverError(String)
     case notAvailable
-    case apiKeyMissing
+    case notConfigured
     case timeout
 
     var errorDescription: String? {
@@ -24,8 +24,8 @@ enum CloudFunctionError: Error, LocalizedError {
             return "サーバーエラー: \(message)"
         case .notAvailable:
             return "サービスが一時的に利用できません"
-        case .apiKeyMissing:
-            return "APIキーが設定されていません"
+        case .notConfigured:
+            return "サービスが設定されていません"
         case .timeout:
             return "リクエストがタイムアウトしました"
         }
@@ -34,13 +34,10 @@ enum CloudFunctionError: Error, LocalizedError {
 
 // MARK: - CloudFunctionClient
 
-/// Anthropic Claude API を呼び出す AI 鑑定生成クライアント
+/// Firebase Cloud Functions 経由で OpenAI GPT-4o-mini を呼び出す AI 鑑定生成クライアント
 ///
-/// APIキーが設定されている場合は Anthropic Messages API を直接呼び出し、
-/// 設定されていない場合はモック応答にフォールバックする。
-///
-/// ⚠️ 本番では Firebase Cloud Functions 経由に移行すること。
-/// アプリバイナリへの直接 API キー埋め込みはセキュリティリスクです。
+/// Cloud Function URL が設定されている場合はサーバー経由でAI生成を行い、
+/// 未設定の場合はモック応答にフォールバックする（開発用）。
 final class CloudFunctionClient: @unchecked Sendable {
 
     // MARK: - Singleton
@@ -51,9 +48,9 @@ final class CloudFunctionClient: @unchecked Sendable {
 
     private let session: URLSession
 
-    /// APIキーが設定されているかどうか
+    /// Cloud Function が設定されているかどうか
     var isAPIConfigured: Bool {
-        !AppConstants.anthropicAPIKey.isEmpty
+        !AppConstants.cloudFunctionBaseURL.isEmpty
     }
 
     // MARK: - Init
@@ -80,16 +77,15 @@ final class CloudFunctionClient: @unchecked Sendable {
         system: FortuneSystem,
         conversationHistory: [(role: String, content: String)] = []
     ) async throws -> String {
-        // APIキーが設定されている場合は実APIを呼び出す
         if isAPIConfigured {
-            return try await callAnthropicAPI(
+            return try await callCloudFunction(
                 systemPrompt: systemPrompt,
                 userPrompt: userPrompt,
                 conversationHistory: conversationHistory
             )
         }
 
-        // APIキー未設定時はモック応答にフォールバック
+        // Cloud Function 未設定時はモック応答にフォールバック
         let delay = Double.random(in: 2.0...4.0)
         try await Task.sleep(for: .seconds(delay))
         return selectMockReading(
@@ -99,46 +95,33 @@ final class CloudFunctionClient: @unchecked Sendable {
         )
     }
 
-    // MARK: - Anthropic API Call
+    // MARK: - Cloud Function Call
 
-    /// Anthropic Messages API を直接呼び出す
-    private func callAnthropicAPI(
+    /// Firebase Cloud Functions HTTPS エンドポイントを呼び出す
+    private func callCloudFunction(
         systemPrompt: String,
         userPrompt: String,
         conversationHistory: [(role: String, content: String)]
     ) async throws -> String {
-        guard let url = URL(string: "https://api.anthropic.com/v1/messages") else {
-            throw CloudFunctionError.invalidResponse
+        let baseURL = AppConstants.cloudFunctionBaseURL.trimmingCharacters(in: .init(charactersIn: "/"))
+        let functionName = AppConstants.cloudFunctionName
+
+        guard let url = URL(string: "\(baseURL)/\(functionName)") else {
+            throw CloudFunctionError.notConfigured
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue(AppConstants.anthropicAPIKey, forHTTPHeaderField: "x-api-key")
-        request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
-        request.setValue("application/json", forHTTPHeaderField: "content-type")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        // メッセージ配列を構築
-        var messages: [[String: String]] = []
-
-        // 過去の会話履歴がある場合（フォローアップ）
-        for entry in conversationHistory {
-            messages.append([
-                "role": entry.role,
-                "content": entry.content
-            ])
+        let historyArray = conversationHistory.map { entry in
+            ["role": entry.role, "content": entry.content]
         }
 
-        // 今回のユーザーメッセージ
-        messages.append([
-            "role": "user",
-            "content": userPrompt
-        ])
-
         let body: [String: Any] = [
-            "model": AppConstants.anthropicModel,
-            "max_tokens": AppConstants.anthropicMaxTokens,
-            "system": systemPrompt,
-            "messages": messages
+            "systemPrompt": systemPrompt,
+            "userPrompt": userPrompt,
+            "conversationHistory": historyArray
         ]
 
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
@@ -159,9 +142,7 @@ final class CloudFunctionClient: @unchecked Sendable {
 
         switch httpResponse.statusCode {
         case 200:
-            break // Success
-        case 401:
-            throw CloudFunctionError.apiKeyMissing
+            break
         case 429:
             throw CloudFunctionError.rateLimited
         case 500...599:
@@ -172,11 +153,8 @@ final class CloudFunctionClient: @unchecked Sendable {
             throw CloudFunctionError.serverError("HTTP \(httpResponse.statusCode): \(errorBody)")
         }
 
-        // レスポンスからテキストを抽出
         guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let content = json["content"] as? [[String: Any]],
-              let firstBlock = content.first,
-              let text = firstBlock["text"] as? String else {
+              let text = json["text"] as? String else {
             throw CloudFunctionError.invalidResponse
         }
 

@@ -38,8 +38,16 @@ struct SettingsScreen: View {
             sectionHeader(title: "一般", icon: "gearshape")
 
             VStack(spacing: 0) {
-                // Notifications toggle (placeholder for future)
-                Toggle(isOn: $viewModel.notificationsEnabled) {
+                // Notifications toggle
+                Toggle(isOn: Binding(
+                    get: { env.notificationManager.isEnabled },
+                    set: { newValue in
+                        env.notificationManager.isEnabled = newValue
+                        if newValue {
+                            Task { await env.notificationManager.requestAuthorization() }
+                        }
+                    }
+                )) {
                     settingsLabel(title: "通知", icon: "bell", color: .sorayomiAccent)
                 }
                 .tint(Color.sorayomiPrimary)

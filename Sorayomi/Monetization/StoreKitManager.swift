@@ -8,6 +8,7 @@ enum PurchaseState: Equatable {
     case idle
     case purchasing
     case success(credits: Int)
+    case subscribedSuccess
     case failed(Error)
 
     static func == (lhs: PurchaseState, rhs: PurchaseState) -> Bool {
@@ -18,6 +19,8 @@ enum PurchaseState: Equatable {
             return true
         case (.success(let l), .success(let r)):
             return l == r
+        case (.subscribedSuccess, .subscribedSuccess):
+            return true
         case (.failed, .failed):
             return true
         default:
@@ -29,15 +32,21 @@ enum PurchaseState: Equatable {
 // MARK: - StoreKitManager
 
 /// StoreKit 2 を使った App Store 課金管理
-/// プロダクトの読み込み、購入、トランザクション監視を統括する。
+/// プロダクトの読み込み、購入、サブスクリプション、トランザクション監視を統括する。
 @Observable
 @MainActor
 final class StoreKitManager {
 
     // MARK: - Properties
 
-    /// 利用可能なプロダクト一覧
+    /// 利用可能なクレジットパック
     private(set) var products: [Product] = []
+
+    /// 利用可能なサブスクリプション
+    private(set) var subscriptions: [Product] = []
+
+    /// サブスクリプションが有効かどうか
+    private(set) var isSubscribed: Bool = false
 
     /// 現在の購入状態
     private(set) var purchaseState: PurchaseState = .idle
@@ -48,7 +57,6 @@ final class StoreKitManager {
     // MARK: - Init
 
     init() {
-        // トランザクション監視を開始
         listenForTransactions()
     }
 
@@ -58,30 +66,69 @@ final class StoreKitManager {
     func loadProducts() async {
         do {
             let storeProducts = try await Product.products(
-                for: Set(ProductIdentifiers.allCreditPacks)
+                for: Set(ProductIdentifiers.allProducts)
             )
-            // 価格順にソート
-            products = storeProducts.sorted { $0.price < $1.price }
+
+            // クレジットパックとサブスクリプションを分離
+            var creditPacks: [Product] = []
+            var subs: [Product] = []
+
+            for product in storeProducts {
+                if ProductIdentifiers.allSubscriptions.contains(product.id) {
+                    subs.append(product)
+                } else {
+                    creditPacks.append(product)
+                }
+            }
+
+            products = creditPacks.sorted { $0.price < $1.price }
+            subscriptions = subs.sorted { $0.price < $1.price }
 
             #if DEBUG
-            print("[StoreKitManager] Loaded \(products.count) products")
-            for product in products {
-                print("  - \(product.id): \(product.displayPrice)")
-            }
+            print("[StoreKitManager] Loaded \(products.count) credit packs, \(subscriptions.count) subscriptions")
             #endif
         } catch {
             #if DEBUG
             print("[StoreKitManager] Failed to load products: \(error.localizedDescription)")
             #endif
             products = []
+            subscriptions = []
         }
+
+        // サブスクリプション状態を確認
+        await checkSubscriptionStatus()
+    }
+
+    // MARK: - Subscription Status
+
+    /// 現在のサブスクリプション状態を確認
+    func checkSubscriptionStatus() async {
+        var hasActiveSubscription = false
+
+        for await result in Transaction.currentEntitlements {
+            do {
+                let transaction = try ReceiptValidator.verify(result)
+                if ProductIdentifiers.allSubscriptions.contains(transaction.productID) {
+                    hasActiveSubscription = true
+                    break
+                }
+            } catch {
+                continue
+            }
+        }
+
+        isSubscribed = hasActiveSubscription
+
+        #if DEBUG
+        print("[StoreKitManager] Subscription status: \(isSubscribed ? "active" : "inactive")")
+        #endif
     }
 
     // MARK: - Purchase
 
     /// プロダクトを購入する
     /// - Parameter product: 購入するプロダクト
-    /// - Returns: 付与されるクレジット数（購入成功時）、nil（キャンセル時）
+    /// - Returns: 付与されるクレジット数（クレジットパック購入成功時）、nil（キャンセル時）
     @discardableResult
     func purchase(_ product: Product) async -> Int? {
         purchaseState = .purchasing
@@ -92,11 +139,20 @@ final class StoreKitManager {
             switch result {
             case .success(let verification):
                 let transaction = try ReceiptValidator.verify(verification)
-                let credits = ProductIdentifiers.creditsFor(productId: product.id)
-
-                // トランザクションを完了済みにする
                 await transaction.finish()
 
+                // サブスクリプション購入の場合
+                if ProductIdentifiers.allSubscriptions.contains(product.id) {
+                    isSubscribed = true
+                    purchaseState = .subscribedSuccess
+                    #if DEBUG
+                    print("[StoreKitManager] Subscription activated: \(product.id)")
+                    #endif
+                    return nil
+                }
+
+                // クレジットパック購入の場合
+                let credits = ProductIdentifiers.creditsFor(productId: product.id)
                 purchaseState = .success(credits: credits)
 
                 #if DEBUG
@@ -107,16 +163,10 @@ final class StoreKitManager {
 
             case .pending:
                 purchaseState = .idle
-                #if DEBUG
-                print("[StoreKitManager] Purchase pending: \(product.id)")
-                #endif
                 return nil
 
             case .userCancelled:
                 purchaseState = .idle
-                #if DEBUG
-                print("[StoreKitManager] Purchase cancelled by user: \(product.id)")
-                #endif
                 return nil
 
             @unknown default:
@@ -138,6 +188,7 @@ final class StoreKitManager {
     func restorePurchases() async {
         do {
             try await AppStore.sync()
+            await checkSubscriptionStatus()
             #if DEBUG
             print("[StoreKitManager] Purchases restored successfully")
             #endif
@@ -158,17 +209,16 @@ final class StoreKitManager {
             for await result in Transaction.updates {
                 do {
                     let transaction = try ReceiptValidator.verify(result)
-                    let credits = ProductIdentifiers.creditsFor(productId: transaction.productID)
 
-                    #if DEBUG
-                    print("[StoreKitManager] Transaction update: \(transaction.productID)")
-                    #endif
-
-                    // トランザクションを完了済みにする
                     await transaction.finish()
 
-                    if credits > 0 {
-                        await self?.applyTransactionUpdate(credits: credits)
+                    if ProductIdentifiers.allSubscriptions.contains(transaction.productID) {
+                        await self?.handleSubscriptionUpdate()
+                    } else {
+                        let credits = ProductIdentifiers.creditsFor(productId: transaction.productID)
+                        if credits > 0 {
+                            await self?.applyTransactionUpdate(credits: credits)
+                        }
                     }
                 } catch {
                     #if DEBUG
@@ -191,7 +241,18 @@ final class StoreKitManager {
         products.first { $0.id == productId }
     }
 
+    /// サブスクリプションの中から特定のプロダクトを取得
+    func subscription(for productId: String) -> Product? {
+        subscriptions.first { $0.id == productId }
+    }
+
     private func applyTransactionUpdate(credits: Int) {
         purchaseState = .success(credits: credits)
+    }
+
+    private func handleSubscriptionUpdate() {
+        Task {
+            await checkSubscriptionStatus()
+        }
     }
 }

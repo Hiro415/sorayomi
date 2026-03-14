@@ -54,9 +54,9 @@ enum FortuneSystem: String, Codable, CaseIterable, Identifiable {
 
     var tier: FortuneTier {
         switch self {
-        case .omikuji, .horoscope, .bloodType, .birthdayPersonality, .rokuyo:
+        case .omikuji, .rokuyo:
             return .daily
-        case .tarot:
+        case .horoscope, .bloodType, .birthdayPersonality, .tarot:
             return .standard
         case .numerology, .nineStarKi:
             return .premium
@@ -72,8 +72,12 @@ enum FortuneSystem: String, Codable, CaseIterable, Identifiable {
     }
 
     /// Whether this system requires AI generation for a full reading.
+    /// Omikuji and rokuyo use local calculators only (saves API costs).
     var requiresAIGeneration: Bool {
-        true
+        switch self {
+        case .omikuji, .rokuyo: return false
+        default: return true
+        }
     }
 
     /// Whether this system is available as a free daily snapshot on the home screen.

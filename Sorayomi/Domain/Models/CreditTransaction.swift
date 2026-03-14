@@ -137,8 +137,8 @@ struct CreditTransaction: Codable, Identifiable {
         id: "txn-mock-001",
         userId: "mock-user-001",
         type: .purchase,
-        amount: 10,
-        productId: "com.sorayomi.credits.10",
+        amount: 12,
+        productId: "com.sorayomi.credits.pack12",
         readingId: nil,
         description: nil,
         timestamp: Date().addingTimeInterval(-3600)

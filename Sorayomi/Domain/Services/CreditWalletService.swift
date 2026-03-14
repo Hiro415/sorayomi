@@ -59,8 +59,12 @@ final class CreditWalletService {
     // MARK: - Affordability Check
 
     /// 指定コストを支払えるかどうか
-    func canAfford(_ creditsCost: Int) -> Bool {
-        totalAvailable >= creditsCost
+    /// - Parameters:
+    ///   - creditsCost: 必要なクレジット数
+    ///   - isSubscribed: サブスクリプションが有効な場合は常に `true` を返す
+    func canAfford(_ creditsCost: Int, isSubscribed: Bool = false) -> Bool {
+        if isSubscribed { return true }
+        return totalAvailable >= creditsCost
     }
 
     // MARK: - Deduction
@@ -69,7 +73,16 @@ final class CreditWalletService {
     /// - Parameters:
     ///   - amount: 消費クレジット数
     ///   - readingId: 関連する鑑定ID（任意）
-    func deductCredits(_ amount: Int, readingId: String? = nil) async throws {
+    ///   - isSubscribed: サブスクリプション有効時はクレジットを消費しない
+    func deductCredits(_ amount: Int, readingId: String? = nil, isSubscribed: Bool = false) async throws {
+        // サブスクリプション有効時はクレジットを消費しない
+        if isSubscribed {
+            #if DEBUG
+            print("[CreditWalletService] Subscriber — skipping credit deduction of \(amount)")
+            #endif
+            return
+        }
+
         guard let userId = authService.currentUserId else {
             throw CreditError.walletNotFound
         }

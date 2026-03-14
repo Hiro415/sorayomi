@@ -21,12 +21,33 @@ struct ReadingScreen: View {
         }
         .navigationTitle(viewModel.selectedSystem == nil ? "" : "対話鑑定")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $viewModel.showShareSheet) {
+            if let system = viewModel.selectedSystem {
+                let shareText = ReadingShareService.shareText(
+                    systemName: system.japaneseName,
+                    readingText: viewModel.lastReadingText
+                )
+                ShareSheet(items: [shareText])
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                CreditBadge(
-                    totalCredits: env.creditWalletService.totalAvailable,
-                    freeCredits: env.creditWalletService.freeCreditsRemaining
-                )
+                HStack(spacing: Spacing.xs) {
+                    if viewModel.sessionStage == .completed {
+                        Button {
+                            viewModel.showShareSheet = true
+                        } label: {
+                            Image(systemName: "square.and.arrow.up")
+                                .font(.callout)
+                                .foregroundStyle(Color.sorayomiPrimary)
+                        }
+                    }
+
+                    CreditBadge(
+                        totalCredits: env.creditWalletService.totalAvailable,
+                        freeCredits: env.creditWalletService.freeCreditsRemaining
+                    )
+                }
             }
 
             if viewModel.selectedSystem != nil {
@@ -48,7 +69,8 @@ struct ReadingScreen: View {
         .sheet(isPresented: $viewModel.showPaywall) {
             PaywallSheet(
                 isPresented: $viewModel.showPaywall,
-                creditsNeeded: viewModel.selectedSystem?.creditCost ?? 1
+                creditsNeeded: viewModel.selectedSystem?.creditCost ?? 1,
+                isSubscribed: env.storeKitManager.isSubscribed
             )
         }
         .onAppear {

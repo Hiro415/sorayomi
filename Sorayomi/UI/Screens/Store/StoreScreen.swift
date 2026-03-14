@@ -15,6 +15,7 @@ struct StoreScreen: View {
                 VStack(spacing: Spacing.lg) {
                     purchaseHero
                     balanceCard
+                    subscriptionSection
                     benefitSection
                     usageGuide
                     productsSection
@@ -28,20 +29,31 @@ struct StoreScreen: View {
         .navigationTitle("クレジットストア")
         .navigationBarTitleDisplayMode(.large)
         .task {
-            await viewModel.loadProducts()
+            await viewModel.loadProducts(storeKitManager: env.storeKitManager)
         }
         .alert(
             "購入完了",
             isPresented: Binding(
                 get: { viewModel.purchasedCredits != nil },
-                set: { if !$0 { viewModel.dismissPurchaseConfirmation() } }
+                set: { if !$0 { viewModel.dismissPurchaseConfirmation(storeKitManager: env.storeKitManager) } }
             )
         ) {
-            Button("OK") { viewModel.dismissPurchaseConfirmation() }
+            Button("OK") { viewModel.dismissPurchaseConfirmation(storeKitManager: env.storeKitManager) }
         } message: {
             if let credits = viewModel.purchasedCredits {
                 Text("\(credits)クレジットが追加されました。すぐに本格鑑定へ進めます。")
             }
+        }
+        .alert(
+            "無制限パス有効",
+            isPresented: Binding(
+                get: { viewModel.didSubscribe },
+                set: { if !$0 { viewModel.dismissPurchaseConfirmation(storeKitManager: env.storeKitManager) } }
+            )
+        ) {
+            Button("OK") { viewModel.dismissPurchaseConfirmation(storeKitManager: env.storeKitManager) }
+        } message: {
+            Text("すべての鑑定がクレジット不要で利用できます。")
         }
         .alert(
             "エラー",
@@ -121,6 +133,163 @@ struct StoreScreen: View {
                 )
         }
         .sorayomiPanel(tone: .spotlight)
+    }
+
+    private var subscriptionSection: some View {
+        Group {
+            if viewModel.isSubscribed {
+                // Active subscription badge
+                HStack(spacing: Spacing.sm) {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.title2)
+                        .foregroundStyle(Color.sorayomiSuccess)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("無制限パス有効")
+                            .font(SorayomiTypography.headline)
+                            .foregroundStyle(Color.sorayomiTextPrimary)
+                        Text("すべての鑑定がクレジット不要で利用できます")
+                            .font(SorayomiTypography.caption)
+                            .foregroundStyle(Color.sorayomiTextSecondary)
+                    }
+
+                    Spacer()
+                }
+                .sorayomiPanel(tone: .elevated)
+            } else {
+                // Subscription upsell
+                VStack(alignment: .leading, spacing: Spacing.sm) {
+                    sectionHeader(
+                        eyebrow: "おすすめ",
+                        title: "無制限パス",
+                        subtitle: "クレジットを気にせず、すべての鑑定が使い放題になります。"
+                    )
+
+                    // Weekly
+                    if let weekly = viewModel.subscriptions.first(where: { $0.id == ProductIdentifiers.weeklyUnlimited }) {
+                        Button {
+                            Task { await viewModel.purchaseSubscription(product: weekly, env: env) }
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    HStack(spacing: Spacing.xxs) {
+                                        Text("週間パス")
+                                            .font(SorayomiTypography.headline)
+                                            .foregroundStyle(.white)
+                                        Text("おすすめ")
+                                            .font(.caption2)
+                                            .fontWeight(.bold)
+                                            .foregroundStyle(.white)
+                                            .padding(.horizontal, 6)
+                                            .padding(.vertical, 2)
+                                            .background(Color.white.opacity(0.25))
+                                            .clipShape(Capsule())
+                                    }
+                                    Text("7日間すべての鑑定が無制限")
+                                        .font(SorayomiTypography.caption)
+                                        .foregroundStyle(Color.white.opacity(0.8))
+                                }
+
+                                Spacer()
+
+                                Text(weekly.displayPrice + "/週")
+                                    .font(SorayomiTypography.title3)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.white)
+                            }
+                            .padding(Spacing.md)
+                            .background(
+                                LinearGradient(
+                                    colors: [.sorayomiPrimary, .sorayomiAccent],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium))
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(viewModel.isPurchasing)
+                    }
+
+                    // Monthly
+                    if let monthly = viewModel.subscriptions.first(where: { $0.id == ProductIdentifiers.monthlyUnlimited }) {
+                        Button {
+                            Task { await viewModel.purchaseSubscription(product: monthly, env: env) }
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("月間パス")
+                                        .font(SorayomiTypography.headline)
+                                        .foregroundStyle(Color.sorayomiTextPrimary)
+                                    Text("30日間すべての鑑定が無制限")
+                                        .font(SorayomiTypography.caption)
+                                        .foregroundStyle(Color.sorayomiTextSecondary)
+                                }
+
+                                Spacer()
+
+                                Text(monthly.displayPrice + "/月")
+                                    .font(SorayomiTypography.title3)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(Color.sorayomiPrimary)
+                            }
+                            .padding(Spacing.md)
+                            .background(Color.sorayomiSurface)
+                            .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium)
+                                    .stroke(Color.sorayomiPrimary.opacity(0.3), lineWidth: 1.5)
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(viewModel.isPurchasing)
+                    }
+
+                    // Fallback when StoreKit products aren't loaded
+                    if viewModel.subscriptions.isEmpty && !viewModel.isLoading {
+                        fallbackSubscriptionCard(
+                            title: "週間パス",
+                            detail: "7日間すべての鑑定が無制限",
+                            price: "¥480/週",
+                            isHighlighted: true
+                        )
+                        fallbackSubscriptionCard(
+                            title: "月間パス",
+                            detail: "30日間すべての鑑定が無制限",
+                            price: "¥1,480/月",
+                            isHighlighted: false
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private func fallbackSubscriptionCard(title: String, detail: String, price: String, isHighlighted: Bool) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(SorayomiTypography.headline)
+                    .foregroundStyle(isHighlighted ? .white : Color.sorayomiTextPrimary)
+                Text(detail)
+                    .font(SorayomiTypography.caption)
+                    .foregroundStyle(isHighlighted ? Color.white.opacity(0.8) : Color.sorayomiTextSecondary)
+            }
+
+            Spacer()
+
+            Text(price)
+                .font(SorayomiTypography.title3)
+                .fontWeight(.bold)
+                .foregroundStyle(isHighlighted ? .white : Color.sorayomiPrimary)
+        }
+        .padding(Spacing.md)
+        .background(
+            isHighlighted
+                ? AnyShapeStyle(LinearGradient(colors: [.sorayomiPrimary, .sorayomiAccent], startPoint: .leading, endPoint: .trailing))
+                : AnyShapeStyle(Color.sorayomiSurface)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium))
     }
 
     private var benefitSection: some View {
@@ -332,7 +501,7 @@ struct StoreScreen: View {
             )
 
             Button {
-                Task { await viewModel.restorePurchases() }
+                Task { await viewModel.restorePurchases(storeKitManager: env.storeKitManager) }
             } label: {
                 Text("購入を復元")
                     .sorayomiSecondaryButton()
@@ -342,6 +511,7 @@ struct StoreScreen: View {
             VStack(alignment: .leading, spacing: Spacing.xxs) {
                 Text("※ クレジットは消耗型のアプリ内課金です")
                 Text("※ 未使用分の払い戻しはできません")
+                Text("※ サブスクリプションは自動更新されます")
                 Text("※ 価格は税込みです")
             }
             .font(SorayomiTypography.caption)
