@@ -14,7 +14,7 @@ enum ReadingSessionStage {
         case .hearing:
             return "今の状況やお気持ちを、できるだけ具体的に入力してください"
         case .completed:
-            return "追加で聞きたいことを入力..."
+            return "さらに深掘り（1クレジット消費）..."
         }
     }
 
@@ -48,9 +48,25 @@ final class ReadingViewModel {
     var errorMessage: String?
     var sessionStage: ReadingSessionStage = .idle
 
+    // タロット専用
+    var drawnTarotCards: [DrawnTarotCard] = []
+    var showTarotReveal = false
+
+    // 血液型占い専用
+    var selectedBloodTypeMode: BloodTypeMode?
+    var partnerBloodType: BloodType?
+    var showBloodTypeModePicker = false
+    var showBloodTypeReveal = false
+    var bloodTypeDailyFortune: BloodTypeDailyFortune?
+    var bloodTypeRanking: BloodTypeRanking?
+    var bloodTypeCompatibilityData: BloodTypeCompatibilityData?
+    var bloodTypeLoveSubScores: BloodTypeLoveSubScores?
+
     private var hearingResponses: [String] = []
 
     private let minimumInterviewResponses = 2
+    /// ヒアリング入力の最低文字数（句読点・空白除去後）
+    private let minimumMeaningfulLength = 6
     private let vagueHearingReplies: Set<String> = [
         "なし",
         "ない",
@@ -79,15 +95,35 @@ final class ReadingViewModel {
         "秘密"
     ]
 
+    /// Whether this session is using the one-time free trial.
+    private var isUsingFreeTrial = false
+
     func startReading(system: FortuneSystem, env: AppEnvironment) async {
         guard !isGenerating else { return }
 
-        if system.creditCost > 0 && !env.creditWalletService.canAfford(system.creditCost, isSubscribed: env.storeKitManager.isSubscribed) {
+        // Check if free trial applies (first paid consultation ever)
+        let trialAvailable = system.creditCost > 0 && env.freeTrialManager.shouldGrantFreeTrial()
+        isUsingFreeTrial = trialAvailable
+
+        if system.creditCost > 0 && !trialAvailable && !env.creditWalletService.canAfford(system.creditCost) {
             showPaywall = true
             return
         }
 
         selectedSystem = system
+
+        // 血液型はモード選択画面を先に表示
+        if system == .bloodType {
+            showBloodTypeModePicker = true
+            selectedBloodTypeMode = nil
+            partnerBloodType = nil
+            bloodTypeDailyFortune = nil
+            bloodTypeRanking = nil
+            bloodTypeCompatibilityData = nil
+            bloodTypeLoveSubScores = nil
+            return
+        }
+
         messages = []
         userInput = ""
         errorMessage = nil
@@ -146,6 +182,21 @@ final class ReadingViewModel {
             return
         }
 
+        // 鑑定完了後の深掘りは追加クレジットが必要
+        if sessionStage == .completed {
+            let followUpCost = 1
+            if !env.creditWalletService.canAfford(followUpCost) && !env.storeKitManager.isSubscribed {
+                showPaywall = true
+                // 入力を復元
+                userInput = text
+                messages.removeLast() // ユーザーメッセージを戻す
+                return
+            }
+            if !env.storeKitManager.isSubscribed {
+                try? await env.creditWalletService.deductCredits(followUpCost)
+            }
+        }
+
         await sendConversationFollowUp(text: text, system: system)
     }
 
@@ -153,7 +204,129 @@ final class ReadingViewModel {
         sessionStage.inputPlaceholder
     }
 
+    /// タロットの場合、カードリビール後にこのメソッドを呼ぶ
+    func completeTarotReveal(env: AppEnvironment) async {
+        guard let system = selectedSystem, system == .tarot else { return }
+        showTarotReveal = false
+        await generateDetailedReading(system: system, env: env)
+    }
+
+    // MARK: - 血液型占いフロー
+
+    func selectBloodTypeMode(_ mode: BloodTypeMode, env: AppEnvironment) {
+        selectedBloodTypeMode = mode
+        showBloodTypeModePicker = false
+
+        let profile = env.userProfileService.currentProfile
+        let userBloodType = profile?.bloodType ?? .a
+
+        if mode == .ranking {
+            // ランキングはヒアリング不要 → 即座にReveal
+            bloodTypeRanking = BloodTypeCompatibility.dailyRanking()
+            bloodTypeDailyFortune = BloodTypeCompatibility.dailyFortune(for: userBloodType)
+            showBloodTypeReveal = true
+            return
+        }
+
+        if mode == .dailyFortune {
+            bloodTypeDailyFortune = BloodTypeCompatibility.dailyFortune(for: userBloodType)
+        }
+
+        // ヒアリング開始
+        messages = []
+        userInput = ""
+        errorMessage = nil
+        isGenerating = false
+        sessionStage = .hearing
+        hearingResponses = []
+
+        messages.append(.assistantMessage(openingPromptForBloodTypeMode(mode, bloodType: userBloodType)))
+    }
+
+    func setPartnerBloodType(_ type: BloodType, env: AppEnvironment) {
+        partnerBloodType = type
+        let profile = env.userProfileService.currentProfile
+        let userBloodType = profile?.bloodType ?? .a
+
+        // 相性データを計算
+        bloodTypeCompatibilityData = BloodTypeCompatibility.compatibility(between: userBloodType, and: type)
+        bloodTypeLoveSubScores = BloodTypeCompatibility.loveSubScores(between: userBloodType, and: type)
+
+        // ユーザーの選択をチャットに反映
+        messages.append(.userMessage("\(type.japaneseName)"))
+
+        // フォローアップ質問
+        let followUp: String
+        if selectedBloodTypeMode == .loveMatch {
+            followUp = "\(userBloodType.japaneseName)と\(type.japaneseName)の恋の相性を見てまいります。お相手との今の関係や、どんな未来を望んでいるかを聞かせてください。"
+        } else {
+            followUp = "\(userBloodType.japaneseName)と\(type.japaneseName)の相性ですね。お二人の関係や、いま気になっていることを教えてください。"
+        }
+        messages.append(.assistantMessage(followUp))
+    }
+
+    func completeBloodTypeReveal(env: AppEnvironment) async {
+        guard let system = selectedSystem, system == .bloodType else { return }
+        showBloodTypeReveal = false
+        await generateDetailedReading(system: system, env: env)
+    }
+
+    private func openingPromptForBloodTypeMode(_ mode: BloodTypeMode, bloodType: BloodType) -> String {
+        switch mode {
+        case .dailyFortune:
+            return """
+            \(bloodType.japaneseName)のあなたの今日を見立てます。
+
+            今いちばん気になっていること、あるいは今日の予定を聞かせてください。お話を土台にして、今日の過ごし方を丁寧に読み解いていきます。
+            """
+        case .compatibility:
+            return "相手の方の血液型を教えてください。"
+        case .loveMatch:
+            return "恋のお相手の血液型を教えてください。"
+        case .ranking:
+            return "" // rankingはヒアリングなし
+        }
+    }
+
     private func generateDetailedReading(system: FortuneSystem, env: AppEnvironment) async {
+        // タロットの場合：先にカードをドローしてリビール画面を表示
+        if system == .tarot && drawnTarotCards.isEmpty {
+            let cardCount = hearingResponses.count >= 3 ? 5 : 3
+            drawnTarotCards = TarotDrawEngine.draw(count: cardCount)
+            showTarotReveal = true
+            // リビール完了後に completeTarotReveal → 再度この関数が呼ばれる
+            return
+        }
+
+        // 血液型の場合：RevealViewを表示（ランキング以外）
+        if system == .bloodType, let mode = selectedBloodTypeMode, !showBloodTypeReveal {
+            let profile = env.userProfileService.currentProfile
+            let userBloodType = profile?.bloodType ?? .a
+
+            switch mode {
+            case .dailyFortune:
+                if bloodTypeDailyFortune == nil {
+                    bloodTypeDailyFortune = BloodTypeCompatibility.dailyFortune(for: userBloodType)
+                }
+                showBloodTypeReveal = true
+                return
+            case .compatibility, .loveMatch:
+                if let partner = partnerBloodType {
+                    if bloodTypeCompatibilityData == nil {
+                        bloodTypeCompatibilityData = BloodTypeCompatibility.compatibility(between: userBloodType, and: partner)
+                    }
+                    if bloodTypeLoveSubScores == nil {
+                        bloodTypeLoveSubScores = BloodTypeCompatibility.loveSubScores(between: userBloodType, and: partner)
+                    }
+                }
+                showBloodTypeReveal = true
+                return
+            case .ranking:
+                // ランキングは selectBloodTypeMode() で既にReveal済み → そのまま進行
+                break
+            }
+        }
+
         isGenerating = true
 
         let profile = env.userProfileService.currentProfile
@@ -163,8 +336,8 @@ final class ReadingViewModel {
         messages.append(.systemMessage(userPrompt))
 
         do {
-            if system.creditCost > 0 {
-                try await env.creditWalletService.deductCredits(system.creditCost, isSubscribed: env.storeKitManager.isSubscribed)
+            if system.creditCost > 0 && !isUsingFreeTrial {
+                try await env.creditWalletService.deductCredits(system.creditCost)
             }
 
             let startTime = Date()
@@ -185,13 +358,28 @@ final class ReadingViewModel {
             lastReadingText = response
             sessionStage = .completed
 
+            // Consume the free trial after successful reading generation
+            let wasFreeTrialUsed = isUsingFreeTrial
+            if isUsingFreeTrial {
+                env.freeTrialManager.consumeFreeTrial()
+                isUsingFreeTrial = false
+            }
+
+            // 鑑定結果を履歴に保存
+            saveReadingToHistory(system: system, wasFree: wasFreeTrialUsed, env: env)
+
             env.analyticsService.track(.readingCompleted(
                 system: system.rawValue,
                 category: selectedCategory.rawValue,
-                creditsCost: system.creditCost
+                creditsCost: wasFreeTrialUsed ? 0 : system.creditCost
             ))
         } catch {
+            #if DEBUG
+            errorMessage = "鑑定エラー: \(error.localizedDescription)"
+            print("[ReadingViewModel] generateDetailedReading error: \(error)")
+            #else
             errorMessage = "鑑定の生成に失敗しました。もう一度お試しください。"
+            #endif
             env.analyticsService.track(.readingError(
                 system: system.rawValue,
                 errorDescription: error.localizedDescription
@@ -235,7 +423,17 @@ final class ReadingViewModel {
     }
 
     private func openingInterviewPrompt(for system: FortuneSystem) -> String {
-        """
+        if system == .generalConsultation {
+            return """
+            こんにちは。占い師の「導き手」です。
+
+            今日はどんなことが気になっていますか？恋愛、仕事、人間関係、将来のこと…テーマを決めていなくても大丈夫です。
+
+            まずはそのまま、気になっていることを自由に話してみてください。お話をうかがいながら、一番合う見方で丁寧に読み解いていきます。
+            """
+        }
+
+        return """
         こんにちは。\(system.japaneseName)で丁寧に見立てるため、まずは気になっていることをそのまま聞かせてください。
 
         恋愛か仕事かを最初に言い切れなくても大丈夫です。お話をうかがいながら、相談の軸も一緒に整理していきます。
@@ -275,12 +473,20 @@ final class ReadingViewModel {
     }
 
     private func buildDetailedReadingPrompt(system: FortuneSystem, profile: UserProfile?) -> String {
+        // タロットの場合：TarotRevealViewで表示済みのカードをそのまま渡す
+        // これにより TarotPrompt.build() が新たにカードをドローせず、
+        // ユーザーに表示されたカードと同一のカードでAI鑑定を行う
+        let preDrawnCards: [DrawnTarotCard]? = (system == .tarot && !drawnTarotCards.isEmpty)
+            ? drawnTarotCards
+            : nil
+
         let basePrompt = PromptTemplateEngine.buildUserPrompt(
             system: system,
             profile: profile,
             category: selectedCategory,
             depth: .deep,
-            userQuestion: hearingResponses.joined(separator: "\n")
+            userQuestion: hearingResponses.joined(separator: "\n"),
+            preDrawnTarotCards: preDrawnCards
         )
 
         let hearingBlock = hearingResponses.enumerated()
@@ -311,7 +517,13 @@ final class ReadingViewModel {
             return false
         }
 
+        // 曖昧な定型回答を排除
         if vagueHearingReplies.contains(normalized) {
+            return false
+        }
+
+        // 短すぎる入力を排除（句読点除去後6文字未満）
+        if normalized.count < minimumMeaningfulLength {
             return false
         }
 
@@ -353,12 +565,11 @@ final class ReadingViewModel {
         }
 
         return """
-        ありがとうございます。ですが、現時点では「\(system.shortName)で個別に見立てるための材料」がまだ足りません。
+        ありがとうございます。\(system.shortName)であなただけの鑑定をお届けするために、もう少しだけ具体的なお話を聞かせてください。
 
-        「特になし」のまま断定的な鑑定を出すと、聞いていない事情まで作ってしまうため、ここでは読み切ったふりはしません。
         \(categoryHint)
 
-        一つだけでも具体的な状況やお気持ちが分かれば、その内容を土台に丁寧に読み解きます。
+        一つだけでも状況が分かれば、そこから丁寧に読み解いていきます。
         """
     }
 
@@ -366,5 +577,21 @@ final class ReadingViewModel {
         let inferred = ReadingCategory.infer(from: text)
         guard inferred != .general else { return }
         selectedCategory = inferred
+    }
+
+    // MARK: - History Save
+
+    private func saveReadingToHistory(system: FortuneSystem, wasFree: Bool, env: AppEnvironment) {
+        let userId = FirebaseAuthService.shared.currentUserId ?? "anonymous"
+        let reading = FortuneReading(
+            id: UUID().uuidString,
+            userId: userId,
+            system: system,
+            theme: selectedCategory,
+            messages: messages,
+            creditsCost: wasFree ? 0 : system.creditCost,
+            createdAt: Date()
+        )
+        env.readingHistoryService.saveReading(reading)
     }
 }
