@@ -273,6 +273,10 @@ struct ReadingScreen: View {
                         Task {
                             await viewModel.sendFollowUp(env: env)
                         }
+                    },
+                    showPartnerBloodTypePicker: viewModel.selectedBloodTypeMode?.requiresPartner == true && viewModel.partnerBloodType == nil,
+                    onSelectPartnerBloodType: { type in
+                        viewModel.setPartnerBloodType(type, env: env)
                     }
                 )
             }

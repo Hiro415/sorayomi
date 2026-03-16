@@ -9,8 +9,11 @@ struct ReadingChatView: View {
     let messages: [ReadingMessage]
     @Binding var userInput: String
     let isGenerating: Bool
+    var fortuneSystem: FortuneSystem?
     let inputPlaceholder: String
     let onSend: () -> Void
+    var showPartnerBloodTypePicker: Bool = false
+    var onSelectPartnerBloodType: ((BloodType) -> Void)? = nil
 
     var body: some View {
         VStack(spacing: 0) {
@@ -38,6 +41,12 @@ struct ReadingChatView: View {
                     }
                     .padding(.vertical, Spacing.md)
                 }
+                .onAppear {
+                    // タロットリビールからの遷移時に最新メッセージへスクロール
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        scrollToBottom(proxy: proxy)
+                    }
+                }
                 .onChange(of: messages.count) { _, _ in
                     scrollToBottom(proxy: proxy)
                 }
@@ -52,7 +61,11 @@ struct ReadingChatView: View {
                 .foregroundStyle(Color.sorayomiDivider)
 
             // Input bar
-            inputBar
+            if showPartnerBloodTypePicker {
+                partnerBloodTypePicker
+            } else {
+                inputBar
+            }
         }
     }
 
@@ -84,33 +97,12 @@ struct ReadingChatView: View {
         .padding(.horizontal, Spacing.md)
     }
 
-    // MARK: - Typing Indicator
+    // MARK: - Typing Indicator (Claude Code style)
 
     private var typingIndicator: some View {
-        HStack(spacing: Spacing.xs) {
-            HStack(spacing: 4) {
-                ForEach(0..<3, id: \.self) { index in
-                    Circle()
-                        .fill(Color.sorayomiPrimary.opacity(0.5))
-                        .frame(width: 6, height: 6)
-                        .scaleEffect(isGenerating ? 1.0 : 0.5)
-                        .animation(
-                            .easeInOut(duration: 0.6)
-                                .repeatForever(autoreverses: true)
-                                .delay(Double(index) * 0.2),
-                            value: isGenerating
-                        )
-                }
-            }
-            .padding(.horizontal, Spacing.sm)
-            .padding(.vertical, Spacing.xs)
-            .background(Color.sorayomiSurface)
-            .clipShape(Capsule())
-
-            Spacer()
-        }
-        .padding(.horizontal, Spacing.md)
-        .transition(.opacity.combined(with: .move(edge: .bottom)))
+        ThinkingIndicatorView(fortuneSystem: fortuneSystem)
+            .padding(.horizontal, Spacing.md)
+            .transition(.opacity.combined(with: .move(edge: .bottom)))
     }
 
     // MARK: - Input Bar
@@ -138,6 +130,40 @@ struct ReadingChatView: View {
         }
         .padding(.horizontal, Spacing.md)
         .padding(.vertical, Spacing.xs)
+        .background(Color.sorayomiBackground)
+    }
+
+    // MARK: - Partner Blood Type Picker
+
+    private var partnerBloodTypePicker: some View {
+        VStack(spacing: Spacing.xs) {
+            Text("血液型を選択")
+                .font(SorayomiTypography.caption)
+                .foregroundStyle(Color.sorayomiTextSecondary)
+
+            HStack(spacing: Spacing.sm) {
+                ForEach(BloodType.allCases) { type in
+                    Button {
+                        onSelectPartnerBloodType?(type)
+                    } label: {
+                        Text(type.japaneseName)
+                            .font(SorayomiTypography.headline)
+                            .foregroundStyle(Color.sorayomiTextPrimary)
+                            .frame(width: 64, height: 44)
+                            .background(
+                                RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous)
+                                    .fill(Color.sorayomiSurface)
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous)
+                                    .strokeBorder(Color.sorayomiPrimary.opacity(0.5), lineWidth: 1)
+                            )
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, Spacing.sm)
         .background(Color.sorayomiBackground)
     }
 
@@ -169,6 +195,7 @@ struct ReadingChatView: View {
         messages: [.mockUser, .mockAssistant],
         userInput: .constant(""),
         isGenerating: false,
+        fortuneSystem: .tarot,
         inputPlaceholder: "追加の質問を入力...",
         onSend: {}
     )
