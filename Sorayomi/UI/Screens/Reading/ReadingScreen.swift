@@ -70,7 +70,8 @@ struct ReadingScreen: View {
             PaywallSheet(
                 isPresented: $viewModel.showPaywall,
                 creditsNeeded: viewModel.selectedSystem?.creditCost ?? 1,
-                isSubscribed: env.storeKitManager.isSubscribed
+                isSubscribed: env.storeKitManager.isSubscribed,
+                currentBalance: env.creditWalletService.totalAvailable
             )
         }
         .onAppear {
@@ -93,6 +94,7 @@ struct ReadingScreen: View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.lg) {
                 selectionHero
+                quickStartButton
                 consultationFlowPanel
 
                 FortuneSystemPickerView(
@@ -136,6 +138,69 @@ struct ReadingScreen: View {
         .sorayomiPanel(tone: .night, padding: Spacing.lg)
     }
 
+    private var quickStartButton: some View {
+        Button {
+            Task {
+                await viewModel.startReading(system: .generalConsultation, env: env)
+            }
+        } label: {
+            VStack(spacing: Spacing.sm) {
+                if env.freeTrialManager.isFirstConsultationAvailable {
+                    HStack(spacing: Spacing.xxs) {
+                        Image(systemName: "gift.fill")
+                            .font(.caption2)
+                        Text("初回無料で体験できます")
+                            .font(SorayomiTypography.caption)
+                            .fontWeight(.bold)
+                    }
+                    .foregroundStyle(Color.sorayomiGlow)
+                    .padding(.horizontal, Spacing.sm)
+                    .padding(.vertical, Spacing.xxs)
+                    .background(Color.white.opacity(0.15))
+                    .clipShape(Capsule())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+
+                HStack(spacing: Spacing.md) {
+                    Image(systemName: "bubble.left.and.bubble.right.fill")
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .frame(width: 48, height: 48)
+                        .background(Color.white.opacity(0.18))
+                        .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous))
+
+                    VStack(alignment: .leading, spacing: Spacing.xxs) {
+                        Text("まずは話してみる")
+                            .font(SorayomiTypography.title3)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.white)
+
+                        Text("占術は自動で選ばれます。気軽にどうぞ。")
+                            .font(SorayomiTypography.caption)
+                            .foregroundStyle(Color.white.opacity(0.82))
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.system(size: 28))
+                        .foregroundStyle(.white.opacity(0.9))
+                }
+            }
+            .padding(Spacing.md)
+            .background(
+                LinearGradient(
+                    colors: [.sorayomiPrimary, .sorayomiAccent],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+            .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusLarge, style: .continuous))
+            .shadow(color: Color.sorayomiPrimary.opacity(0.3), radius: 12, x: 0, y: 6)
+        }
+        .buttonStyle(.plain)
+    }
+
     private var consultationFlowPanel: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             sectionHeader(
@@ -150,18 +215,51 @@ struct ReadingScreen: View {
     private var readingContent: some View {
         VStack(spacing: 0) {
             if let system = viewModel.selectedSystem {
-                sessionOverview(system)
+                compactSessionHeader(system)
                     .padding(.horizontal, Spacing.screenPadding)
-                    .padding(.top, Spacing.sm)
-
-                if viewModel.sessionStage == .hearing {
-                    hearingGuideCard(system)
-                        .padding(.horizontal, Spacing.screenPadding)
-                        .padding(.top, Spacing.sm)
-                }
+                    .padding(.top, Spacing.xs)
+                    .padding(.bottom, Spacing.xs)
             }
 
-            if viewModel.isGenerating && !hasVisibleMessages {
+            if viewModel.showBloodTypeModePicker {
+                BloodTypeModePickerView(
+                    userBloodType: env.userProfileService.currentProfile?.bloodType ?? .a,
+                    onSelect: { mode in
+                        viewModel.selectBloodTypeMode(mode, env: env)
+                    },
+                    onBack: {
+                        viewModel.showBloodTypeModePicker = false
+                        viewModel.selectedSystem = nil
+                    }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if viewModel.showBloodTypeReveal {
+                BloodTypeRevealView(
+                    mode: viewModel.selectedBloodTypeMode ?? .dailyFortune,
+                    userBloodType: env.userProfileService.currentProfile?.bloodType ?? .a,
+                    partnerBloodType: viewModel.partnerBloodType,
+                    dailyFortune: viewModel.bloodTypeDailyFortune,
+                    ranking: viewModel.bloodTypeRanking,
+                    compatibilityData: viewModel.bloodTypeCompatibilityData,
+                    loveSubScores: viewModel.bloodTypeLoveSubScores,
+                    onComplete: {
+                        Task {
+                            await viewModel.completeBloodTypeReveal(env: env)
+                        }
+                    }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if viewModel.showTarotReveal {
+                TarotRevealView(
+                    drawnCards: viewModel.drawnTarotCards,
+                    onComplete: {
+                        Task {
+                            await viewModel.completeTarotReveal(env: env)
+                        }
+                    }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if viewModel.isGenerating && !hasVisibleMessages {
                 ReadingLoadingView(fortuneSystem: viewModel.selectedSystem)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
@@ -169,6 +267,7 @@ struct ReadingScreen: View {
                     messages: viewModel.messages,
                     userInput: $viewModel.userInput,
                     isGenerating: viewModel.isGenerating,
+                    fortuneSystem: viewModel.selectedSystem,
                     inputPlaceholder: viewModel.inputPlaceholder,
                     onSend: {
                         Task {
@@ -176,6 +275,13 @@ struct ReadingScreen: View {
                         }
                     }
                 )
+            }
+
+            // Post-reading engagement prompt
+            if viewModel.sessionStage == .completed && !viewModel.isGenerating {
+                postReadingPrompt
+                    .padding(.horizontal, Spacing.screenPadding)
+                    .padding(.bottom, Spacing.xs)
             }
 
             if let error = viewModel.errorMessage {
@@ -198,6 +304,56 @@ struct ReadingScreen: View {
             }
         }
     }
+
+    // MARK: - Compact Session Header
+
+    private func compactSessionHeader(_ system: FortuneSystem) -> some View {
+        HStack(spacing: Spacing.sm) {
+            Image(systemName: system.iconName)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 28, height: 28)
+                .background(
+                    LinearGradient(
+                        colors: [.sorayomiAccent, .sorayomiPrimary],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+
+            VStack(alignment: .leading, spacing: 1) {
+                Text(system.japaneseName)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Color.sorayomiTextPrimary)
+
+                Text(viewModel.sessionStage.statusLabel)
+                    .font(.system(size: 11))
+                    .foregroundStyle(Color.sorayomiTextSecondary)
+            }
+
+            Spacer()
+
+            // ミニステージインジケーター
+            HStack(spacing: 3) {
+                miniStageDot(filled: true)
+                miniStageDot(filled: viewModel.sessionStage == .hearing || viewModel.sessionStage == .completed)
+                miniStageDot(filled: viewModel.sessionStage == .completed)
+            }
+        }
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, Spacing.sm)
+        .background(Color.sorayomiSurface.opacity(0.7))
+        .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous))
+    }
+
+    private func miniStageDot(filled: Bool) -> some View {
+        Circle()
+            .fill(filled ? Color.sorayomiAccent : Color.sorayomiDivider)
+            .frame(width: 6, height: 6)
+    }
+
+    // MARK: - Session Overview (legacy, kept for reference)
 
     private func sessionOverview(_ system: FortuneSystem) -> some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
@@ -367,6 +523,67 @@ struct ReadingScreen: View {
             .padding(.vertical, 6)
             .background(Color.white.opacity(0.10))
             .clipShape(Capsule())
+    }
+
+    private var postReadingPrompt: some View {
+        VStack(spacing: Spacing.xs) {
+            if env.creditWalletService.totalAvailable <= 2 && !env.storeKitManager.isSubscribed {
+                // Low credit upsell
+                HStack(spacing: Spacing.sm) {
+                    Image(systemName: "crown.fill")
+                        .font(.caption)
+                        .foregroundStyle(Color.sorayomiAccent)
+
+                    Text("深掘りを続けるなら — プレミアムパスで毎日クレジットが届きます")
+                        .font(SorayomiTypography.caption)
+                        .foregroundStyle(Color.sorayomiTextSecondary)
+                        .lineSpacing(3)
+
+                    Spacer(minLength: 0)
+                }
+                .padding(Spacing.sm)
+                .background(Color.sorayomiAccent.opacity(0.06))
+                .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusSmall))
+            }
+
+            // Try another system suggestion
+            if let current = viewModel.selectedSystem {
+                let suggestions = FortuneSystem.allCases.filter { $0 != current && $0.creditCost > 0 }.prefix(2)
+                if !suggestions.isEmpty {
+                    HStack(spacing: Spacing.xs) {
+                        Text("他の占術も試す:")
+                            .font(SorayomiTypography.caption)
+                            .foregroundStyle(Color.sorayomiTextSecondary)
+
+                        ForEach(Array(suggestions), id: \.self) { system in
+                            Button {
+                                resetSession()
+                                Task {
+                                    try? await Task.sleep(for: .milliseconds(100))
+                                    await viewModel.startReading(system: system, env: env)
+                                }
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Image(systemName: system.iconName)
+                                        .font(.caption2)
+                                    Text(system.shortName)
+                                        .font(SorayomiTypography.caption)
+                                }
+                                .padding(.horizontal, Spacing.sm)
+                                .padding(.vertical, Spacing.xxs)
+                                .background(Color.sorayomiPrimary.opacity(0.1))
+                                .foregroundStyle(Color.sorayomiPrimary)
+                                .clipShape(Capsule())
+                            }
+                            .buttonStyle(.plain)
+                        }
+
+                        Spacer()
+                    }
+                    .padding(.horizontal, Spacing.xs)
+                }
+            }
+        }
     }
 
     private func resetSession() {
