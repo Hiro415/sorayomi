@@ -486,7 +486,9 @@ final class ReadingViewModel {
             category: selectedCategory,
             depth: .deep,
             userQuestion: hearingResponses.joined(separator: "\n"),
-            preDrawnTarotCards: preDrawnCards
+            preDrawnTarotCards: preDrawnCards,
+            bloodTypeMode: selectedBloodTypeMode,
+            partnerBloodType: partnerBloodType
         )
 
         let hearingBlock = hearingResponses.enumerated()

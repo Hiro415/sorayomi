@@ -34,7 +34,10 @@ struct PromptTemplateEngine {
         profile: UserProfile?,
         category: ReadingCategory,
         depth: ReadingDepth = .standard,
-        userQuestion: String? = nil
+        userQuestion: String? = nil,
+        preDrawnTarotCards: [DrawnTarotCard]? = nil,
+        bloodTypeMode: BloodTypeMode? = nil,
+        partnerBloodType: BloodType? = nil
     ) -> String {
         let seasonal = SeasonalContext.from(date: Date())
 
@@ -54,18 +57,26 @@ struct PromptTemplateEngine {
         // System-specific context (calculated data for the AI to interpret)
         let systemContext: String
         switch system {
+        case .generalConsultation:
+            let seasonal = SeasonalContext.from(date: Date())
+            systemContext = """
+            【総合相談の文脈】
+            相談者はテーマを絞らず、占い師に直接相談するように自由に話しかけています。
+            季節：\(seasonal.season)（\(seasonal.solarTerm)）
+            相談者のお話をよく聞き、最も適した視点から見立ててください。
+            """
         case .omikuji:
             systemContext = OmikujiPrompt.build(profile: profile, category: category)
         case .horoscope:
             systemContext = HoroscopePrompt.build(profile: profile, category: category)
         case .bloodType:
-            systemContext = BloodTypePrompt.build(profile: profile, category: category)
+            systemContext = BloodTypePrompt.build(profile: profile, category: category, mode: bloodTypeMode, partnerBloodType: partnerBloodType)
         case .birthdayPersonality:
             systemContext = BirthdayPrompt.build(profile: profile, category: category)
         case .rokuyo:
             systemContext = RokuyoPrompt.build(category: category)
         case .tarot:
-            systemContext = TarotPrompt.build(category: category, depth: depth)
+            systemContext = TarotPrompt.build(category: category, depth: depth, preDrawnCards: preDrawnTarotCards)
         case .numerology:
             systemContext = NumerologyPrompt.build(profile: profile, category: category)
         case .nineStarKi:
