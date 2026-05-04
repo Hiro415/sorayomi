@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>宙よみ Sorayomi</title>
+  <title>宙よみ サポート</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -15,16 +15,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 32px 16px;
-      text-align: center;
+      padding: 64px 16px;
     }
-    h1 { font-size: 32px; font-weight: 700; color: #f0eaff; margin-bottom: 8px; }
-    .subtitle { font-size: 16px; color: #9b87c4; margin-bottom: 48px; }
-    nav { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+    .container { max-width: 680px; width: 100%; }
+    h1 { font-size: 32px; font-weight: 700; color: #f0eaff; margin-bottom: 8px; text-align: center; }
+    .subtitle { font-size: 16px; color: #9b87c4; margin-bottom: 56px; text-align: center; }
+    nav { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 64px; }
     nav a {
       display: inline-block;
-      padding: 12px 24px;
+      padding: 10px 22px;
       background: #1a1830;
       color: #c4bdd8;
       text-decoration: none;
@@ -33,16 +32,66 @@
       transition: background 0.2s;
     }
     nav a:hover { background: #252040; color: #f0eaff; }
-    footer { margin-top: 64px; font-size: 12px; color: #5a5270; }
+    h2 { font-size: 20px; font-weight: 600; color: #f0eaff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #2a2540; }
+    .faq { margin-bottom: 48px; }
+    .faq-item { margin-bottom: 24px; }
+    .faq-item dt { font-size: 15px; font-weight: 600; color: #c4bdd8; margin-bottom: 8px; }
+    .faq-item dd { font-size: 14px; color: #9b87c4; line-height: 1.7; padding-left: 1em; }
+    .notice { background: #1a1830; border-radius: 12px; padding: 20px 24px; font-size: 13px; color: #7a7090; line-height: 1.7; margin-bottom: 48px; }
+    footer { font-size: 12px; color: #5a5270; text-align: center; margin-top: 32px; }
   </style>
 </head>
 <body>
-  <h1>宙よみ</h1>
-  <p class="subtitle">Sorayomi — Fortune Telling App</p>
-  <nav>
-    <a href="privacy/">プライバシーポリシー</a>
-    <a href="terms/">利用規約</a>
-  </nav>
-  <footer>&copy; 2026 Sorayomi. All rights reserved.</footer>
+  <div class="container">
+    <h1>宙よみ</h1>
+    <p class="subtitle">Sorayomi — AI占いアプリ サポートページ</p>
+
+    <nav>
+      <a href="privacy/">プライバシーポリシー</a>
+      <a href="terms/">利用規約</a>
+    </nav>
+
+    <section class="faq">
+      <h2>よくある質問</h2>
+
+      <dl>
+        <div class="faq-item">
+          <dt>Q. クレジットはどこで購入できますか？</dt>
+          <dd>アプリ下部のタブバーから「導き」を選択し、画面右上のクレジット残高をタップするとストアが開きます。クレジットパックまたは月間プレミアムパスをご購入いただけます。</dd>
+        </div>
+
+        <div class="faq-item">
+          <dt>Q. 以前購入したクレジット・サブスクリプションを復元するには？</dt>
+          <dd>ストア画面下部の「購入を復元する」ボタンをタップしてください。同じApple IDでログインしている場合、購入済みのアイテムが復元されます。</dd>
+        </div>
+
+        <div class="faq-item">
+          <dt>Q. おみくじと六曜は無料ですか？</dt>
+          <dd>はい、おみくじと六曜は毎日無料でご利用いただけます。その他の占術（タロット、星座占い、数秘術など）はクレジットまたはプレミアムパスが必要です。</dd>
+        </div>
+
+        <div class="faq-item">
+          <dt>Q. サブスクリプションをキャンセルするには？</dt>
+          <dd>iPhoneの「設定」→ Apple ID →「サブスクリプション」から、宙よみのサブスクリプションをキャンセルできます。次の更新日までは引き続きご利用いただけます。</dd>
+        </div>
+
+        <div class="faq-item">
+          <dt>Q. 占い結果はどのように生成されますか？</dt>
+          <dd>占い結果はAI（OpenAI GPT-4o-mini）を使用して生成されます。エンターテインメント目的のコンテンツであり、医療・法律・金融に関する専門的なアドバイスではありません。</dd>
+        </div>
+
+        <div class="faq-item">
+          <dt>Q. 不具合や改善要望はどこに送ればいいですか？</dt>
+          <dd>App Storeの宙よみページにあるレビュー欄よりお寄せください。いただいたご意見はアプリ改善に活用させていただきます。</dd>
+        </div>
+      </dl>
+    </section>
+
+    <div class="notice">
+      ※ 本アプリはエンターテインメント目的です。占い結果を重要な決断の根拠にすることはお控えください。心身に関わる深刻なお悩みは、専門の相談機関にご相談ください。
+    </div>
+
+    <footer>&copy; 2026 Sorayomi. All rights reserved.</footer>
+  </div>
 </body>
 </html>
