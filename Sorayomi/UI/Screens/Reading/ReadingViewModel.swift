@@ -614,7 +614,7 @@ final class ReadingViewModel {
                 let dummyBirthday = calendar.date(from: DateComponents(
                     year: calendar.component(.year, from: today) - 30,
                     month: 1, day: 1
-                ))!
+                )) ?? today
                 numerologyEnergy = NumerologyCalculator.dailyEnergy(birthday: dummyBirthday, on: today)
             }
             showNumerologyReveal = true
