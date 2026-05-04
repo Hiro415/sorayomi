@@ -29,10 +29,10 @@ enum BloodTypeMode: String, CaseIterable, Identifiable {
 
     var description: String {
         switch self {
-        case .dailyFortune:  return "あなたの血液型の\n今日を詳しく鑑定"
-        case .compatibility: return "2人の血液型の\n相性を深く読み解く"
-        case .loveMatch:     return "恋の行方を\n血液型から読み解く"
-        case .ranking:       return "今日の血液型別\nランキングを発表！"
+        case .dailyFortune:  return "今日の運勢を\n血液型から読み解く"
+        case .compatibility: return "気になる相手との\n相性をチェック"
+        case .loveMatch:     return "恋の行方を\n血液型で占う"
+        case .ranking:       return "今日いちばん\nツイてる血液型は？"
         }
     }
 

@@ -82,9 +82,29 @@ final class AnalyticsService {
 
     /// 購入完了を記録
     func trackPurchaseCompleted(productId: String, credits: Int) {
-        track(.monetizationPurchaseCompleted(
+        track(.purchaseCompleted(
             productId: productId,
-            credits: credits
+            credits: credits,
+            revenue: 0
         ))
+    }
+
+    /// ペイウォール表示を記録
+    func trackPaywallShown(trigger: String, requiredCredits: Int, currentBalance: Int) {
+        track(.paywallShown(
+            trigger: trigger,
+            requiredCredits: requiredCredits,
+            currentBalance: currentBalance
+        ))
+    }
+
+    /// スターターパック表示を記録
+    func trackStarterPackShown(location: String) {
+        track(.starterPackShown(location: location))
+    }
+
+    /// レビュー依頼表示を記録
+    func trackReviewRequestShown(readingCount: Int) {
+        track(.reviewRequestShown(readingCount: readingCount))
     }
 }

@@ -14,8 +14,13 @@ struct CreditPackCard: View {
     let isPurchasing: Bool
     let onPurchase: () -> Void
 
+    @ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 56
+
     var body: some View {
-        Button(action: onPurchase) {
+        Button {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            onPurchase()
+        } label: {
             HStack(spacing: Spacing.md) {
                 // Credit icon and count
                 ZStack {
@@ -27,9 +32,9 @@ struct CreditPackCard: View {
                                 endPoint: .bottomTrailing
                             )
                         )
-                        .frame(width: 56, height: 56)
+                        .frame(width: iconSize, height: iconSize)
 
-                    Image(systemName: "diamond.fill")
+                    Image(systemName: "sparkle")
                         .font(.system(size: 24))
                         .foregroundStyle(
                             LinearGradient(
@@ -43,9 +48,11 @@ struct CreditPackCard: View {
                 // Pack info
                 VStack(alignment: .leading, spacing: Spacing.xxs) {
                     HStack(spacing: Spacing.xs) {
-                        Text("\(credits) クレジット")
+                        Text("\(credits)クレジット")
                             .font(SorayomiTypography.headline)
                             .foregroundStyle(Color.sorayomiTextPrimary)
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
 
                         if let badge {
                             Text(badge)
@@ -93,7 +100,8 @@ struct CreditPackCard: View {
             }
             .sorayomiPanel(tone: badge != nil ? .spotlight : .elevated, padding: Spacing.md)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(SorayomiPressableButtonStyle())
+        .hoverEffect(.lift)
         .disabled(isPurchasing)
     }
 

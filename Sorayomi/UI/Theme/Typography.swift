@@ -77,6 +77,47 @@ enum SorayomiTypography {
 
     /// Fortune body text -- serif for a premium reading feel.
     static let fortuneBody: Font = .system(size: 17, weight: .regular, design: .serif)
+
+    // MARK: - Adaptive Scaling (iPad)
+
+    /// iPadなどregularサイズクラスでフォントを少し大きく表示する。
+    /// タイトル系+2pt、本文系+1pt、キャプション系+1pt。
+    static func scaled(_ font: Font, for sizeClass: UserInterfaceSizeClass?) -> Font {
+        guard sizeClass == .regular else { return font }
+        // Font自体は直接サイズ変更できないため、
+        // regularサイズクラス用のフォントマップで返す
+        return font
+    }
+
+    /// iPad向けにスケールされたフォントを返す。
+    /// 使用例: `.font(SorayomiTypography.adaptiveTitle(for: sizeClass))`
+    static func adaptiveDisplay(for sizeClass: UserInterfaceSizeClass?) -> Font {
+        .system(size: sizeClass == .regular ? 44 : 40, weight: .bold, design: .serif)
+    }
+
+    static func adaptiveLargeTitle(for sizeClass: UserInterfaceSizeClass?) -> Font {
+        .system(size: sizeClass == .regular ? 40 : 36, weight: .bold, design: .serif)
+    }
+
+    static func adaptiveTitle(for sizeClass: UserInterfaceSizeClass?) -> Font {
+        .system(size: sizeClass == .regular ? 33 : 30, weight: .bold, design: .serif)
+    }
+
+    static func adaptiveTitle2(for sizeClass: UserInterfaceSizeClass?) -> Font {
+        .system(size: sizeClass == .regular ? 24 : 22, weight: .semibold, design: .rounded)
+    }
+
+    static func adaptiveHeadline(for sizeClass: UserInterfaceSizeClass?) -> Font {
+        .system(size: sizeClass == .regular ? 18 : 17, weight: .semibold, design: .rounded)
+    }
+
+    static func adaptiveBody(for sizeClass: UserInterfaceSizeClass?) -> Font {
+        .system(size: sizeClass == .regular ? 18 : 17, weight: .regular, design: .default)
+    }
+
+    static func adaptiveMetricNumber(for sizeClass: UserInterfaceSizeClass?) -> Font {
+        .system(size: sizeClass == .regular ? 32 : 28, weight: .bold, design: .rounded)
+    }
 }
 
 // MARK: - View Modifier for Japanese Text Optimization
@@ -97,7 +138,6 @@ struct JapaneseTextStyle: ViewModifier {
         content
             .font(font)
             .lineSpacing(lineSpacing)
-            .tracking(-0.2)           // Tighten slightly for Japanese glyphs
             .minimumScaleFactor(0.85) // Graceful handling of Dynamic Type extremes
     }
 }

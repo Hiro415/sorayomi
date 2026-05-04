@@ -46,7 +46,20 @@ final class CreditRepository {
             return wallet
         }
 
-        // デフォルトウォレットを作成（残高0、無料クレジット0）
+        // データが存在するがデコード失敗の場合は上書きしない（データ保護）
+        if store.exists(forKey: walletKey(for: userId)) {
+            #if DEBUG
+            print("[CreditRepository] ⚠️ Wallet data exists but decode failed for user: \(userId). Returning zero wallet WITHOUT overwriting storage.")
+            #endif
+            return CreditWallet(
+                userId: userId,
+                balance: 0,
+                freeCreditsRemaining: 0,
+                lastUpdated: Date()
+            )
+        }
+
+        // 本当にデータが存在しない場合のみ新規作成・保存
         let defaultWallet = CreditWallet(
             userId: userId,
             balance: 0,
@@ -187,6 +200,49 @@ final class CreditRepository {
         return finalWallet
     }
 
+    /// 有償クレジット（balance）のみから差し引く（深掘りフォローアップ専用）
+    func deductPaidCredits(
+        userId: String,
+        amount: Int,
+        readingId: String? = nil
+    ) throws -> CreditWallet {
+        lock.lock()
+        defer { lock.unlock() }
+
+        let wallet = getWalletUnsafe(userId: userId)
+
+        guard wallet.balance >= amount else {
+            throw CreditError.insufficientBalance(required: amount, available: wallet.balance)
+        }
+
+        let updatedWallet = wallet.consumingPaidOnly(credits: amount)
+        let finalWallet = CreditWallet(
+            userId: updatedWallet.userId,
+            balance: updatedWallet.balance,
+            freeCreditsRemaining: updatedWallet.freeCreditsRemaining,
+            lastUpdated: Date()
+        )
+        store.save(finalWallet, forKey: walletKey(for: userId))
+
+        let transaction = CreditTransaction(
+            id: UUID().uuidString,
+            userId: userId,
+            type: .consumption,
+            amount: amount,
+            productId: nil,
+            readingId: readingId,
+            description: "深掘り（有償クレジット）",
+            timestamp: Date()
+        )
+        appendTransaction(transaction, userId: userId)
+
+        #if DEBUG
+        print("[CreditRepository] Deducted \(amount) paid credits for user: \(userId)")
+        #endif
+
+        return finalWallet
+    }
+
     // MARK: - Transaction History
 
     /// 取引履歴を取得
@@ -206,6 +262,20 @@ final class CreditRepository {
         if let wallet: CreditWallet = store.load(forKey: walletKey(for: userId)) {
             return wallet
         }
+
+        // デコード失敗時はデータを保護（上書きしない）
+        if store.exists(forKey: walletKey(for: userId)) {
+            #if DEBUG
+            print("[CreditRepository] ⚠️ getWalletUnsafe: decode failed, returning zero wallet without overwriting")
+            #endif
+            return CreditWallet(
+                userId: userId,
+                balance: 0,
+                freeCreditsRemaining: 0,
+                lastUpdated: Date()
+            )
+        }
+
         let defaultWallet = CreditWallet(
             userId: userId,
             balance: 0,
@@ -221,6 +291,14 @@ final class CreditRepository {
         var transactions: [CreditTransaction] = store.load(forKey: transactionsKey(for: userId)) ?? []
         transactions.insert(transaction, at: 0)
         store.save(transactions, forKey: transactionsKey(for: userId))
+    }
+
+    // MARK: - Delete (Account Deletion)
+
+    /// ウォレットと取引履歴を完全削除する（アカウント削除時）
+    func deleteWallet(userId: String) {
+        store.delete(forKey: walletKey(for: userId))
+        store.delete(forKey: transactionsKey(for: userId))
     }
 }
 

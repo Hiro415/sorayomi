@@ -22,8 +22,9 @@ struct FortuneResultCardView: View {
                 fortuneSectionCard(section: section, index: index)
             }
 
-            // ラッキーアイテム & カラー
-            if result.luckyItem != nil || result.luckyColor != nil {
+            // ラッキーアイテム & カラー（コンサルティング型の総合相談では非表示）
+            if !isConsultationFormat,
+               result.luckyItem != nil || result.luckyColor != nil {
                 luckyItemsCard
                     .opacity(showLucky ? 1 : 0)
                     .offset(y: showLucky ? 0 : 20)
@@ -284,6 +285,16 @@ struct FortuneResultCardView: View {
         // メッセージ
         withAnimation(.easeOut(duration: 0.5).delay(luckyDelay + 0.2)) {
             showMessage = true
+        }
+    }
+
+    // MARK: - Format Detection
+
+    /// 総合相談（コンサルティング型）フォーマットかどうかを判定
+    /// 【占術の読み】や【核心】が含まれていれば総合相談フォーマットとみなす
+    private var isConsultationFormat: Bool {
+        result.sections.contains { section in
+            section.category == .divinationReading || section.category == .coreInsight
         }
     }
 

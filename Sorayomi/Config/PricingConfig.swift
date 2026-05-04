@@ -6,9 +6,10 @@ final class PricingConfig {
 
     // MARK: - Credit Pack Sizes
 
-    var creditsPack4: Int = 4
+    var creditsStarter: Int = 5
     var creditsPack12: Int = 12
-    var creditsPack24: Int = 24
+    var creditsPack30: Int = 30
+    var creditsPack60: Int = 60
 
     // MARK: - Credit Costs Per System
 
@@ -20,10 +21,21 @@ final class PricingConfig {
     var costTarot: Int = 1
     var costNumerology: Int = 2
     var costNineStarKi: Int = 2
+    var costGeneralConsultation: Int = 1
+    var costFlowerFortune: Int = 1
+    var costStoneFortune: Int = 1
 
     // MARK: - Free Credits
 
     var freeCreditsInitial: Int = 3
+
+    // MARK: - Premium Subscription
+
+    /// 月間プレミアムの月次クレジット付与数
+    var premiumMonthlyCredits: Int = 30
+
+    /// クレジット繰越上限（超過分は切り捨て）
+    var creditCarryoverCap: Int = 30
 
     // MARK: - Lookup
 
@@ -37,16 +49,14 @@ final class PricingConfig {
         case .tarot:               return costTarot
         case .numerology:          return costNumerology
         case .nineStarKi:          return costNineStarKi
+        case .generalConsultation: return costGeneralConsultation
+        case .flowerFortune:       return costFlowerFortune
+        case .stoneFortune:        return costStoneFortune
         }
     }
 
     func creditsForPack(productId: String) -> Int {
-        switch productId {
-        case "com.sorayomi.credits.pack4":  return creditsPack4
-        case "com.sorayomi.credits.pack12": return creditsPack12
-        case "com.sorayomi.credits.pack24": return creditsPack24
-        default: return 0
-        }
+        ProductIdentifiers.creditsFor(productId: productId)
     }
 
     // TODO: Load from RemoteConfigService

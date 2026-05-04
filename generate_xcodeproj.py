@@ -36,14 +36,29 @@ def collect_swift_files(root_dir: str):
     return sorted(swift_files)
 
 def collect_resource_files(root_dir: str):
-    """Collect non-swift resource files (plist, json, etc.)."""
-    resource_exts = {'.plist', '.json', '.storekit', '.xcassets', '.xcprivacy', '.entitlements'}
+    """Collect non-swift resource files (plist, json, etc.).
+
+    .xcassets directories are treated as opaque bundles — we add the
+    directory itself as a single resource and do NOT recurse into it.
+    """
+    # Extensions for individual resource files
+    file_resource_exts = {'.plist', '.json', '.storekit', '.xcprivacy', '.entitlements'}
+    # Extensions for bundle directories (treated as single resources)
+    bundle_dir_exts = {'.xcassets'}
     resources = []
     for dirpath, dirnames, filenames in os.walk(root_dir):
         dirnames[:] = [d for d in dirnames if not d.startswith('.')]
+        # Check for bundle directories — add them as resources and skip recursion
+        bundle_dirs = [d for d in dirnames if os.path.splitext(d)[1].lower() in bundle_dir_exts]
+        for bd in bundle_dirs:
+            full_path = os.path.join(dirpath, bd)
+            rel_path = os.path.relpath(full_path, os.path.dirname(root_dir))
+            resources.append(rel_path)
+        # Remove bundle dirs from dirnames so os.walk won't recurse into them
+        dirnames[:] = [d for d in dirnames if os.path.splitext(d)[1].lower() not in bundle_dir_exts]
         for f in sorted(filenames):
             ext = os.path.splitext(f)[1].lower()
-            if ext in resource_exts:
+            if ext in file_resource_exts:
                 full_path = os.path.join(dirpath, f)
                 rel_path = os.path.relpath(full_path, os.path.dirname(root_dir))
                 resources.append(rel_path)
@@ -148,6 +163,8 @@ def generate_pbxproj(swift_files, resource_files):
             '.json': 'text.json',
             '.storekit': 'text',
             '.xcassets': 'folder.assetcatalog',
+            '.xcprivacy': 'text.plist.xml',
+            '.entitlements': 'text.plist.entitlements',
         }.get(ext, 'text')
         lines.append(f'\t\t{ref_uuid} /* {fname} */ = {{isa = PBXFileReference; lastKnownFileType = {file_type}; path = "{fname}"; sourceTree = "<group>"; }};')
     # Product reference
@@ -462,6 +479,7 @@ def generate_pbxproj(swift_files, resource_files):
     lines.append('\t\t\t\tINFOPLIST_KEY_UILaunchScreen_Generation = YES;')
     lines.append('\t\t\t\tINFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;')
     lines.append('\t\t\t\tINFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";')
+    lines.append('\t\t\t\tINFOPLIST_KEY_NSPhotoLibraryUsageDescription = "プロフィール写真の設定に使用します。";')
     lines.append('\t\t\t\tLD_RUNPATH_SEARCH_PATHS = (')
     lines.append('\t\t\t\t\t"$(inherited)",')
     lines.append('\t\t\t\t\t"@executable_path/Frameworks",')
@@ -495,6 +513,7 @@ def generate_pbxproj(swift_files, resource_files):
     lines.append('\t\t\t\tINFOPLIST_KEY_UILaunchScreen_Generation = YES;')
     lines.append('\t\t\t\tINFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;')
     lines.append('\t\t\t\tINFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";')
+    lines.append('\t\t\t\tINFOPLIST_KEY_NSPhotoLibraryUsageDescription = "プロフィール写真の設定に使用します。";')
     lines.append('\t\t\t\tLD_RUNPATH_SEARCH_PATHS = (')
     lines.append('\t\t\t\t\t"$(inherited)",')
     lines.append('\t\t\t\t\t"@executable_path/Frameworks",')

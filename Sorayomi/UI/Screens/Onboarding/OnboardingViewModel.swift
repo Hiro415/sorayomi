@@ -7,11 +7,10 @@ final class OnboardingViewModel {
     var currentPage: Int = 0
     var birthday: Date = Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
     var bloodType: BloodType? = nil
-    var hasConsentedToAI: Bool = false
     var isCompleting: Bool = false
 
     func completeOnboarding(env: AppEnvironment) async {
-        guard hasConsentedToAI else { return }
+        guard !isCompleting else { return }
         isCompleting = true
 
         // Ensure authenticated

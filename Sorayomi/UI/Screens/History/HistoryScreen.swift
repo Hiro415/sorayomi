@@ -4,6 +4,10 @@ import SwiftUI
 struct HistoryScreen: View {
     @Environment(AppEnvironment.self) private var env
     @State private var viewModel = HistoryViewModel()
+    @State private var readingToDelete: FortuneReading?
+    @State private var isSelectMode = false
+    @State private var selectedIds: Set<String> = []
+    @State private var showBulkDeleteConfirmation = false
 
     var body: some View {
         ZStack {
@@ -22,9 +26,17 @@ struct HistoryScreen: View {
                             } else {
                                 archiveStats
                                 readingsTimeline
+
+                                // プレミアム限定の全履歴アクセス
+                                if !env.storeKitManager.isSubscribed
+                                    && env.featureFlags.isHistoryPremiumOnly
+                                    && viewModel.readings.count > 3 {
+                                    premiumHistoryUpsell
+                                }
                             }
                         }
-                        .padding(.horizontal, Spacing.screenPadding)
+                        .adaptiveScreenPadding()
+                        .contentWidthConstraint()
                         .padding(.top, Spacing.sm)
                         .padding(.bottom, Spacing.xxl)
                     }
@@ -36,15 +48,90 @@ struct HistoryScreen: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                CreditBadge(
-                    totalCredits: env.creditWalletService.totalAvailable,
-                    freeCredits: env.creditWalletService.freeCreditsRemaining
-                )
+                NavigationLink(value: NavigationDestination.creditStore) {
+                    CreditBadge(
+                        totalCredits: env.creditWalletService.totalAvailable,
+                        freeCredits: env.creditWalletService.freeCreditsRemaining
+                    )
+                }
+                .buttonStyle(.plain)
             }
         }
         .task {
             await viewModel.loadReadings(env: env)
         }
+        // 単体削除の確認ダイアログ
+        .alert("この鑑定を削除しますか？", isPresented: Binding(
+            get: { readingToDelete != nil },
+            set: { if !$0 { readingToDelete = nil } }
+        )) {
+            Button("削除", role: .destructive) {
+                if let reading = readingToDelete {
+                    Task {
+                        await viewModel.deleteReading(id: reading.id, env: env)
+                    }
+                    readingToDelete = nil
+                }
+            }
+            Button("キャンセル", role: .cancel) {
+                readingToDelete = nil
+            }
+        } message: {
+            if let reading = readingToDelete {
+                Text("\(reading.displayTitle)の鑑定記録が完全に削除されます。")
+            }
+        }
+        // 一括削除の確認ダイアログ
+        .alert("\(selectedIds.count)件の鑑定を削除しますか？", isPresented: $showBulkDeleteConfirmation) {
+            Button("すべて削除", role: .destructive) {
+                Task {
+                    for id in selectedIds {
+                        await viewModel.deleteReading(id: id, env: env)
+                    }
+                    selectedIds.removeAll()
+                    isSelectMode = false
+                }
+            }
+            Button("キャンセル", role: .cancel) {}
+        } message: {
+            Text("選択した\(selectedIds.count)件の鑑定記録が完全に削除されます。この操作は元に戻せません。")
+        }
+    }
+
+    private var premiumHistoryUpsell: some View {
+        VStack(spacing: Spacing.sm) {
+            Image(systemName: "crown.fill")
+                .font(.title2)
+                .foregroundStyle(Color.sorayomiAccent)
+
+            Text("すべての履歴を振り返る")
+                .font(SorayomiTypography.headline)
+                .foregroundStyle(Color.sorayomiTextPrimary)
+
+            Text("月間プレミアムなら、過去の鑑定をすべて閲覧できます")
+                .font(SorayomiTypography.caption)
+                .foregroundStyle(Color.sorayomiTextSecondary)
+                .multilineTextAlignment(.center)
+
+            NavigationLink(value: NavigationDestination.creditStore) {
+                Text("プレミアムを見る")
+                    .font(SorayomiTypography.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, Spacing.sm)
+                    .background(
+                        LinearGradient(
+                            colors: [.sorayomiPrimary, .sorayomiAccent],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(Spacing.lg)
+        .sorayomiPanel(tone: .spotlight)
     }
 
     private var loadingView: some View {
@@ -59,26 +146,27 @@ struct HistoryScreen: View {
     }
 
     private var archiveHero: some View {
-        VStack(alignment: .leading, spacing: Spacing.md) {
-            VStack(alignment: .leading, spacing: Spacing.xs) {
+        HStack(spacing: Spacing.sm) {
+            VStack(alignment: .leading, spacing: Spacing.xxs) {
                 Text("鑑定を振り返る")
-                    .font(SorayomiTypography.title2)
+                    .font(SorayomiTypography.headline)
                     .foregroundStyle(.white)
 
                 Text(heroSubtitle)
-                    .font(SorayomiTypography.callout)
-                    .foregroundStyle(Color.white.opacity(0.86))
-                    .lineSpacing(5)
+                    .font(SorayomiTypography.caption)
+                    .foregroundStyle(Color.white.opacity(0.78))
+                    .lineLimit(2)
             }
+
+            Spacer(minLength: 0)
 
             HStack(spacing: Spacing.xs) {
                 archiveBadge(title: "累計", value: "\(viewModel.readings.count)件")
                 archiveBadge(title: "今月", value: "\(monthlyReadingCount)件")
-                archiveBadge(title: "最多", value: mostUsedSystemName)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .sorayomiPanel(tone: .night, padding: Spacing.lg)
+        .sorayomiPanel(tone: .night, padding: Spacing.md)
     }
 
     private var archiveStats: some View {
@@ -86,7 +174,7 @@ struct HistoryScreen: View {
             sectionHeader(
                 eyebrow: "傾向",
                 title: "最近の傾向",
-                subtitle: "よく見るテーマや、最後に鑑定したタイミングがすぐ分かるようにしています。"
+                subtitle: "よく相談するテーマや最近の鑑定がひと目でわかります。"
             )
 
             HStack(spacing: Spacing.sm) {
@@ -108,21 +196,102 @@ struct HistoryScreen: View {
 
     private var readingsTimeline: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            sectionHeader(
-                eyebrow: "履歴",
-                title: "鑑定アーカイブ",
-                subtitle: "過去の読みは削除するまでここに残り、後から見返せます。"
-            )
+            HStack {
+                VStack(alignment: .leading, spacing: Spacing.xxs) {
+                    Text("履歴".uppercased())
+                        .font(SorayomiTypography.eyebrow)
+                        .foregroundStyle(Color.sorayomiAccent)
 
-            LazyVStack(spacing: Spacing.sm) {
-                ForEach(viewModel.readings) { reading in
-                    HistoryRowView(reading: reading) {
-                        Task {
-                            await viewModel.deleteReading(id: reading.id, env: env)
+                    Text("鑑定アーカイブ")
+                        .font(SorayomiTypography.title2)
+                        .foregroundStyle(Color.sorayomiTextPrimary)
+
+                    Text("過去の鑑定はいつでも見返せます。")
+                        .font(SorayomiTypography.caption)
+                        .foregroundStyle(Color.sorayomiTextSecondary)
+                        .lineSpacing(4)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                if !viewModel.readings.isEmpty {
+                    Button {
+                        withAnimation {
+                            isSelectMode.toggle()
+                            if !isSelectMode {
+                                selectedIds.removeAll()
+                            }
                         }
+                    } label: {
+                        Text(isSelectMode ? "完了" : "選択")
+                            .font(SorayomiTypography.caption)
+                            .foregroundStyle(Color.sorayomiPrimary)
+                            .padding(.horizontal, Spacing.sm)
+                            .padding(.vertical, Spacing.xs)
+                            .background(Color.sorayomiPrimary.opacity(0.08))
+                            .clipShape(Capsule())
                     }
                 }
             }
+
+            // 選択モード時の一括削除ボタン
+            if isSelectMode && !selectedIds.isEmpty {
+                Button {
+                    showBulkDeleteConfirmation = true
+                } label: {
+                    HStack(spacing: Spacing.xs) {
+                        Image(systemName: "trash")
+                            .font(.caption)
+                        Text("\(selectedIds.count)件を削除")
+                            .font(SorayomiTypography.headline)
+                    }
+                    .foregroundStyle(Color.sorayomiError)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, Spacing.sm)
+                    .background(Color.sorayomiError.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium)
+                            .stroke(Color.sorayomiError.opacity(0.2), lineWidth: 1)
+                    )
+                }
+                .buttonStyle(.plain)
+            }
+
+            LazyVStack(spacing: Spacing.sm) {
+                ForEach(viewModel.readings) { reading in
+                    if isSelectMode {
+                        // 選択モード: チェックボックス付き
+                        Button {
+                            toggleSelection(reading.id)
+                        } label: {
+                            HStack(spacing: Spacing.sm) {
+                                Image(systemName: selectedIds.contains(reading.id) ? "checkmark.circle.fill" : "circle")
+                                    .font(.title3)
+                                    .foregroundStyle(selectedIds.contains(reading.id) ? Color.sorayomiPrimary : Color.sorayomiTextSecondary.opacity(0.4))
+
+                                HistoryRowView(reading: reading)
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        // 通常モード: タップで詳細表示
+                        NavigationLink(value: ReadingDetailDestination(reading: reading)) {
+                            HistoryRowView(reading: reading) {
+                                readingToDelete = reading
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
+    }
+
+    private func toggleSelection(_ id: String) {
+        if selectedIds.contains(id) {
+            selectedIds.remove(id)
+        } else {
+            selectedIds.insert(id)
         }
     }
 
@@ -131,7 +300,7 @@ struct HistoryScreen: View {
             sectionHeader(
                 eyebrow: "はじめての鑑定",
                 title: "まだ記録がありません",
-                subtitle: "最初の鑑定を受けると、ここに対話の履歴が少しずつ積み上がっていきます。"
+                subtitle: "鑑定を受けると、ここに記録が残ります。"
             )
 
             VStack(alignment: .leading, spacing: Spacing.sm) {
@@ -142,17 +311,17 @@ struct HistoryScreen: View {
                 EmptyArchiveStep(
                     icon: "heart.fill",
                     title: "恋愛や相性を見る",
-                    detail: "相手との距離感や迷いがあるときに向いています。"
+                    detail: "気になる相手との距離感に迷ったときに。"
                 )
                 EmptyArchiveStep(
                     icon: "briefcase.fill",
                     title: "仕事の転機を聞く",
-                    detail: "動くべき時期や優先順位を整理したいときに便利です。"
+                    detail: "動くべき時期や方向性を整理したいときに。"
                 )
                 EmptyArchiveStep(
                     icon: "sparkles",
                     title: "今日の流れを整える",
-                    detail: "大きな悩みがなくても、気分を整える入り口として使えます。"
+                    detail: "特に悩みがなくても、気分を整えたいときに。"
                 )
 
                 Button {
@@ -226,10 +395,10 @@ struct HistoryScreen: View {
 
     private var heroSubtitle: String {
         if viewModel.readings.isEmpty {
-            return "鑑定を始めると、ここに対話の記録が残ります。"
+            return "鑑定を始めると、ここに記録が残ります。"
         }
 
-        return "最近は\(mostUsedThemeName)をよく見ています。気になったときにすぐ見返せます。"
+        return "最近は\(mostUsedThemeName)をよく見ています。"
     }
 
     private var latestReadingLabel: String {

@@ -70,8 +70,11 @@ enum SorayomiSpacing {
     /// Standard internal padding for card-style containers.
     static let cardPadding: CGFloat = 16
 
-    /// Horizontal padding applied to full-width screen content.
+    /// Horizontal padding applied to full-width screen content (iPhone).
     static let screenPadding: CGFloat = 20
+
+    /// Wider screen padding for iPad / regular size class.
+    static let screenPaddingRegular: CGFloat = 40
 
     /// Bottom padding to keep content above the safe area / tab bar.
     static let bottomSafeArea: CGFloat = 34

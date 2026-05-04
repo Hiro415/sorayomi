@@ -17,6 +17,7 @@ struct ReadingLoadingView: View {
     @State private var messageIndex = 0
     @State private var dotCount = 0
     @State private var progress: CGFloat = 0
+    @State private var viewSize: CGSize = CGSize(width: 390, height: 844)
     @State private var particles: [LoadingParticle] = []
     @State private var showPhaseLabel = false
 
@@ -51,7 +52,7 @@ struct ReadingLoadingView: View {
             Spacer()
 
             // 免責事項
-            Text("※ AIが鑑定内容を生成しております")
+            Text("※ 鑑定結果はエンターテインメント目的です")
                 .font(SorayomiTypography.caption)
                 .foregroundStyle(Color.sorayomiTextSecondary.opacity(0.5))
                 .padding(.bottom, Spacing.xl)
@@ -72,6 +73,11 @@ struct ReadingLoadingView: View {
                 }
             }
         )
+        .onGeometryChange(for: CGSize.self) { proxy in
+            proxy.size
+        } action: { newSize in
+            viewSize = newSize
+        }
         .onAppear {
             isAnimating = true
             generateParticles()
@@ -188,8 +194,17 @@ struct ReadingLoadingView: View {
 
     private var messageView: some View {
         Text(currentMessages[messageIndex % currentMessages.count] + animatedDots)
-            .font(.system(size: 14, weight: .regular, design: .serif))
-            .foregroundStyle(Color.sorayomiTextSecondary)
+            .font(.system(size: 15, weight: .medium, design: .serif))
+            .foregroundStyle(
+                LinearGradient(
+                    colors: [
+                        Color(hue: 0.12, saturation: 0.35, brightness: 0.92),
+                        Color(hue: 0.08, saturation: 0.45, brightness: 0.78),
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
             .multilineTextAlignment(.center)
             .frame(height: 24)
             .animation(.easeInOut(duration: 0.3), value: messageIndex)
@@ -267,35 +282,171 @@ struct ReadingLoadingView: View {
     }
 
     private var preparingMessages: [String] {
-        guard let system = fortuneSystem else { return ["準備しています"] }
+        guard let system = fortuneSystem else {
+            return ["場を整えています", "気の流れを感じています"]
+        }
         switch system {
-        case .omikuji:       return ["おみくじを整えています", "本日の御言葉を選んでいます"]
-        case .horoscope:     return ["星の配置を確認しています", "天体の位置を計算しています"]
-        case .bloodType:     return ["血液型の特性を分析しています", "気質パターンを確認しています"]
-        case .birthdayPersonality: return ["誕生日の星を読み解いています", "誕生数を計算しています"]
-        case .tarot:         return ["カードをシャッフルしています", "カードを展開しています"]
-        case .numerology:    return ["数字の神秘を計算しています", "ライフパスナンバーを分析中"]
-        case .nineStarKi:    return ["九星の巡りを確認しています", "本命星のエネルギーを読み取っています"]
-        case .rokuyo:        return ["今日の六曜を確認しています", "暦の導きを読み解いています"]
+        case .omikuji:
+            return [
+                "おみくじ筒を静かに振っています",
+                "神前の空気を整えています",
+                "今日の運を受け取る準備をしています",
+            ]
+        case .horoscope:
+            return [
+                "星の配置を読み込んでいます",
+                "天球儀を回しています",
+                "星座の記憶を辿っています",
+            ]
+        case .bloodType:
+            return [
+                "気質パターンを照合しています",
+                "血液型の傾向を整理しています",
+                "体質のリズムを感じています",
+            ]
+        case .birthdayPersonality:
+            return [
+                "誕生日の星を探しています",
+                "生まれた日のエネルギーを感じています",
+                "誕生数を計算しています",
+            ]
+        case .tarot:
+            return [
+                "カードをシャッフルしています",
+                "タロットデッキを清めています",
+                "カードとの対話を始めています",
+            ]
+        case .numerology:
+            return [
+                "数字の振動を読み取っています",
+                "ライフパスナンバーを算出しています",
+                "数字の神秘に耳を澄ませています",
+            ]
+        case .nineStarKi:
+            return [
+                "九星の巡りを確認しています",
+                "本命星の位置を計算しています",
+                "方位盤を回しています",
+            ]
+        case .rokuyo:
+            return [
+                "暦を繰っています",
+                "今日の六曜を読み解いています",
+                "吉凶のリズムを確認しています",
+            ]
+        case .flowerFortune:
+            return [
+                "花の声に耳を澄ませています",
+                "誕生花の花言葉を読み解いています",
+                "今日の花を選んでいます",
+            ]
+        case .stoneFortune:
+            return [
+                "パワーストーンの波動を感じています",
+                "誕生石との共鳴を読み取っています",
+                "今日の守護石を探しています",
+            ]
+        case .generalConsultation:
+            return [
+                "あなたの声に耳を澄ませています",
+                "お話の糸を整理しています",
+                "最も合う見方を探しています",
+            ]
         }
     }
 
     private var readingMessages: [String] {
-        guard let system = fortuneSystem else { return ["鑑定しています"] }
+        guard let system = fortuneSystem else {
+            return ["見立てを深めています", "流れを読み解いています"]
+        }
         switch system {
-        case .omikuji:       return ["神前のような静けさを整えています", "今日の運の流れを受け取っています"]
-        case .horoscope:     return ["天体のエネルギーを感じ取っています", "星座からのメッセージを受信中"]
-        case .bloodType:     return ["気質と相性を読み解いています", "内なるエネルギーの流れを感じています"]
-        case .birthdayPersonality: return ["生まれた日のエネルギーを感じ取っています", "運命の糸を辿っています"]
-        case .tarot:         return ["タロットカードのメッセージを読み解いています", "運命のカードが語りかけています"]
-        case .numerology:    return ["数字が語るメッセージを紡いでいます", "運命の数列を読み解いています"]
-        case .nineStarKi:    return ["吉方位を計算しています", "気の流れを感じ取っています"]
-        case .rokuyo:        return ["吉凶の流れを感じ取っています", "天の時を計っています"]
+        case .omikuji:
+            return [
+                "御言葉が降りてくるのを待っています",
+                "今日の運の色を見ています",
+                "吉凶の境を丁寧に見極めています",
+                "神前の静けさの中で読み取っています",
+            ]
+        case .horoscope:
+            return [
+                "天体のささやきを聞いています",
+                "星の配列が語る物語を読んでいます",
+                "あなたの星座に光を当てています",
+                "惑星の軌道から流れを追っています",
+            ]
+        case .bloodType:
+            return [
+                "気質の奥を読み解いています",
+                "相性のパターンを紡いでいます",
+                "あなたの内なるリズムを感じています",
+                "血の記憶を辿っています",
+            ]
+        case .birthdayPersonality:
+            return [
+                "生まれた日の運命を辿っています",
+                "あなたに宿る資質を読んでいます",
+                "誕生日が教える物語を紡いでいます",
+                "数秘の光を追いかけています",
+            ]
+        case .tarot:
+            return [
+                "カードが語りかけています",
+                "スプレッドの物語を読み解いています",
+                "正位置と逆位置の境を見ています",
+                "カードの象徴が浮かび上がっています",
+            ]
+        case .numerology:
+            return [
+                "数字が囁くメッセージを聞いています",
+                "運命の数列を紐解いています",
+                "隠された数のパターンを追っています",
+                "数の共鳴を感じ取っています",
+            ]
+        case .nineStarKi:
+            return [
+                "気の流れを手繰っています",
+                "吉方位を丁寧に見極めています",
+                "五行の相生相剋を読んでいます",
+                "星の巡りが示す景色を見ています",
+            ]
+        case .rokuyo:
+            return [
+                "暦の知恵を引き出しています",
+                "天の時を慎重に計っています",
+                "吉凶の波を読んでいます",
+                "暦が語る今日の物語を聞いています",
+            ]
+        case .flowerFortune:
+            return [
+                "花びらの囁きを聞いています",
+                "花言葉の奥を読み解いています",
+                "花の香りに導かれています",
+                "季節の花が語りかけています",
+            ]
+        case .stoneFortune:
+            return [
+                "石の輝きを読み取っています",
+                "チャクラの共鳴を感じています",
+                "パワーストーンの導きを受けています",
+                "クリスタルの光を追っています",
+            ]
+        case .generalConsultation:
+            return [
+                "あなたの悩みの奥を見つめています",
+                "流れの中にある転機を探しています",
+                "最も大切な一点を見極めています",
+                "導きの言葉を紡いでいます",
+            ]
         }
     }
 
     private var summarizingMessages: [String] {
-        ["鑑定結果をまとめています", "あなたへのメッセージを仕上げています"]
+        [
+            "鑑定の全体像をまとめています",
+            "あなたへの言葉を仕上げています",
+            "最後の一筆を入れています",
+            "導きの手紙を封じています",
+        ]
     }
 
     // MARK: - Animations
@@ -307,7 +458,7 @@ struct ReadingLoadingView: View {
     private func startMessageCycle() {
         Task { @MainActor in
             while !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(2.5))
+                try? await Task.sleep(for: .seconds(1.8))
                 withAnimation(.easeInOut(duration: 0.3)) {
                     messageIndex = (messageIndex + 1)
                 }
@@ -387,14 +538,14 @@ struct ReadingLoadingView: View {
     // MARK: - Particles
 
     private func generateParticles() {
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = viewSize.width
+        let screenHeight = viewSize.height
 
         particles = (0..<15).map { _ in
             LoadingParticle(
                 position: CGPoint(
-                    x: CGFloat.random(in: 20...(screenWidth - 20)),
-                    y: CGFloat.random(in: 80...(screenHeight - 80))
+                    x: CGFloat.random(in: 20...max(screenWidth - 20, 40)),
+                    y: CGFloat.random(in: 80...max(screenHeight - 80, 160))
                 ),
                 size: CGFloat.random(in: 1.5...3.5),
                 opacity: 0,

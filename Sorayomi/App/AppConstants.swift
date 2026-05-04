@@ -22,11 +22,9 @@ enum AppConstants {
 
     // MARK: - Support & Legal
 
-    static let supportEmail: String = "support@sorayomi-app.com"
+    static let privacyPolicyURL: URL = URL(string: "https://hiro415.github.io/sorayomi/privacy/")!
 
-    static let privacyPolicyURL: URL = URL(string: "https://sorayomi-app.com/privacy")!
-
-    static let termsURL: URL = URL(string: "https://sorayomi-app.com/terms")!
+    static let termsURL: URL = URL(string: "https://hiro415.github.io/sorayomi/terms/")!
 
     // MARK: - App Metadata
 
@@ -49,12 +47,13 @@ enum AppConstants {
     // MARK: - Firebase Cloud Functions
 
     /// Firebase Cloud Functions のベースURL
-    /// デプロイ後に `https://<region>-<project>.cloudfunctions.net` に設定する。
+    /// Cloud Run の完全なURLを設定する（関数名を含まない）。
     /// 空文字の場合はモック応答にフォールバック（開発用）。
-    static let cloudFunctionBaseURL: String = "" // ← デプロイ後に設定
+    static let cloudFunctionBaseURL: String = "https://generatereading-xrup2mbsaa-uc.a.run.app"
 
-    /// Cloud Function 名
-    static let cloudFunctionName: String = "generateReading"
+    /// Cloud Function 名（URLパスに追加される）
+    /// Cloud Run の場合、関数名はURLに含まれているため空文字にする。
+    static let cloudFunctionName: String = ""
 
     /// 鑑定ローディング最低表示時間（秒）
     static let minimumLoadingDuration: TimeInterval = 5.0

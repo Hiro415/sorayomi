@@ -135,6 +135,30 @@ final class UserProfileService {
         #endif
     }
 
+    // MARK: - Favorite Systems
+
+    /// お気に入り占術をトグル（追加 or 削除）
+    func toggleFavoriteSystem(_ system: FortuneSystem) {
+        guard var profile = currentProfile else { return }
+        if profile.favoriteSystemIDs.contains(system.rawValue) {
+            profile.favoriteSystemIDs.removeAll { $0 == system.rawValue }
+        } else {
+            profile.favoriteSystemIDs.append(system.rawValue)
+        }
+        profile.updatedAt = Date()
+        repository.save(profile)
+        currentProfile = profile
+
+        #if DEBUG
+        print("[UserProfileService] Toggled favorite: \(system.rawValue) → \(profile.favoriteSystemIDs)")
+        #endif
+    }
+
+    /// お気に入りに登録されているかどうか
+    func isFavorite(_ system: FortuneSystem) -> Bool {
+        currentProfile?.favoriteSystemIDs.contains(system.rawValue) ?? false
+    }
+
     /// AI同意を付与
     func grantAIConsent() {
         guard let userId = authService.currentUserId else { return }
@@ -164,6 +188,38 @@ final class UserProfileService {
 
         #if DEBUG
         print("[UserProfileService] AI consent granted")
+        #endif
+    }
+
+    // MARK: - Account Deletion
+
+    /// すべてのユーザーデータを消去する（アカウント削除用）。
+    /// プロフィール、履歴、クレジット残高、キャッシュをすべて削除する。
+    func deleteAllUserData(
+        readingHistoryService: ReadingHistoryService,
+        creditWalletService: CreditWalletService,
+        freeTrialManager: FreeTrialManager
+    ) {
+        guard let userId = authService.currentUserId else { return }
+
+        // プロフィール削除
+        repository.delete(userId: userId)
+        currentProfile = nil
+
+        // 鑑定履歴削除
+        readingHistoryService.deleteAllReadings(for: userId)
+
+        // クレジット残高リセット
+        creditWalletService.resetWallet()
+
+        // フリートライアル状態リセット
+        freeTrialManager.resetFreeTrial()
+
+        // すべての UserDefaults キーを消去
+        UserDefaultsStore.shared.clearAll()
+
+        #if DEBUG
+        print("[UserProfileService] All user data deleted for: \(userId)")
         #endif
     }
 

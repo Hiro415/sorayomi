@@ -66,6 +66,30 @@ final class ProfileViewModel {
         }
     }
 
+    // MARK: - Update Birthday
+
+    /// 誕生日を更新する（星座も自動更新される）
+    func updateBirthday(env: AppEnvironment, date: Date) {
+        env.userProfileService.updateBirthday(date)
+        profile = env.userProfileService.currentProfile
+
+        #if DEBUG
+        print("[ProfileViewModel] Updated birthday, zodiac: \(profile?.zodiacSign?.japaneseName ?? "nil")")
+        #endif
+    }
+
+    // MARK: - Update Blood Type
+
+    /// 血液型を更新する
+    func updateBloodType(env: AppEnvironment, type: BloodType) {
+        env.userProfileService.updateBloodType(type)
+        profile = env.userProfileService.currentProfile
+
+        #if DEBUG
+        print("[ProfileViewModel] Updated blood type to: \(type.rawValue)")
+        #endif
+    }
+
     // MARK: - Profile Photo
 
     /// 保存済みのプロフィール画像を読み込む

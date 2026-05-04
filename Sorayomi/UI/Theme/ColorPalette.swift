@@ -2,112 +2,114 @@ import SwiftUI
 
 // MARK: - Semantic Color Palette
 
-/// Japanese-inspired premium color palette for the Sorayomi app.
+/// Japanese-inspired mystical color palette for the Sorayomi app.
 ///
-/// Every color is defined as a pair of light / dark mode values so
-/// the app respects the system appearance setting automatically.
+/// Built around a deep-indigo / violet cosmos theme that evokes a starlit
+/// night sky — mysterious and premium, but never harsh or inaccessible.
+/// All colors are defined as light / dark adaptive pairs so the app
+/// respects the system appearance setting automatically.
 /// Access colors through the `Color.sorayomi*` static properties.
 extension Color {
 
     // MARK: - Brand Colors
 
-    /// Deep midnight indigo -- primary brand color.
+    /// Deep royal violet -- primary brand color.
     static let sorayomiPrimary = Color(
-        light: .init(red: 0.11, green: 0.16, blue: 0.33),  // #1D2954
-        dark:  .init(red: 0.65, green: 0.72, blue: 0.93)   // #A5B8ED
+        light: .init(red: 0.239, green: 0.169, blue: 0.549),  // #3D2B8C
+        dark:  .init(red: 0.616, green: 0.561, blue: 0.984)   // #9D8FFB
     )
 
     /// Warm gold -- secondary accent.
     static let sorayomiSecondary = Color(
-        light: .init(red: 0.80, green: 0.66, blue: 0.37),  // #CCA85E
-        dark:  .init(red: 0.90, green: 0.80, blue: 0.56)   // #E6CC8F
+        light: .init(red: 0.722, green: 0.573, blue: 0.227),  // #B8923A
+        dark:  .init(red: 0.910, green: 0.800, blue: 0.416)   // #E8CC6A
     )
 
-    /// Vermilion-inspired accent used for ritual highlights.
+    /// Amethyst -- accent used for ritual highlights.
     static let sorayomiAccent = Color(
-        light: .init(red: 0.80, green: 0.34, blue: 0.24),  // #CC573D
-        dark:  .init(red: 0.93, green: 0.55, blue: 0.44)   // #ED8C70
+        light: .init(red: 0.471, green: 0.200, blue: 0.627),  // #7833A0
+        dark:  .init(red: 0.831, green: 0.471, blue: 0.941)   // #D478F0
     )
 
     // MARK: - Backgrounds
 
-    /// Warm paper background.
+    /// Soft lavender-paper background.
     static let sorayomiBackground = Color(
-        light: .init(red: 0.97, green: 0.95, blue: 0.91),  // #F7F1E8
-        dark:  .init(red: 0.06, green: 0.08, blue: 0.11)   // #10131B
+        light: .init(red: 0.933, green: 0.918, blue: 0.965),  // #EEEAf6
+        dark:  .init(red: 0.059, green: 0.047, blue: 0.125)   // #0F0C20
     )
 
     /// Primary card surface.
     static let sorayomiSurface = Color(
-        light: .init(red: 1.0,  green: 0.99, blue: 0.98),  // #FFFCFA
-        dark:  .init(red: 0.11, green: 0.13, blue: 0.18)   // #1C202E
+        light: .init(red: 0.973, green: 0.961, blue: 1.000),  // #F8F5FF
+        dark:  .init(red: 0.094, green: 0.078, blue: 0.235)   // #18143C
     )
 
     static let sorayomiPaper = Color(
-        light: .init(red: 0.99, green: 0.97, blue: 0.95),  // #FCF7F2
-        dark:  .init(red: 0.17, green: 0.18, blue: 0.24)   // #2A2E3D
+        light: .init(red: 0.957, green: 0.941, blue: 1.000),  // #F4F0FF
+        dark:  .init(red: 0.114, green: 0.098, blue: 0.282)   // #1D1948
     )
 
     static let sorayomiSurfaceElevated = Color(
-        light: .init(red: 1.0, green: 0.98, blue: 0.96),   // #FFF9F4
-        dark:  .init(red: 0.19, green: 0.20, blue: 0.27)   // #303446
+        light: .init(red: 0.980, green: 0.973, blue: 1.000),  // #FAF8FF
+        dark:  .init(red: 0.133, green: 0.125, blue: 0.306)   // #22204E
     )
 
-    /// Deep lacquer-like surface used for hero panels.
+    /// Deep cosmic surface used for hero panels.
     static let sorayomiNight = Color(
-        light: .init(red: 0.18, green: 0.20, blue: 0.33),  // #2E3354
-        dark:  .init(red: 0.12, green: 0.15, blue: 0.23)   // #1F263A
+        light: .init(red: 0.165, green: 0.118, blue: 0.408),  // #2A1E68
+        dark:  .init(red: 0.047, green: 0.039, blue: 0.094)   // #0C0A18
     )
 
     /// Soft highlight wash used behind chips and supportive surfaces.
     static let sorayomiMist = Color(
-        light: .init(red: 0.95, green: 0.91, blue: 0.86),  // #F2E9DB
-        dark:  .init(red: 0.21, green: 0.22, blue: 0.28)   // #363947
+        light: .init(red: 0.894, green: 0.871, blue: 0.961),  // #E4DEF5
+        dark:  .init(red: 0.157, green: 0.141, blue: 0.361)   // #28245C
     )
 
     // MARK: - Text
 
     /// Deep ink text.
     static let sorayomiTextPrimary = Color(
-        light: .init(red: 0.15, green: 0.13, blue: 0.16),  // #261F28
-        dark:  .init(red: 0.95, green: 0.93, blue: 0.90)   // #F2EDE6
+        light: .init(red: 0.110, green: 0.078, blue: 0.188),  // #1C1430
+        dark:  .init(red: 0.949, green: 0.933, blue: 0.973)   // #F2EEF8
     )
 
-    /// Secondary text with a warm slate tint.
+    /// Secondary text with a soft lavender-slate tint.
     static let sorayomiTextSecondary = Color(
-        light: .init(red: 0.41, green: 0.37, blue: 0.41),  // #695E68
-        dark:  .init(red: 0.72, green: 0.68, blue: 0.72)   // #B7ADB7
+        light: .init(red: 0.369, green: 0.314, blue: 0.502),  // #5E5080
+        dark:  .init(red: 0.659, green: 0.620, blue: 0.784)   // #A89EC8
     )
 
     // MARK: - Semantic Status
 
     static let sorayomiSuccess = Color(
-        light: .init(red: 0.29, green: 0.58, blue: 0.34),  // #4A9457
-        dark:  .init(red: 0.42, green: 0.76, blue: 0.50)   // #6BC280
+        light: .init(red: 0.165, green: 0.533, blue: 0.282),  // #2A8848
+        dark:  .init(red: 0.290, green: 0.804, blue: 0.478)   // #4ACD7A
     )
 
     static let sorayomiWarning = Color(
-        light: .init(red: 0.86, green: 0.60, blue: 0.22),  // #DB9938
-        dark:  .init(red: 0.94, green: 0.76, blue: 0.36)   // #F0C15C
+        light: .init(red: 0.800, green: 0.533, blue: 0.125),  // #CC8820
+        dark:  .init(red: 0.941, green: 0.753, blue: 0.251)   // #F0C040
     )
 
     static let sorayomiError = Color(
-        light: .init(red: 0.74, green: 0.24, blue: 0.24),  // #BC3D3D
-        dark:  .init(red: 0.90, green: 0.40, blue: 0.40)   // #E66666
+        light: .init(red: 0.737, green: 0.188, blue: 0.188),  // #BC3030
+        dark:  .init(red: 0.910, green: 0.373, blue: 0.373)   // #E85F5F
     )
 
     // MARK: - Fortune Gradient
 
-    /// Start of the signature fortune-reading gradient (vermilion).
+    /// Start of the signature fortune-reading gradient (vivid violet).
     static let sorayomiFortuneGradientStart = Color(
-        light: .init(red: 0.79, green: 0.31, blue: 0.25),  // #C94F40
-        dark:  .init(red: 0.88, green: 0.45, blue: 0.37)   // #E0735E
+        light: .init(red: 0.420, green: 0.247, blue: 0.784),  // #6B3FC8
+        dark:  .init(red: 0.608, green: 0.361, blue: 0.961)   // #9B5CF5
     )
 
-    /// End of the signature fortune-reading gradient (midnight indigo).
+    /// End of the signature fortune-reading gradient (cobalt blue).
     static let sorayomiFortuneGradientEnd = Color(
-        light: .init(red: 0.14, green: 0.19, blue: 0.39),  // #243163
-        dark:  .init(red: 0.34, green: 0.39, blue: 0.66)   // #5763A8
+        light: .init(red: 0.176, green: 0.361, blue: 0.722),  // #2D5CB8
+        dark:  .init(red: 0.298, green: 0.486, blue: 0.961)   // #4C7CF5
     )
 
     /// Convenience linear gradient used for fortune card backgrounds.
@@ -122,18 +124,18 @@ extension Color {
     // MARK: - Divider / Border
 
     static let sorayomiDivider = Color(
-        light: .init(red: 0.89, green: 0.84, blue: 0.79),  // #E3D7CA
-        dark:  .init(red: 0.24, green: 0.26, blue: 0.31)   // #3D424F
+        light: .init(red: 0.816, green: 0.784, blue: 0.910),  // #D0C8E8
+        dark:  .init(red: 0.145, green: 0.125, blue: 0.282)   // #252048
     )
 
     static let sorayomiHighlight = Color(
-        light: .init(red: 0.98, green: 0.88, blue: 0.70),  // #FAE1B3
-        dark:  .init(red: 0.50, green: 0.42, blue: 0.24)   // #7F6A3D
+        light: .init(red: 0.867, green: 0.816, blue: 1.000),  // #DDD0FF
+        dark:  .init(red: 0.290, green: 0.247, blue: 0.627)   // #4A3FA0
     )
 
     static let sorayomiGlow = Color(
-        light: .init(red: 0.95, green: 0.75, blue: 0.56),  // #F2BF8F
-        dark:  .init(red: 0.55, green: 0.42, blue: 0.30)   // #8C6B4D
+        light: .init(red: 0.565, green: 0.439, blue: 0.847),  // #9070D8
+        dark:  .init(red: 0.769, green: 0.690, blue: 1.000)   // #C4B0FF
     )
 }
 

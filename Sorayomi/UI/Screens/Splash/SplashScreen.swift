@@ -21,6 +21,7 @@ struct SplashScreen: View {
     // MARK: - Particle State
 
     @State private var particles: [SplashParticle] = []
+    @State private var viewSize: CGSize = CGSize(width: 390, height: 844)
 
     var body: some View {
         ZStack {
@@ -220,6 +221,11 @@ struct SplashScreen: View {
             .padding(.horizontal, 40)
         }
         .opacity(fadeOut ? 0 : 1)
+        .onGeometryChange(for: CGSize.self) { proxy in
+            proxy.size
+        } action: { newSize in
+            viewSize = newSize
+        }
         .onAppear {
             startAnimations()
         }
@@ -276,14 +282,14 @@ struct SplashScreen: View {
     // MARK: - Particles
 
     private func generateParticles() {
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = viewSize.width
+        let screenHeight = viewSize.height
 
         particles = (0..<25).map { _ in
             SplashParticle(
                 position: CGPoint(
-                    x: CGFloat.random(in: 20...(screenWidth - 20)),
-                    y: CGFloat.random(in: 40...(screenHeight - 40))
+                    x: CGFloat.random(in: 20...max(screenWidth - 20, 40)),
+                    y: CGFloat.random(in: 40...max(screenHeight - 40, 80))
                 ),
                 size: CGFloat.random(in: 1.5...3.5),
                 opacity: 0,

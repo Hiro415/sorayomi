@@ -39,7 +39,7 @@ final class StoreKitManager {
 
     // MARK: - Properties
 
-    /// 利用可能なクレジットパック
+    /// 利用可能なクレジットパック（スターターパック含む）
     private(set) var products: [Product] = []
 
     /// 利用可能なサブスクリプション
@@ -48,15 +48,43 @@ final class StoreKitManager {
     /// サブスクリプションが有効かどうか
     private(set) var isSubscribed: Bool = false
 
+    /// 有効なサブスクリプションのプロダクトID
+    private(set) var activeSubscriptionProductId: String?
+
+    /// スターターパック購入済みかどうか
+    private(set) var hasUsedStarterPack: Bool = false
+
+    /// サブスクリプションの月次クレジット付与数
+    var monthlyCreditsAllowance: Int {
+        guard let productId = activeSubscriptionProductId else { return 0 }
+        return ProductIdentifiers.monthlyCredits(for: productId)
+    }
+
+    /// サブスクリプションのプラン表示名
+    var activeSubscriptionDisplayName: String? {
+        guard activeSubscriptionProductId != nil else { return nil }
+        return "月間プレミアム"
+    }
+
     /// 現在の購入状態
     private(set) var purchaseState: PurchaseState = .idle
 
     /// トランザクション監視タスク
     private var transactionListenerTask: Task<Void, Never>?
 
+    // MARK: - Starter Pack Persistence Key
+
+    private let starterPackUsedKey = "sorayomi_starter_pack_used"
+
     // MARK: - Init
 
     init() {
+        // One-time migration: UserDefaults → Keychain
+        if UserDefaults.standard.bool(forKey: starterPackUsedKey) {
+            KeychainStore.shared.saveString("1", forKey: starterPackUsedKey)
+            UserDefaults.standard.removeObject(forKey: starterPackUsedKey)
+        }
+        hasUsedStarterPack = KeychainStore.shared.exists(forKey: starterPackUsedKey)
         listenForTransactions()
     }
 
@@ -97,19 +125,21 @@ final class StoreKitManager {
 
         // サブスクリプション状態を確認
         await checkSubscriptionStatus()
+        // スターターパック購入済みチェック
+        await checkStarterPackStatus()
     }
 
     // MARK: - Subscription Status
 
     /// 現在のサブスクリプション状態を確認
     func checkSubscriptionStatus() async {
-        var hasActiveSubscription = false
+        var foundProductId: String?
 
         for await result in Transaction.currentEntitlements {
             do {
                 let transaction = try ReceiptValidator.verify(result)
                 if ProductIdentifiers.allSubscriptions.contains(transaction.productID) {
-                    hasActiveSubscription = true
+                    foundProductId = transaction.productID
                     break
                 }
             } catch {
@@ -117,11 +147,39 @@ final class StoreKitManager {
             }
         }
 
-        isSubscribed = hasActiveSubscription
+        activeSubscriptionProductId = foundProductId
+        isSubscribed = foundProductId != nil
 
         #if DEBUG
-        print("[StoreKitManager] Subscription status: \(isSubscribed ? "active" : "inactive")")
+        print("[StoreKitManager] Subscription status: \(isSubscribed ? "active (\(foundProductId ?? ""))" : "inactive")")
         #endif
+    }
+
+    // MARK: - Starter Pack Status
+
+    /// スターターパック購入済みをチェック（Transaction履歴 + UserDefaults両方）
+    /// Note: Consumable products don't appear in `currentEntitlements`.
+    /// Use `Transaction.all` to scan finished consumable transaction history.
+    func checkStarterPackStatus() async {
+        if hasUsedStarterPack { return }
+
+        for await result in Transaction.all {
+            do {
+                let transaction = try ReceiptValidator.verify(result)
+                if ProductIdentifiers.isStarterPack(transaction.productID) {
+                    markStarterPackUsed()
+                    return
+                }
+            } catch {
+                continue
+            }
+        }
+    }
+
+    /// スターターパック使用済みをマーク
+    private func markStarterPackUsed() {
+        hasUsedStarterPack = true
+        KeychainStore.shared.saveString("1", forKey: starterPackUsedKey)
     }
 
     // MARK: - Purchase
@@ -143,12 +201,18 @@ final class StoreKitManager {
 
                 // サブスクリプション購入の場合
                 if ProductIdentifiers.allSubscriptions.contains(product.id) {
+                    activeSubscriptionProductId = product.id
                     isSubscribed = true
                     purchaseState = .subscribedSuccess
                     #if DEBUG
                     print("[StoreKitManager] Subscription activated: \(product.id)")
                     #endif
                     return nil
+                }
+
+                // スターターパック購入の場合
+                if ProductIdentifiers.isStarterPack(product.id) {
+                    markStarterPackUsed()
                 }
 
                 // クレジットパック購入の場合
@@ -189,6 +253,7 @@ final class StoreKitManager {
         do {
             try await AppStore.sync()
             await checkSubscriptionStatus()
+            await checkStarterPackStatus()
             #if DEBUG
             print("[StoreKitManager] Purchases restored successfully")
             #endif
@@ -218,6 +283,9 @@ final class StoreKitManager {
                         let credits = ProductIdentifiers.creditsFor(productId: transaction.productID)
                         if credits > 0 {
                             await self?.applyTransactionUpdate(credits: credits)
+                        }
+                        if ProductIdentifiers.isStarterPack(transaction.productID) {
+                            await self?.markStarterPackUsed()
                         }
                     }
                 } catch {

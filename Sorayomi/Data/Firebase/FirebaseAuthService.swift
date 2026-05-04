@@ -32,8 +32,16 @@ final class FirebaseAuthService {
     // MARK: - Init
 
     init() {
-        // 保存済みのユーザーIDを復元
-        self.currentUserId = UserDefaults.standard.string(forKey: Keys.userId)
+        let keychain = KeychainStore.shared
+
+        // 既存ユーザーの UserDefaults → Keychain マイグレーション（一回限り）
+        if let legacyId = UserDefaults.standard.string(forKey: Keys.userId) {
+            keychain.saveString(legacyId, forKey: Keys.userId)
+            UserDefaults.standard.removeObject(forKey: Keys.userId)
+        }
+
+        // Keychain から保存済みのユーザーIDを復元
+        self.currentUserId = keychain.loadString(forKey: Keys.userId)
     }
 
     // MARK: - Authentication
@@ -55,7 +63,7 @@ final class FirebaseAuthService {
         // currentUserId = result.user.uid
         let localUserId = UUID().uuidString
         currentUserId = localUserId
-        UserDefaults.standard.set(localUserId, forKey: Keys.userId)
+        KeychainStore.shared.saveString(localUserId, forKey: Keys.userId)
 
         #if DEBUG
         print("[FirebaseAuth] Signed in anonymously: \(localUserId)")
@@ -67,7 +75,7 @@ final class FirebaseAuthService {
         // TODO: Replace with Firebase implementation
         // try Auth.auth().signOut()
         currentUserId = nil
-        UserDefaults.standard.removeObject(forKey: Keys.userId)
+        KeychainStore.shared.delete(forKey: Keys.userId)
 
         #if DEBUG
         print("[FirebaseAuth] Signed out")

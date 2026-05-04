@@ -108,9 +108,15 @@ final class NotificationManager {
         content.body = Self.messages.randomElement() ?? Self.messages[0]
         content.sound = .default
 
-        var dateComponents = DateComponents()
-        dateComponents.hour = notificationHour
-        dateComponents.minute = notificationMinute
+        let hour = notificationHour
+        let minute = notificationMinute
+
+        let dateComponents: DateComponents = {
+            var dc = DateComponents()
+            dc.hour = hour
+            dc.minute = minute
+            return dc
+        }()
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         let request = UNNotificationRequest(
@@ -124,7 +130,7 @@ final class NotificationManager {
             if let error {
                 print("[NotificationManager] Failed to schedule notification: \(error.localizedDescription)")
             } else {
-                print("[NotificationManager] Daily notification scheduled for \(dateComponents.hour ?? 0):\(String(format: "%02d", dateComponents.minute ?? 0))")
+                print("[NotificationManager] Daily notification scheduled for \(hour):\(String(format: "%02d", minute))")
             }
             #endif
         }

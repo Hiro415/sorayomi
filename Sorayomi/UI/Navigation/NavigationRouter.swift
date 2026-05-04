@@ -106,3 +106,16 @@ enum NavigationDestination: Hashable {
     case creditStore
     case about
 }
+
+/// FortuneReading をNavigationPathで直接渡すためのラッパー
+struct ReadingDetailDestination: Hashable {
+    let reading: FortuneReading
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(reading.id)
+    }
+
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.reading.id == rhs.reading.id
+    }
+}

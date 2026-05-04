@@ -10,6 +10,7 @@ import SwiftUI
 struct ReadingMessageBubble: View {
     let message: ReadingMessage
     var isFirstReading: Bool = false
+    var onShare: (() -> Void)? = nil
 
     @State private var appeared = false
 
@@ -42,13 +43,44 @@ struct ReadingMessageBubble: View {
     @ViewBuilder
     private var fortuneResultView: some View {
         let result = FortuneResultParser.parse(message.content)
-        if message.presentation == .readingResult, result.isValid {
-            // パース成功 → リッチカード表示
-            FortuneResultCardView(result: result)
-        } else {
-            // パース失敗 → フォールバック（装飾付きテキスト）
-            fallbackFortuneCard
+        VStack(spacing: Spacing.sm) {
+            if message.presentation == .readingResult, result.isValid {
+                // パース成功 → リッチカード表示
+                FortuneResultCardView(result: result)
+            } else {
+                // パース失敗 → フォールバック（装飾付きテキスト）
+                fallbackFortuneCard
+            }
+
+            // 共有ボタン（鑑定結果の末尾）
+            if let onShare {
+                shareButton(action: onShare)
+            }
         }
+    }
+
+    private func shareButton(action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: Spacing.xs) {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.system(size: 13, weight: .medium))
+                Text("この鑑定をシェア")
+                    .font(.system(size: 13, weight: .medium))
+            }
+            .foregroundStyle(Color.sorayomiPrimary)
+            .padding(.horizontal, Spacing.lg)
+            .padding(.vertical, Spacing.sm)
+            .background(
+                Capsule()
+                    .fill(Color.sorayomiPrimary.opacity(0.08))
+            )
+            .overlay(
+                Capsule()
+                    .strokeBorder(Color.sorayomiPrimary.opacity(0.2), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .padding(.top, Spacing.xs)
     }
 
     // MARK: - Fallback Fortune Card（パース失敗時）
@@ -88,7 +120,6 @@ struct ReadingMessageBubble: View {
                 .font(.system(size: 15, weight: .regular, design: .serif))
                 .foregroundStyle(Color.sorayomiTextPrimary)
                 .lineSpacing(10)
-                .tracking(-0.1)
                 .padding(.horizontal, Spacing.md)
                 .padding(.vertical, Spacing.md)
 
@@ -150,7 +181,6 @@ struct ReadingMessageBubble: View {
                     .font(messageFont)
                     .foregroundStyle(messageForeground)
                     .lineSpacing(6)
-                    .tracking(-0.2)
                     .padding(.horizontal, Spacing.sm)
                     .padding(.vertical, Spacing.xs + 2)
                     .background(messageBackground)

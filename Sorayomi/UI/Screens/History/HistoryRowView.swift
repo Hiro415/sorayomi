@@ -58,7 +58,7 @@ struct HistoryRowView: View {
 
                 if reading.creditsCost > 0 {
                     metaPill(
-                        icon: "diamond.fill",
+                        icon: "sparkle",
                         label: "\(reading.creditsCost)クレジット",
                         tint: .sorayomiSecondary
                     )

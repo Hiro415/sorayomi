@@ -47,6 +47,7 @@ final class CloudFunctionClient: @unchecked Sendable {
     // MARK: - Properties
 
     private let session: URLSession
+    private let appCheckProvider: AppCheckTokenProvider
 
     /// Cloud Function が設定されているかどうか
     var isAPIConfigured: Bool {
@@ -55,11 +56,12 @@ final class CloudFunctionClient: @unchecked Sendable {
 
     // MARK: - Init
 
-    init() {
+    init(appCheckProvider: AppCheckTokenProvider = FirebaseAppCheckTokenProvider()) {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = AppConstants.aiRequestTimeout
         config.timeoutIntervalForResource = AppConstants.aiRequestTimeout + 10
         self.session = URLSession(configuration: config)
+        self.appCheckProvider = appCheckProvider
     }
 
     // MARK: - Public API
@@ -106,13 +108,19 @@ final class CloudFunctionClient: @unchecked Sendable {
         let baseURL = AppConstants.cloudFunctionBaseURL.trimmingCharacters(in: .init(charactersIn: "/"))
         let functionName = AppConstants.cloudFunctionName
 
-        guard let url = URL(string: "\(baseURL)/\(functionName)") else {
+        let urlString = functionName.isEmpty ? baseURL : "\(baseURL)/\(functionName)"
+        guard let url = URL(string: urlString) else {
             throw CloudFunctionError.notConfigured
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        // Attach App Check token for server-side verification
+        if let appCheckToken = await appCheckProvider.currentToken() {
+            request.setValue(appCheckToken, forHTTPHeaderField: "X-Firebase-AppCheck")
+        }
 
         let historyArray = conversationHistory.map { entry in
             ["role": entry.role, "content": entry.content]
@@ -143,6 +151,8 @@ final class CloudFunctionClient: @unchecked Sendable {
         switch httpResponse.statusCode {
         case 200:
             break
+        case 401:
+            throw CloudFunctionError.notAvailable  // App Check rejected
         case 429:
             throw CloudFunctionError.rateLimited
         case 500...599:
@@ -389,6 +399,12 @@ final class CloudFunctionClient: @unchecked Sendable {
             return "数秘術では、今は流れの転換点を静かに見極める時期"
         case .nineStarKi:
             return "九星気学では、気の向きを整えることで選択の精度が上がりやすい"
+        case .generalConsultation:
+            return "総合的な見立てでは、あなたの直感が示す方向に大切なヒントがある"
+        case .flowerFortune:
+            return "花の導きでは、誕生花の花言葉があなたの本質と今日の過ごし方を示している"
+        case .stoneFortune:
+            return "パワーストーンの導きでは、石の持つエネルギーが今日のあなたを静かに守っている"
         }
     }
 

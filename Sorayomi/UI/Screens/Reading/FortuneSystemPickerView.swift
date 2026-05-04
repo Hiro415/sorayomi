@@ -6,23 +6,22 @@ import SwiftUI
 struct FortuneSystemPickerView: View {
     let selectedSystem: FortuneSystem?
     let onSelect: (FortuneSystem) -> Void
+    /// 本日使用済みの占術IDセット（当日鑑定済バッジ表示に使用）
+    var usedTodayIDs: Set<String> = []
 
-    private let columns = [
-        GridItem(.flexible(), spacing: Spacing.sm),
-        GridItem(.flexible(), spacing: Spacing.sm)
-    ]
+    // アダプティブグリッドはpickerSection内でAdaptiveGridを使用
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
             pickerSection(
                 title: "毎日の導き",
-                subtitle: "無料でさっと見られる、日本の暮らしに馴染む占術",
+                subtitle: "毎日無料で気軽にチェック",
                 systems: FortuneSystem.showcaseOrder.filter { $0.tier == .daily }
             )
 
             pickerSection(
                 title: "じっくり鑑定",
-                subtitle: "恋愛や仕事の悩みを深く読み解きたい日に",
+                subtitle: "恋愛や仕事の悩みをじっくり相談",
                 systems: FortuneSystem.showcaseOrder.filter { $0.tier != .daily }
             )
         }
@@ -44,11 +43,12 @@ struct FortuneSystemPickerView: View {
                     .foregroundStyle(Color.sorayomiTextSecondary)
             }
 
-            LazyVGrid(columns: columns, spacing: Spacing.sm) {
+            AdaptiveGrid(compactColumns: 2, regularColumns: 3, spacing: Spacing.sm) {
                 ForEach(systems) { system in
                     FortuneSystemCard(
                         system: system,
                         isSelected: selectedSystem == system,
+                        isUsedToday: usedTodayIDs.contains(system.rawValue),
                         onSelect: { onSelect(system) }
                     )
                 }
@@ -60,6 +60,8 @@ struct FortuneSystemPickerView: View {
 private struct FortuneSystemCard: View {
     let system: FortuneSystem
     let isSelected: Bool
+    /// 本日すでに無料鑑定を使用済みか
+    var isUsedToday: Bool = false
     let onSelect: () -> Void
 
     var body: some View {
@@ -75,18 +77,36 @@ private struct FortuneSystemCard: View {
 
                     Spacer()
 
-                    Text(system.highlightLabel)
-                        .font(SorayomiTypography.caption2)
-                        .fontWeight(.bold)
-                        .foregroundStyle(isSelected ? Color.white.opacity(0.88) : badgeColor)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(
-                            isSelected
-                                ? Color.white.opacity(0.14)
-                                : badgeColor.opacity(0.10)
-                        )
-                        .clipShape(Capsule())
+                    // 本日鑑定済バッジ or 通常ラベル
+                    Group {
+                        if isUsedToday && !isSelected {
+                            HStack(spacing: 3) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 9, weight: .bold))
+                                Text("本日鑑定済")
+                                    .font(SorayomiTypography.caption2)
+                                    .fontWeight(.bold)
+                            }
+                            .foregroundStyle(Color.sorayomiTextSecondary)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.sorayomiDivider.opacity(0.35))
+                            .clipShape(Capsule())
+                        } else {
+                            Text(system.highlightLabel)
+                                .font(SorayomiTypography.caption2)
+                                .fontWeight(.bold)
+                                .foregroundStyle(isSelected ? Color.white.opacity(0.88) : badgeColor)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(
+                                    isSelected
+                                        ? Color.white.opacity(0.14)
+                                        : badgeColor.opacity(0.10)
+                                )
+                                .clipShape(Capsule())
+                        }
+                    }
                 }
 
                 Text(system.shortName)
@@ -122,6 +142,7 @@ private struct FortuneSystemCard: View {
             )
         }
         .buttonStyle(.plain)
+        .hoverEffect(.lift)
         .shadow(
             color: isSelected ? Color.sorayomiFortuneGradientEnd.opacity(0.22) : Color.sorayomiPrimary.opacity(0.04),
             radius: isSelected ? 16 : 8,
@@ -163,20 +184,32 @@ private struct FortuneSystemCard: View {
     @ViewBuilder
     private var creditBadge: some View {
         if system.creditCost == 0 {
-            Text("無料")
-                .font(SorayomiTypography.caption2)
-                .fontWeight(.bold)
-                .foregroundStyle(isSelected ? Color.white : Color.sorayomiSuccess)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(
-                    isSelected ? Color.white.opacity(0.14) : Color.sorayomiSuccess.opacity(0.12)
-                )
-                .clipShape(Capsule())
+            if isUsedToday && !isSelected {
+                // 本日使用済み → 「明日また」ヒント
+                Text("明日またどうぞ")
+                    .font(SorayomiTypography.caption2)
+                    .fontWeight(.bold)
+                    .foregroundStyle(Color.sorayomiTextSecondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.sorayomiDivider.opacity(0.30))
+                    .clipShape(Capsule())
+            } else {
+                Text("毎日無料")
+                    .font(SorayomiTypography.caption2)
+                    .fontWeight(.bold)
+                    .foregroundStyle(isSelected ? Color.white : Color.sorayomiSuccess)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(
+                        isSelected ? Color.white.opacity(0.14) : Color.sorayomiSuccess.opacity(0.12)
+                    )
+                    .clipShape(Capsule())
+            }
         } else {
             HStack(spacing: 4) {
                 Image(systemName: "diamond.fill")
-                    .font(.system(size: 8))
+                    .font(.system(size: 7, weight: .bold))
                 Text("\(system.creditCost)")
                     .font(SorayomiTypography.caption2)
                     .fontWeight(.bold)

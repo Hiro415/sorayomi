@@ -42,13 +42,34 @@ final class AppEnvironment {
     /// 連続利用日数（ストリーク）の追跡
     let streakManager: StreakManager
 
+    /// 初回無料相談の管理（Keychain永続化）
+    let freeTrialManager: FreeTrialManager
+
+    /// 鑑定履歴の保存・読み込み
+    let readingHistoryService: ReadingHistoryService
+
+    /// App Storeレビュー依頼の管理
+    let reviewRequestManager: ReviewRequestManager
+
+    /// 広告リワード機能の管理
+    let adRewardManager: AdRewardManager
+
+    /// 無料コンテンツ（1日1回制限）の使用状況追跡
+    let dailyFortuneTracker: DailyFortuneUsageTracker
+
     // MARK: - Onboarding State
 
     /// `true` after the user completes the first-run onboarding flow.
-    /// Persisted in `UserDefaults` so the decision survives app restarts.
+    /// Persisted in Keychain (non-synchronizable) — survives app restarts and
+    /// UserDefaults clearing; resets on reinstall (acceptable: reinstall = fresh start).
+    /// Only FreeTrialManager uses synchronizable: true to survive reinstall.
     var isOnboardingComplete: Bool {
         didSet {
-            UserDefaults.standard.set(isOnboardingComplete, forKey: Keys.onboardingComplete)
+            if isOnboardingComplete {
+                KeychainStore.shared.saveString("1", forKey: Keys.onboardingComplete, synchronizable: false)
+            } else {
+                KeychainStore.shared.delete(forKey: Keys.onboardingComplete, synchronizable: false)
+            }
         }
     }
 
@@ -65,7 +86,20 @@ final class AppEnvironment {
         self.storeKitManager = StoreKitManager()
         self.notificationManager = NotificationManager()
         self.streakManager = StreakManager()
-        self.isOnboardingComplete = UserDefaults.standard.bool(forKey: Keys.onboardingComplete)
+        self.freeTrialManager = FreeTrialManager()
+        self.readingHistoryService = ReadingHistoryService()
+        self.reviewRequestManager = ReviewRequestManager(analyticsService: analyticsService, featureFlags: featureFlags)
+        self.adRewardManager = AdRewardManager(featureFlags: featureFlags, walletService: creditWalletService, analyticsService: analyticsService)
+        self.dailyFortuneTracker = DailyFortuneUsageTracker()
+        // One-time migration: UserDefaults → Keychain
+        if UserDefaults.standard.bool(forKey: Keys.onboardingComplete) {
+            KeychainStore.shared.saveString("1", forKey: Keys.onboardingComplete, synchronizable: false)
+            UserDefaults.standard.removeObject(forKey: Keys.onboardingComplete)
+        }
+        self.isOnboardingComplete = KeychainStore.shared.exists(forKey: Keys.onboardingComplete, synchronizable: false)
+
+        // 起動時にウォレット残高をストレージから読み込み
+        creditWalletService.loadWallet()
     }
 
     // MARK: - Actions
@@ -82,6 +116,21 @@ final class AppEnvironment {
         // オンボーディング完了後に通知許可をリクエスト
         Task {
             await notificationManager.requestAuthorization()
+        }
+    }
+
+    /// アプリ起動時にサブスクリプション月次クレジットを付与
+    func grantPremiumCreditsIfNeeded() async {
+        await storeKitManager.checkSubscriptionStatus()
+
+        // AdRewardManagerにサブスク状態を同期
+        adRewardManager.isSubscribed = storeKitManager.isSubscribed
+
+        if storeKitManager.isSubscribed {
+            creditWalletService.grantMonthlyPremiumCredits(
+                allowance: pricingConfig.premiumMonthlyCredits,
+                carryoverCap: pricingConfig.creditCarryoverCap
+            )
         }
     }
 

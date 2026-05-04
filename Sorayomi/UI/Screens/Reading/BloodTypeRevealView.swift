@@ -145,6 +145,10 @@ private struct DailyFortuneRevealContent: View {
     @State private var ambientPhase: CGFloat = 0
     @State private var particles: [BloodTypeParticle] = []
     @State private var iconFlip: Double = 0
+    @State private var viewWidth: CGFloat = 390
+
+    private var sizes: RevealSizeProvider { RevealSizeProvider(availableWidth: viewWidth) }
+    private var isLargeScreen: Bool { viewWidth > 600 }
 
     private let barLabels = ["総合", "恋愛", "仕事", "金運"]
 
@@ -165,7 +169,7 @@ private struct DailyFortuneRevealContent: View {
                 // Title
                 if showTitle {
                     Text("\(bloodType.japaneseName)のあなたの今日")
-                        .font(.system(size: 20, weight: .bold, design: .serif))
+                        .font(.system(size: isLargeScreen ? 26 : 20, weight: .bold, design: .serif))
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [
@@ -222,6 +226,11 @@ private struct DailyFortuneRevealContent: View {
                 }
             }
         }
+        .onGeometryChange(for: CGFloat.self) { proxy in
+            proxy.size.width
+        } action: { newWidth in
+            viewWidth = newWidth
+        }
         .onAppear {
             generateParticles()
             startAmbientAnimation()
@@ -231,7 +240,7 @@ private struct DailyFortuneRevealContent: View {
 
     private var bloodTypeIcon: some View {
         Text(bloodType.rawValue)
-            .font(.system(size: 48, weight: .bold, design: .serif))
+            .font(.system(size: isLargeScreen ? 64 : 48, weight: .bold, design: .serif))
             .foregroundStyle(
                 LinearGradient(
                     colors: [
@@ -248,7 +257,7 @@ private struct DailyFortuneRevealContent: View {
     private func scoreBarRow(label: String, score: Int) -> some View {
         HStack(spacing: Spacing.sm) {
             Text(label)
-                .font(.system(size: 14, weight: .medium, design: .serif))
+                .font(.system(size: isLargeScreen ? 17 : 14, weight: .medium, design: .serif))
                 .foregroundStyle(.white.opacity(0.7))
                 .frame(width: 40, alignment: .trailing)
 
@@ -261,13 +270,13 @@ private struct DailyFortuneRevealContent: View {
     private func luckyItem(icon: String, label: String, value: String) -> some View {
         VStack(spacing: Spacing.xxs) {
             Image(systemName: icon)
-                .font(.system(size: 16))
+                .font(.system(size: isLargeScreen ? 20 : 16))
                 .foregroundStyle(Color(hue: 0.12, saturation: 0.4, brightness: 0.8))
             Text(label)
-                .font(.system(size: 10, weight: .medium))
+                .font(.system(size: isLargeScreen ? 12 : 10, weight: .medium))
                 .foregroundStyle(.white.opacity(0.4))
             Text(value)
-                .font(.system(size: 14, weight: .semibold, design: .serif))
+                .font(.system(size: isLargeScreen ? 17 : 14, weight: .semibold, design: .serif))
                 .foregroundStyle(.white.opacity(0.9))
         }
     }
@@ -366,8 +375,8 @@ private struct DailyFortuneRevealContent: View {
     }
 
     private func generateParticles() {
-        let w = UIScreen.main.bounds.width
-        let h = UIScreen.main.bounds.height
+        let w = viewWidth
+        let h = viewWidth * 2.16
         particles = (0..<18).map { _ in
             BloodTypeParticle(
                 position: CGPoint(x: .random(in: 0...w), y: .random(in: 0...h)),
@@ -409,6 +418,12 @@ private struct CompatibilityRevealContent: View {
     @State private var showButton = false
     @State private var ambientPhase: CGFloat = 0
     @State private var sparkleParticles: [BloodTypeParticle] = []
+    @State private var viewWidth: CGFloat = 390
+
+    private var sizes: RevealSizeProvider {
+        RevealSizeProvider(availableWidth: viewWidth)
+    }
+    private var isLargeScreen: Bool { viewWidth > 600 }
 
     var body: some View {
         ZStack {
@@ -418,7 +433,7 @@ private struct CompatibilityRevealContent: View {
                 Spacer()
 
                 // Two blood types
-                HStack(spacing: mergeToCenter ? Spacing.lg : 100) {
+                HStack(spacing: mergeToCenter ? Spacing.lg : viewWidth * 0.25) {
                     if showUser {
                         bloodTypeBadge(type: userType)
                             .transition(.move(edge: .leading).combined(with: .opacity))
@@ -450,7 +465,7 @@ private struct CompatibilityRevealContent: View {
                     ZStack {
                         Circle()
                             .stroke(.white.opacity(0.1), lineWidth: 8)
-                            .frame(width: 120, height: 120)
+                            .frame(width: sizes.bloodTypeCircle, height: sizes.bloodTypeCircle)
 
                         Circle()
                             .trim(from: 0, to: meterProgress)
@@ -462,18 +477,18 @@ private struct CompatibilityRevealContent: View {
                                 ),
                                 style: StrokeStyle(lineWidth: 8, lineCap: .round)
                             )
-                            .frame(width: 120, height: 120)
+                            .frame(width: sizes.bloodTypeCircle, height: sizes.bloodTypeCircle)
                             .rotationEffect(.degrees(-90))
 
                         VStack(spacing: 2) {
                             ScoreStarsView(score: data.score, maxScore: 5, litCount: litStars)
 
                             Text("\(data.score)")
-                                .font(.system(size: 32, weight: .bold, design: .serif))
+                                .font(.system(size: isLargeScreen ? 44 : 32, weight: .bold, design: .serif))
                                 .foregroundStyle(.white)
 
                             Text("/ 5")
-                                .font(.system(size: 12, weight: .medium))
+                                .font(.system(size: isLargeScreen ? 14 : 12, weight: .medium))
                                 .foregroundStyle(.white.opacity(0.4))
                         }
                     }
@@ -484,7 +499,7 @@ private struct CompatibilityRevealContent: View {
                 // Description
                 if showDescription, let data = data {
                     Text(data.description)
-                        .font(.system(size: 14, weight: .regular, design: .serif))
+                        .font(.system(size: isLargeScreen ? 17 : 14, weight: .regular, design: .serif))
                         .foregroundStyle(.white.opacity(0.7))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, Spacing.xl)
@@ -506,6 +521,11 @@ private struct CompatibilityRevealContent: View {
                 }
             }
         }
+        .onGeometryChange(for: CGFloat.self) { proxy in
+            proxy.size.width
+        } action: { newWidth in
+            viewWidth = newWidth
+        }
         .onAppear {
             startAmbientAnimation()
             startCompatibilitySequence()
@@ -515,7 +535,7 @@ private struct CompatibilityRevealContent: View {
     private func bloodTypeBadge(type: BloodType) -> some View {
         VStack(spacing: Spacing.xxs) {
             Text(type.rawValue)
-                .font(.system(size: 36, weight: .bold, design: .serif))
+                .font(.system(size: isLargeScreen ? 48 : 36, weight: .bold, design: .serif))
                 .foregroundStyle(
                     LinearGradient(
                         colors: [
@@ -527,7 +547,7 @@ private struct CompatibilityRevealContent: View {
                     )
                 )
             Text(type.japaneseName)
-                .font(.system(size: 12, weight: .medium, design: .serif))
+                .font(.system(size: isLargeScreen ? 14 : 12, weight: .medium, design: .serif))
                 .foregroundStyle(.white.opacity(0.5))
         }
     }
@@ -668,6 +688,10 @@ private struct LoveMatchRevealContent: View {
     @State private var ambientPhase: CGFloat = 0
     @State private var heartScale: CGFloat = 1.0
     @State private var particles: [BloodTypeParticle] = []
+    @State private var viewWidth: CGFloat = 390
+
+    private var sizes: RevealSizeProvider { RevealSizeProvider(availableWidth: viewWidth) }
+    private var isLargeScreen: Bool { viewWidth > 600 }
 
     private let scoreLabels = ["コミュニケーション", "価値観", "情熱度", "長期安定度"]
 
@@ -682,11 +706,11 @@ private struct LoveMatchRevealContent: View {
                 if showTypes {
                     HStack(spacing: Spacing.md) {
                         Text(userType.japaneseName)
-                            .font(.system(size: 24, weight: .bold, design: .serif))
+                            .font(.system(size: isLargeScreen ? 32 : 24, weight: .bold, design: .serif))
                             .foregroundStyle(.white)
 
                         Image(systemName: "heart.fill")
-                            .font(.system(size: 28))
+                            .font(.system(size: isLargeScreen ? 36 : 28))
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [
@@ -700,7 +724,7 @@ private struct LoveMatchRevealContent: View {
                             .scaleEffect(heartScale)
 
                         Text(partnerType.japaneseName)
-                            .font(.system(size: 24, weight: .bold, design: .serif))
+                            .font(.system(size: isLargeScreen ? 32 : 24, weight: .bold, design: .serif))
                             .foregroundStyle(.white)
                     }
                     .transition(.scale.combined(with: .opacity))
@@ -710,7 +734,7 @@ private struct LoveMatchRevealContent: View {
                 // Title
                 if showTitle {
                     Text("\(userType.japaneseName) \u{00D7} \(partnerType.japaneseName)の恋の相性")
-                        .font(.system(size: 16, weight: .semibold, design: .serif))
+                        .font(.system(size: isLargeScreen ? 20 : 16, weight: .semibold, design: .serif))
                         .foregroundStyle(.white.opacity(0.7))
                         .transition(.opacity)
                         .padding(.bottom, Spacing.xl)
@@ -747,6 +771,11 @@ private struct LoveMatchRevealContent: View {
                 }
             }
         }
+        .onGeometryChange(for: CGFloat.self) { proxy in
+            proxy.size.width
+        } action: { newWidth in
+            viewWidth = newWidth
+        }
         .onAppear {
             generateHeartParticles()
             startAmbientAnimation()
@@ -757,7 +786,7 @@ private struct LoveMatchRevealContent: View {
     private func loveScoreRow(label: String, score: Int) -> some View {
         VStack(alignment: .leading, spacing: Spacing.xxs) {
             Text(label)
-                .font(.system(size: 12, weight: .medium, design: .serif))
+                .font(.system(size: isLargeScreen ? 14 : 12, weight: .medium, design: .serif))
                 .foregroundStyle(.white.opacity(0.5))
 
             HStack(spacing: Spacing.sm) {
@@ -878,8 +907,8 @@ private struct LoveMatchRevealContent: View {
     }
 
     private func generateHeartParticles() {
-        let w = UIScreen.main.bounds.width
-        let h = UIScreen.main.bounds.height
+        let w = viewWidth
+        let h = viewWidth * 2.16
         particles = (0..<15).map { _ in
             BloodTypeParticle(
                 position: CGPoint(x: .random(in: 0...w), y: .random(in: 0...h)),
@@ -918,19 +947,24 @@ private struct RankingRevealContent: View {
     @State private var firstPlaceScale: CGFloat = 0.8
     @State private var burstParticles: [BloodTypeParticle] = []
     @State private var showBurst = false
+    @State private var viewWidth: CGFloat = 390
+
+    private var sizes: RevealSizeProvider { RevealSizeProvider(availableWidth: viewWidth) }
+    private var isLargeScreen: Bool { viewWidth > 600 }
 
     var body: some View {
         ZStack {
             rankingBackground
 
+            ScrollView {
             VStack(spacing: 0) {
-                Spacer()
+                Spacer(minLength: Spacing.xl)
 
                 // Title + trophy
                 if showTitle {
                     VStack(spacing: Spacing.xs) {
                         Image(systemName: "trophy.fill")
-                            .font(.system(size: 32))
+                            .font(.system(size: isLargeScreen ? 44 : 32))
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [
@@ -943,7 +977,7 @@ private struct RankingRevealContent: View {
                             )
 
                         Text("今日の血液型ランキング")
-                            .font(.system(size: 18, weight: .bold, design: .serif))
+                            .font(.system(size: isLargeScreen ? 22 : 18, weight: .bold, design: .serif))
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [
@@ -959,12 +993,15 @@ private struct RankingRevealContent: View {
                     .padding(.bottom, Spacing.xl)
                 }
 
-                // Ranking entries (revealed from 4th to 1st)
+                // Ranking entries: 表示は1位→4位（上→下）、リビールは4位→1位の順
                 if let ranking = ranking {
-                    let sortedEntries = ranking.entries.sorted { $0.rank > $1.rank }
+                    let sortedEntries = ranking.entries.sorted { $0.rank < $1.rank } // 1位が上
+                    let totalEntries = sortedEntries.count
                     VStack(spacing: Spacing.sm) {
                         ForEach(Array(sortedEntries.enumerated()), id: \.element.id) { index, entry in
-                            if index < revealedRanks {
+                            // リビール順: 4位(index=3)→1位(index=0) = 下から上に表示
+                            let revealIndex = totalEntries - 1 - index
+                            if revealIndex < revealedRanks {
                                 rankRow(entry: entry, isFirst: entry.rank == 1)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -1001,7 +1038,7 @@ private struct RankingRevealContent: View {
                     .transition(.opacity)
                 }
 
-                Spacer()
+                Spacer(minLength: Spacing.lg)
 
                 // Button
                 if showButton {
@@ -1014,6 +1051,12 @@ private struct RankingRevealContent: View {
                         ))
                 }
             }
+            }
+        }
+        .onGeometryChange(for: CGFloat.self) { proxy in
+            proxy.size.width
+        } action: { newWidth in
+            viewWidth = newWidth
         }
         .onAppear {
             startAmbientAnimation()
@@ -1022,7 +1065,7 @@ private struct RankingRevealContent: View {
     }
 
     private func rankRow(entry: BloodTypeRanking.Entry, isFirst: Bool) -> some View {
-        HStack(spacing: Spacing.sm) {
+        HStack(alignment: .top, spacing: Spacing.sm) {
             // Rank badge
             ZStack {
                 Circle()
@@ -1030,23 +1073,27 @@ private struct RankingRevealContent: View {
                     .frame(width: 32, height: 32)
 
                 Text("\(entry.rank)")
-                    .font(.system(size: 16, weight: .bold, design: .serif))
+                    .font(.system(size: isLargeScreen ? 20 : 16, weight: .bold, design: .serif))
                     .foregroundStyle(.white)
             }
             .shadow(color: rankGlowColor(for: entry.rank), radius: isFirst ? 8 : 4)
 
-            Text(entry.bloodType.japaneseName)
-                .font(.system(size: 18, weight: .bold, design: .serif))
-                .foregroundStyle(.white)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: Spacing.sm) {
+                    Text(entry.bloodType.japaneseName)
+                        .font(.system(size: isLargeScreen ? 22 : 18, weight: .bold, design: .serif))
+                        .foregroundStyle(.white)
 
-            Spacer()
+                    Spacer()
 
-            Text(entry.oneLiner)
-                .font(.system(size: 11, weight: .regular, design: .serif))
-                .foregroundStyle(.white.opacity(0.5))
-                .lineLimit(1)
+                    ScoreStarsView(score: entry.score, maxScore: 5, litCount: entry.score)
+                }
 
-            ScoreStarsView(score: entry.score, maxScore: 5, litCount: entry.score)
+                Text(entry.oneLiner)
+                    .font(.system(size: isLargeScreen ? 13 : 11, weight: .regular, design: .serif))
+                    .foregroundStyle(.white.opacity(0.5))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .padding(.horizontal, Spacing.md)
         .padding(.vertical, Spacing.sm)
@@ -1171,7 +1218,7 @@ private struct RankingRevealContent: View {
     }
 
     private func generateBurstParticles() {
-        let centerX = UIScreen.main.bounds.width / 2
+        let centerX = viewWidth / 2
         burstParticles = (0..<20).map { _ in
             BloodTypeParticle(
                 position: CGPoint(

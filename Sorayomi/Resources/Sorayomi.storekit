@@ -9,32 +9,32 @@
       "internalID" : "100001",
       "localizations" : [
         {
-          "description" : "4クレジットを取得して、タロットや星座の鑑定を始めましょう。",
-          "displayName" : "おためしパック（4クレジット）",
+          "description" : "5クレジットで、まず好きな占術をお試しください。初回限定。",
+          "displayName" : "はじめてパック（5クレジット）",
           "locale" : "ja"
         },
         {
-          "description" : "Get 4 credits to start tarot or horoscope readings.",
-          "displayName" : "Starter Pack (4 Credits)",
+          "description" : "Get 5 credits to try your favorite fortune system. One-time only.",
+          "displayName" : "Starter Pack (5 Credits)",
           "locale" : "en"
         }
       ],
-      "productID" : "com.sorayomi.credits.pack4",
-      "referenceName" : "Credit Pack 4",
+      "productID" : "com.sorayomi.credits.starter",
+      "referenceName" : "Starter Pack 5",
       "type" : "Consumable"
     },
     {
-      "displayPrice" : "400",
+      "displayPrice" : "480",
       "familyShareable" : false,
       "internalID" : "100002",
       "localizations" : [
         {
-          "description" : "12クレジットでさまざまな占術を試せます。1回あたり約33円。",
+          "description" : "12クレジットでさまざまな占術を試せます。1回あたり約40円。",
           "displayName" : "おすすめパック（12クレジット）",
           "locale" : "ja"
         },
         {
-          "description" : "12 credits to explore multiple fortune systems. About ¥33 per reading.",
+          "description" : "12 credits to explore multiple fortune systems. About ¥40 per reading.",
           "displayName" : "Popular Pack (12 Credits)",
           "locale" : "en"
         }
@@ -44,94 +44,88 @@
       "type" : "Consumable"
     },
     {
-      "displayPrice" : "800",
+      "displayPrice" : "980",
       "familyShareable" : false,
       "internalID" : "100003",
       "localizations" : [
         {
-          "description" : "24クレジットでじっくり相談。1回あたり約33円でいちばんお得。",
-          "displayName" : "お得パック（24クレジット）",
+          "description" : "30クレジットでじっくり相談。1回あたり約33円。",
+          "displayName" : "じっくり相談パック（30クレジット）",
           "locale" : "ja"
         },
         {
-          "description" : "24 credits for deep consultations. Best value at about ¥33 per reading.",
-          "displayName" : "Value Pack (24 Credits)",
+          "description" : "30 credits for deep consultations. About ¥33 per reading.",
+          "displayName" : "Consultation Pack (30 Credits)",
           "locale" : "en"
         }
       ],
-      "productID" : "com.sorayomi.credits.pack24",
-      "referenceName" : "Credit Pack 24",
+      "productID" : "com.sorayomi.credits.pack30",
+      "referenceName" : "Credit Pack 30",
       "type" : "Consumable"
     },
     {
-      "displayPrice" : "480",
+      "displayPrice" : "1600",
+      "familyShareable" : false,
+      "internalID" : "100004",
+      "localizations" : [
+        {
+          "description" : "60クレジットでたっぷり鑑定。1回あたり約27円でいちばんお得。",
+          "displayName" : "たっぷり鑑定パック（60クレジット）",
+          "locale" : "ja"
+        },
+        {
+          "description" : "60 credits for extensive readings. Best value at about ¥27 per reading.",
+          "displayName" : "Value Pack (60 Credits)",
+          "locale" : "en"
+        }
+      ],
+      "productID" : "com.sorayomi.credits.pack60",
+      "referenceName" : "Credit Pack 60",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "980",
       "familyShareable" : false,
       "internalID" : "200001",
       "localizations" : [
         {
-          "description" : "7日間すべての鑑定がクレジット不要で使い放題。自動更新。",
-          "displayName" : "週間無制限パス",
+          "description" : "毎月30クレジットが届きます。履歴閲覧・広告非表示つき。自動更新。",
+          "displayName" : "月間プレミアム",
           "locale" : "ja"
         },
         {
-          "description" : "Unlimited readings for 7 days. Auto-renews weekly.",
-          "displayName" : "Weekly Unlimited Pass",
-          "locale" : "en"
-        }
-      ],
-      "productID" : "com.sorayomi.sub.weekly",
-      "referenceName" : "Weekly Unlimited Pass",
-      "type" : "AutoRenewableSubscription",
-      "subscription" : {
-        "groupNumber" : 1,
-        "subscriptionGroupID" : "sorayomi_unlimited",
-        "subscriptionPeriod" : "P1W"
-      }
-    },
-    {
-      "displayPrice" : "1480",
-      "familyShareable" : false,
-      "internalID" : "200002",
-      "localizations" : [
-        {
-          "description" : "30日間すべての鑑定がクレジット不要で使い放題。自動更新。週間パスより約23%お得。",
-          "displayName" : "月間無制限パス",
-          "locale" : "ja"
-        },
-        {
-          "description" : "Unlimited readings for 30 days. Auto-renews monthly. ~23% savings vs weekly.",
-          "displayName" : "Monthly Unlimited Pass",
+          "description" : "Get 30 credits monthly. Includes reading history and ad-free experience. Auto-renews.",
+          "displayName" : "Monthly Premium",
           "locale" : "en"
         }
       ],
       "productID" : "com.sorayomi.sub.monthly",
-      "referenceName" : "Monthly Unlimited Pass",
+      "referenceName" : "Monthly Premium",
       "type" : "AutoRenewableSubscription",
       "subscription" : {
         "groupNumber" : 1,
-        "subscriptionGroupID" : "sorayomi_unlimited",
+        "subscriptionGroupID" : "sorayomi_premium",
         "subscriptionPeriod" : "P1M"
       }
     }
   ],
   "subscriptionGroups" : [
     {
-      "id" : "sorayomi_unlimited",
+      "id" : "sorayomi_premium",
       "localizations" : [
         {
-          "description" : "宙よみの全鑑定が使い放題になるパスです。",
-          "displayName" : "無制限パス",
+          "description" : "毎月クレジットが届くプレミアムプランです。",
+          "displayName" : "プレミアム",
           "locale" : "ja"
         },
         {
-          "description" : "Unlimited access to all Sorayomi fortune readings.",
-          "displayName" : "Unlimited Pass",
+          "description" : "Monthly credits for Sorayomi fortune readings.",
+          "displayName" : "Premium",
           "locale" : "en"
         }
       ],
-      "name" : "Unlimited Pass",
+      "name" : "Premium",
       "subscriptions" : [
-        "com.sorayomi.sub.weekly",
         "com.sorayomi.sub.monthly"
       ]
     }

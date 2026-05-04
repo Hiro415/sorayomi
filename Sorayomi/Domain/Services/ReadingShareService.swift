@@ -2,31 +2,21 @@ import SwiftUI
 
 // MARK: - ReadingShareService
 
-/// 鑑定結果の共有テキスト・画像を生成するサービス
+/// 鑑定結果の共有テキストを生成するサービス
 enum ReadingShareService {
 
-    /// 鑑定結果からシェア用テキストを生成
+    /// 鑑定結果からシェア用テキストを生成（全文・装飾付き）
     /// - Parameters:
     ///   - systemName: 占術名（例: "タロット"）
     ///   - readingText: 鑑定結果テキスト
     /// - Returns: SNS等で共有可能なテキスト
     static func shareText(systemName: String, readingText: String) -> String {
-        // 長すぎるテキストは省略
-        let maxLength = 200
-        let truncated: String
-        if readingText.count > maxLength {
-            let index = readingText.index(readingText.startIndex, offsetBy: maxLength)
-            truncated = String(readingText[..<index]) + "…"
-        } else {
-            truncated = readingText
-        }
-
         return """
-        【\(AppConstants.appName) - \(systemName)】
+        ✧ \(AppConstants.appName) — \(systemName) ✧
 
-        \(truncated)
+        \(readingText)
 
-        \(AppConstants.appName)で自分だけの宙よみを体験 ✨
+        ✨ \(AppConstants.appName)で自分だけの占いを体験
         #宙よみ #Sorayomi #占い
         """
     }

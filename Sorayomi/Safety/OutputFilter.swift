@@ -163,6 +163,13 @@ struct OutputFilter: Sendable {
             wasModified = true
         }
 
+        // Remove template placeholders the AI may hallucinate
+        let placeholderCleaned = removePlaceholders(in: content)
+        if placeholderCleaned != content {
+            content = placeholderCleaned
+            wasModified = true
+        }
+
         // Append disclaimer if not present
         if !containsDisclaimer(content) {
             content += Self.standardDisclaimer
@@ -217,6 +224,33 @@ struct OutputFilter: Sendable {
 
         for (pattern, replacement) in replacements {
             result = result.replacingOccurrences(of: pattern, with: replacement)
+        }
+
+        return result
+    }
+
+    /// Removes template placeholders that the AI may hallucinate
+    /// (e.g. [お名前], [名前], {name}) and replaces them with "あなた".
+    private func removePlaceholders(in text: String) -> String {
+        var result = text
+
+        // Common placeholder patterns the AI might output
+        let placeholderPatterns = [
+            "\\[お名前\\]", "\\[名前\\]", "\\[ニックネーム\\]",
+            "\\[your name\\]", "\\[name\\]",
+            "\\{お名前\\}", "\\{名前\\}", "\\{name\\}",
+            "＜お名前＞", "＜名前＞",
+            "<お名前>", "<名前>",
+        ]
+
+        for pattern in placeholderPatterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                result = regex.stringByReplacingMatches(
+                    in: result,
+                    range: NSRange(result.startIndex..., in: result),
+                    withTemplate: "あなた"
+                )
+            }
         }
 
         return result

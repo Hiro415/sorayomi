@@ -254,6 +254,19 @@ struct SorayomiGoldButtonModifier: ViewModifier {
     }
 }
 
+// MARK: - Pressable Button Style
+
+/// Lightweight press-response style: subtle scale-down on tap, no other decoration.
+/// Use this on purchase cards and any button that currently uses `.plain` but
+/// needs tactile feedback.
+struct SorayomiPressableButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.easeInOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
 // MARK: - View Extensions
 
 extension View {

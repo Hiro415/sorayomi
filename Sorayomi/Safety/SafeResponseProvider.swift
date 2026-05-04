@@ -1,6 +1,7 @@
 import Foundation
 
-/// Provides safe, empathetic Japanese responses when user input touches restricted domains.
+/// Provides safe, empathetic Japanese responses when user input is intercepted
+/// by the on-device safety gate (crisis or inappropriate content only).
 struct SafeResponseProvider {
 
     struct SafeResponse {
@@ -10,7 +11,6 @@ struct SafeResponseProvider {
 
         enum SafeAction {
             case showCrisisResources
-            case dismissWithOption
             case none
         }
     }
@@ -22,56 +22,22 @@ struct SafeResponseProvider {
                 message: """
                 あなたのお気持ちを受け止めています。
 
-                今つらい状況にいらっしゃるなら、一人で抱え込まないでください。\
-                専門の相談窓口にお話しすることをお勧めします。
+                今つらい状況にいらっしゃるなら、一人で抱え込まないでください。専門の相談窓口に話すことで、楽になることがあります。
+
+                ▼ 今すぐ話せる無料相談窓口
+                📞 いのちの電話（24時間）
+                   0120-783-556
+
+                📞 よりそいホットライン（24時間）
+                   0120-279-338
+
+                📞 こころの健康相談統一ダイヤル
+                   0570-064-556
 
                 あなたは一人ではありません。
                 """,
                 action: .showCrisisResources,
                 resources: CrisisResource.japanese
-            )
-
-        case .medical:
-            return SafeResponse(
-                message: """
-                健康に関するご心配があるのですね。
-
-                申し訳ありませんが、医療に関する具体的なアドバイスを\
-                提供することはできません。\
-                医師や医療専門家にご相談されることをお勧めいたします。
-
-                運勢や気持ちの面での導きでしたら、お気軽にどうぞ。
-                """,
-                action: .dismissWithOption,
-                resources: []
-            )
-
-        case .legal:
-            return SafeResponse(
-                message: """
-                法律に関するお悩みがあるのですね。
-
-                法的なアドバイスは専門の弁護士にご相談ください。
-
-                運勢や人間関係についてのご質問でしたら、お手伝いできます。
-                """,
-                action: .dismissWithOption,
-                resources: [CrisisResource.legalHotline]
-            )
-
-        case .financial:
-            return SafeResponse(
-                message: """
-                お金に関するご質問ですね。
-
-                投資や財務に関する具体的なアドバイスを提供することはできません。\
-                ファイナンシャルプランナーや金融の専門家にご相談されることを\
-                お勧めします。
-
-                金運や仕事運の導きでしたら、お気軽にお尋ねください。
-                """,
-                action: .dismissWithOption,
-                resources: []
             )
 
         case .inappropriate:

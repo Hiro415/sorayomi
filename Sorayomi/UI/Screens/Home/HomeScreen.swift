@@ -4,6 +4,12 @@ import SwiftUI
 struct HomeScreen: View {
     @Environment(AppEnvironment.self) private var env
     @State private var viewModel = HomeViewModel()
+    /// 本日鑑定済みのおみくじ結果をシートで表示
+    @State private var showingStoredOmikuji = false
+    /// おみくじを未引きで直接起動（導きページを経由しない）
+    @State private var showingOmikujiDraw = false
+    /// 六曜を未引きで直接起動（導きページを経由しない）
+    @State private var showingRokuyoDraw = false
 
     var body: some View {
         ZStack {
@@ -11,61 +17,152 @@ struct HomeScreen: View {
 
             ScrollView {
                 VStack(spacing: Spacing.lg) {
-                    welcomeHero
+                    // Low credit upsell banner
+                    if env.creditWalletService.totalAvailable <= 2 && !env.storeKitManager.isSubscribed {
+                        lowCreditBanner
+                    }
+
+                    // Subscriber daily credit info
+                    if env.storeKitManager.isSubscribed {
+                        subscriberBadge
+                    }
+
                     streakCard
-                    primaryActions
                     todaySection
-                    shortcutDeck
-                    QuickAccessGrid(
-                        systems: FortuneSystem.showcaseOrder,
-                        onSelect: { system in
-                            startReading(system: system, category: .general)
-                        }
-                    )
+                    primaryActions
                 }
-                .padding(.horizontal, Spacing.screenPadding)
-                .padding(.top, Spacing.sm)
+                .adaptiveScreenPadding()
+                .contentWidthConstraint()
                 .padding(.bottom, Spacing.xxl)
             }
         }
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                todayGuidancePill
+            }
             ToolbarItem(placement: .topBarTrailing) {
-                CreditBadge(
-                    totalCredits: env.creditWalletService.totalAvailable,
-                    freeCredits: env.creditWalletService.freeCreditsRemaining
-                )
+                NavigationLink(value: NavigationDestination.creditStore) {
+                    CreditBadge(
+                        totalCredits: env.creditWalletService.totalAvailable,
+                        freeCredits: env.creditWalletService.freeCreditsRemaining
+                    )
+                }
+                .buttonStyle(.plain)
             }
         }
         .task {
+            env.dailyFortuneTracker.refreshIfNeeded()
             await viewModel.loadDailyFortune(env: env)
             env.streakManager.recordActivity()
         }
-    }
-
-    private var welcomeHero: some View {
-        VStack(alignment: .leading, spacing: Spacing.md) {
-            Text(formattedDate)
-                .font(SorayomiTypography.eyebrow)
-                .foregroundStyle(Color.white.opacity(0.72))
-
-            VStack(alignment: .leading, spacing: Spacing.xs) {
-                Text(heroTitle)
-                    .font(SorayomiTypography.title)
-                    .foregroundStyle(.white)
-
-                Text(heroNarrative)
-                    .japaneseText(SorayomiTypography.callout, lineSpacing: 6)
-                    .foregroundStyle(Color.white.opacity(0.86))
-            }
-
-            HStack(spacing: Spacing.xs) {
-                heroPill(title: "季節", value: viewModel.seasonalContext.season)
-                heroPill(title: "節気", value: viewModel.seasonalContext.solarTerm)
-                heroPill(title: "本日", value: viewModel.todayOmikuji.rank.japaneseName)
+        .sheet(isPresented: $showingStoredOmikuji) {
+            if let result = env.dailyFortuneTracker.todayOmikujiResult {
+                OmikujiRevealView(
+                    profile: env.userProfileService.currentProfile,
+                    storedResult: result,
+                    onResultDetermined: { _ in },
+                    onDismiss: { showingStoredOmikuji = false }
+                )
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .sorayomiPanel(tone: .night, padding: Spacing.lg)
+        // おみくじ: 未引きのとき導きページを経由せず直接起動
+        .fullScreenCover(isPresented: $showingOmikujiDraw) {
+            OmikujiRevealView(
+                profile: env.userProfileService.currentProfile,
+                storedResult: nil,
+                onResultDetermined: { result in
+                    env.dailyFortuneTracker.storeOmikujiResult(result)
+                    env.dailyFortuneTracker.markUsed(system: .omikuji)
+                    env.analyticsService.track(.readingStarted(
+                        system: FortuneSystem.omikuji.rawValue,
+                        category: ReadingCategory.daily.rawValue
+                    ))
+                },
+                onDismiss: { showingOmikujiDraw = false }
+            )
+        }
+        // 六曜: 未引きのとき導きページを経由せず直接起動
+        .fullScreenCover(isPresented: $showingRokuyoDraw) {
+            RokuyoRevealView(
+                rokuyo: viewModel.todayRokuyo,
+                onComplete: { showingRokuyoDraw = false },
+                wasAlreadyUsedToday: false,
+                onDraw: {
+                    env.dailyFortuneTracker.markUsed(system: .rokuyo)
+                    env.analyticsService.track(.readingStarted(
+                        system: FortuneSystem.rokuyo.rawValue,
+                        category: ReadingCategory.daily.rawValue
+                    ))
+                }
+            )
+        }
+    }
+
+    private var lowCreditBanner: some View {
+        NavigationLink(value: NavigationDestination.creditStore) {
+            HStack(spacing: Spacing.sm) {
+                Image(systemName: "exclamationmark.diamond.fill")
+                    .font(.title3)
+                    .foregroundStyle(Color.sorayomiWarning)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("クレジット残りわずか")
+                        .font(SorayomiTypography.headline)
+                        .foregroundStyle(Color.sorayomiTextPrimary)
+
+                    if env.creditWalletService.totalAvailable == 0 {
+                        Text("クレジットを追加して鑑定を続けましょう")
+                            .font(SorayomiTypography.caption)
+                            .foregroundStyle(Color.sorayomiTextSecondary)
+                    } else {
+                        Text("残り\(env.creditWalletService.totalAvailable)クレジット — プレミアムパスなら毎日届きます")
+                            .font(SorayomiTypography.caption)
+                            .foregroundStyle(Color.sorayomiTextSecondary)
+                    }
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(Color.sorayomiPrimary)
+            }
+            .padding(Spacing.md)
+            .background(Color.sorayomiWarning.opacity(0.08))
+            .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium))
+            .overlay(
+                RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium)
+                    .stroke(Color.sorayomiWarning.opacity(0.2), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var subscriberBadge: some View {
+        HStack(spacing: Spacing.sm) {
+            Image(systemName: "crown.fill")
+                .font(.title3)
+                .foregroundStyle(Color.sorayomiAccent)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(env.storeKitManager.activeSubscriptionDisplayName ?? "プレミアムパス")
+                    .font(SorayomiTypography.headline)
+                    .foregroundStyle(Color.sorayomiTextPrimary)
+
+                Text("毎月\(env.storeKitManager.monthlyCreditsAllowance)クレジットが届きます")
+                    .font(SorayomiTypography.caption)
+                    .foregroundStyle(Color.sorayomiTextSecondary)
+            }
+
+            Spacer()
+
+            Image(systemName: "checkmark.seal.fill")
+                .font(.title3)
+                .foregroundStyle(Color.sorayomiSuccess)
+        }
+        .sorayomiPanel(tone: .elevated, padding: Spacing.md)
     }
 
     private var streakCard: some View {
@@ -106,7 +203,12 @@ struct HomeScreen: View {
                 set: { if !$0 { env.streakManager.clearPendingMilestone() } }
             )
         ) {
-            Button("受け取る") { env.streakManager.clearPendingMilestone() }
+            Button("受け取る") {
+            if let credits = env.streakManager.pendingMilestoneCredits {
+                env.creditWalletService.grantStreakReward(credits)
+            }
+            env.streakManager.clearPendingMilestone()
+        }
         } message: {
             if let credits = env.streakManager.pendingMilestoneCredits {
                 Text("\(env.streakManager.currentStreak)日連続達成！\(credits)クレジットを獲得しました 🎉")
@@ -117,110 +219,237 @@ struct HomeScreen: View {
     private var primaryActions: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             sectionTitle(
-                eyebrow: "すぐ始める",
-                title: "今の気分に合う入口",
-                subtitle: "さっと流れを見るか、相談からじっくり入るかをここで選べます。"
+                eyebrow: "はじめる",
+                title: "気になることから選ぶ",
+                subtitle: "テーマを選ぶと、相性のいい占術でそのまま始められます。"
             )
 
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: Spacing.sm) {
-                    primaryActionCard(
-                        title: "今日の運を見る",
-                        subtitle: "おみくじから、今の空気を手早く確かめる",
-                        symbol: "sparkles.rectangle.stack.fill",
-                        tint: .sorayomiAccent
-                    ) {
-                        startReading(system: .omikuji, category: .daily)
-                    }
+            // 悩みベースの入口
+            concernBasedEntry
 
-                    primaryActionCard(
-                        title: "相談を始める",
-                        subtitle: "恋愛や仕事など、気になるテーマから入る",
-                        symbol: "bubble.left.and.bubble.right.fill",
-                        tint: .sorayomiPrimary
-                    ) {
-                        env.navigationRouter.navigate(to: .reading)
-                    }
+            // 自由相談バナー（初回のみ）
+            if env.freeTrialManager.isFirstConsultationAvailable {
+                freeTrialConsultBanner
+            }
+
+            // 導きページへの誘導
+            allSystemsLink
+        }
+    }
+
+    /// 導きページ（全占術選択）へのナビゲーションリンク
+    /// 既存のセッション状態をリセットしてから遷移する
+    private var allSystemsLink: some View {
+        Button {
+            // おみくじ結果などの残存状態をクリアしてからReadingタブへ
+            env.navigationRouter.shouldResetReading = true
+            env.navigationRouter.navigate(to: .reading)
+        } label: {
+            HStack(spacing: Spacing.sm) {
+                Image(systemName: "square.grid.2x2.fill")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Color.sorayomiPrimary)
+                    .frame(width: 32, height: 32)
+                    .background(Color.sorayomiPrimary.opacity(0.10))
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("占術を選んで相談する")
+                        .font(SorayomiTypography.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.sorayomiTextPrimary)
+
+                    Text("タロット・星座・数秘術など好みの占術を指定して相談")
+                        .font(SorayomiTypography.caption2)
+                        .foregroundStyle(Color.sorayomiTextSecondary)
                 }
 
-                VStack(spacing: Spacing.sm) {
-                    primaryActionCard(
-                        title: "今日の運を見る",
-                        subtitle: "おみくじから、今の空気を手早く確かめる",
-                        symbol: "sparkles.rectangle.stack.fill",
-                        tint: .sorayomiAccent
-                    ) {
-                        startReading(system: .omikuji, category: .daily)
-                    }
+                Spacer(minLength: 0)
 
-                    primaryActionCard(
-                        title: "相談を始める",
-                        subtitle: "恋愛や仕事など、気になるテーマから入る",
-                        symbol: "bubble.left.and.bubble.right.fill",
-                        tint: .sorayomiPrimary
-                    ) {
-                        env.navigationRouter.navigate(to: .reading)
-                    }
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(Color.sorayomiPrimary)
+            }
+            .padding(Spacing.md)
+            .background(Color.sorayomiSurface)
+            .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous)
+                    .strokeBorder(Color.sorayomiDivider.opacity(0.6), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .hoverEffect(.lift)
+    }
+
+    // MARK: - Concern-Based Entry
+
+    private var concernBasedEntry: some View {
+        AdaptiveGrid(compactColumns: 2, regularColumns: 3, spacing: Spacing.sm) {
+            ForEach(concernEntries) { entry in
+                ConcernEntryCard(entry: entry) {
+                    env.analyticsService.track(.concernEntryTapped(concern: entry.analyticsKey))
+                    startReading(system: entry.system, category: entry.category)
                 }
             }
         }
+    }
+
+    private var concernEntries: [ConcernEntry] {
+        [
+            ConcernEntry(
+                title: "恋愛・人間関係",
+                subtitle: "気持ちの距離感、相性、次の一歩",
+                symbol: "heart.fill",
+                tint: .pink,
+                system: .tarot,
+                category: .love,
+                analyticsKey: "love_relationships"
+            ),
+            ConcernEntry(
+                title: "仕事・将来",
+                subtitle: "転機の見極め、方向性、適職",
+                symbol: "briefcase.fill",
+                tint: .sorayomiPrimary,
+                system: .nineStarKi,
+                category: .career,
+                analyticsKey: "career_future"
+            ),
+            ConcernEntry(
+                title: "お金・暮らし",
+                subtitle: "金運、引越し、生活の流れ",
+                symbol: "yensign.circle.fill",
+                tint: .sorayomiAccent,
+                system: .numerology,
+                category: .wealth,
+                analyticsKey: "money_life"
+            ),
+            ConcernEntry(
+                title: "自分を知る",
+                subtitle: "性格、才能、今のリズム",
+                symbol: "person.fill.questionmark",
+                tint: .sorayomiSecondary,
+                system: .birthdayPersonality,
+                category: .personality,
+                analyticsKey: "self_discovery"
+            )
+        ]
+    }
+
+    private var freeTrialConsultBanner: some View {
+        Button {
+            startReading(system: .generalConsultation, category: .general)
+        } label: {
+            HStack(spacing: Spacing.sm) {
+                Image(systemName: "gift.fill")
+                    .font(.caption)
+                    .foregroundStyle(Color.sorayomiAccent)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("初回無料：なんでも自由に相談")
+                        .font(SorayomiTypography.headline)
+                        .foregroundStyle(Color.sorayomiTextPrimary)
+
+                    Text("恋愛・仕事・人間関係…テーマを決めずに話せます")
+                        .font(SorayomiTypography.caption)
+                        .foregroundStyle(Color.sorayomiTextSecondary)
+                }
+
+                Spacer(minLength: 0)
+
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(Color.sorayomiPrimary)
+            }
+            .padding(Spacing.md)
+            .background(Color.sorayomiAccent.opacity(0.06))
+            .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium))
+            .overlay(
+                RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium)
+                    .stroke(Color.sorayomiAccent.opacity(0.15), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     private var todaySection: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             sectionTitle(
                 eyebrow: "今日の流れ",
-                title: "まずは今日の空気を確認",
-                subtitle: "おみくじ、運の整えどころ、六曜をまとめて見られます。"
+                title: "今日の空気をひと目で",
+                subtitle: "おみくじ・運勢・六曜をまとめて確認できます。"
             )
 
-            OmikujiSpotlightCard(omikuji: viewModel.todayOmikuji) {
-                startReading(system: .omikuji, category: .daily)
-            }
+            OmikujiSpotlightCard(
+                omikuji: env.dailyFortuneTracker.todayOmikujiResult ?? viewModel.todayOmikuji,
+                isDrawnToday: env.dailyFortuneTracker.todayOmikujiResult != nil,
+                action: { startReading(system: .omikuji, category: .daily) },
+                onViewResult: { showingStoredOmikuji = true }
+            )
 
             dailyRhythmCard
-            RokuyoBannerView(rokuyo: viewModel.todayRokuyo)
+
+            // 六曜：未引きはティーザーカード、引き済みはフルガジェット
+            if env.dailyFortuneTracker.usedSystemIDs.contains(FortuneSystem.rokuyo.rawValue) {
+                RokuyoBannerView(rokuyo: viewModel.todayRokuyo)
+            } else {
+                RokuyoTeaserCard {
+                    startReading(system: .rokuyo, category: .daily)
+                }
+            }
         }
     }
 
     private var dailyRhythmCard: some View {
         VStack(alignment: .leading, spacing: Spacing.xxs) {
             if let dailyFortune = viewModel.dailyFortune {
-                HStack(alignment: .top, spacing: Spacing.md) {
-                    VStack(alignment: .leading, spacing: Spacing.xxs) {
-                        Text("整えどころ")
-                            .font(SorayomiTypography.caption)
-                            .foregroundStyle(Color.sorayomiTextSecondary)
+                VStack(alignment: .leading, spacing: Spacing.sm) {
+                    HStack(alignment: .top, spacing: Spacing.md) {
+                        // 整えどころ：スコアをドット表示に
+                        VStack(alignment: .leading, spacing: Spacing.xs) {
+                            Text("整えどころ")
+                                .font(SorayomiTypography.caption)
+                                .foregroundStyle(Color.sorayomiTextSecondary)
 
-                        Text("\(dailyFortune.overallScore)/5")
-                            .font(SorayomiTypography.metricNumber)
-                            .foregroundStyle(Color.sorayomiPrimary)
+                            HStack(spacing: 5) {
+                                ForEach(1...5, id: \.self) { i in
+                                    Circle()
+                                        .fill(i <= dailyFortune.overallScore
+                                              ? Color.sorayomiPrimary
+                                              : Color.sorayomiPrimary.opacity(0.15))
+                                        .frame(width: 9, height: 9)
+                                }
+                            }
 
-                        Text(scoreNarrative(for: dailyFortune.overallScore))
-                            .font(SorayomiTypography.caption)
-                            .foregroundStyle(Color.sorayomiTextSecondary)
+                            Text(scoreNarrative(for: dailyFortune.overallScore))
+                                .font(SorayomiTypography.caption)
+                                .foregroundStyle(Color.sorayomiTextSecondary)
+                                .lineSpacing(3)
+                        }
+
+                        Spacer(minLength: 0)
+
+                        // 今日のラッキーアイテム（おみくじ由来）
+                        VStack(alignment: .leading, spacing: Spacing.sm) {
+                            rhythmBadge(
+                                icon: "paintpalette.fill",
+                                title: "ラッキーカラー",
+                                value: dailyFortune.luckyColor
+                            )
+                            rhythmBadge(
+                                icon: "bag.fill",
+                                title: "ラッキーアイテム",
+                                value: dailyFortune.luckyItem
+                            )
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
 
-                    Spacer(minLength: 0)
+                    Divider()
+                        .opacity(0.25)
 
-                    VStack(alignment: .leading, spacing: Spacing.sm) {
-                        rhythmBadge(
-                            icon: "sparkles",
-                            title: "気分の鍵",
-                            value: dailyFortune.horoscopeSnippet
-                        )
-                        rhythmBadge(
-                            icon: "paintpalette.fill",
-                            title: "ラッキーカラー",
-                            value: dailyFortune.luckyColor
-                        )
-                        rhythmBadge(
-                            icon: "bag.fill",
-                            title: "ラッキーアイテム",
-                            value: dailyFortune.luckyItem
-                        )
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    // 今日のスコアに合わせたアクション誘導
+                    rhythmActionRow(for: dailyFortune.overallScore)
                 }
             } else {
                 ProgressView()
@@ -231,68 +460,64 @@ struct HomeScreen: View {
         .sorayomiPanel(tone: .spotlight)
     }
 
-    private var shortcutDeck: some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
-            sectionTitle(
-                eyebrow: "人気テーマ",
-                title: "迷ったときの入口",
-                subtitle: "よくある相談から入ると、占術選びで迷いにくくなります。"
-            )
+    @ViewBuilder
+    private func rhythmActionRow(for score: Int) -> some View {
+        let (label, icon, system, category) = rhythmActionDetails(for: score)
+        Button {
+            startReading(system: system, category: category)
+        } label: {
+            HStack(spacing: Spacing.sm) {
+                Image(systemName: icon)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Color.sorayomiPrimary)
+                    .frame(width: 28, height: 28)
+                    .background(Color.sorayomiPrimary.opacity(0.10))
+                    .clipShape(Circle())
 
-            LazyVGrid(
-                columns: [
-                    GridItem(.flexible(), spacing: Spacing.sm),
-                    GridItem(.flexible(), spacing: Spacing.sm)
-                ],
-                spacing: Spacing.sm
-            ) {
-                ForEach(themeShortcuts) { shortcut in
-                    ThemeShortcutCard(shortcut: shortcut) {
-                        startReading(system: shortcut.system, category: shortcut.category)
-                    }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("今日のおすすめ")
+                        .font(SorayomiTypography.caption2)
+                        .foregroundStyle(Color.sorayomiTextSecondary)
+                    Text(label)
+                        .font(SorayomiTypography.footnote)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.sorayomiTextPrimary)
                 }
+
+                Spacer(minLength: 0)
+
+                Image(systemName: "chevron.right")
+                    .font(.caption2)
+                    .foregroundStyle(Color.sorayomiPrimary)
             }
         }
+        .buttonStyle(.plain)
     }
 
-    private var themeShortcuts: [ThemeShortcut] {
-        [
-            ThemeShortcut(
-                title: "恋愛・相性",
-                subtitle: "人気のタロットで気持ちの流れと距離感を丁寧に確認",
-                symbol: "heart.fill",
-                system: .tarot,
-                category: .love
-            ),
-            ThemeShortcut(
-                title: "仕事・転機",
-                subtitle: "九星気学で今の巡りと、動き出すべき時期を読む",
-                symbol: "briefcase.fill",
-                system: .nineStarKi,
-                category: .career
-            ),
-            ThemeShortcut(
-                title: "金運・開運",
-                subtitle: "おみくじで今日のお金の使い方と整え方を受け取る",
-                symbol: "yensign.circle.fill",
-                system: .omikuji,
-                category: .wealth
-            ),
-            ThemeShortcut(
-                title: "今日の流れ",
-                subtitle: "星座の流れから、いまの空気とペース配分を知る",
-                symbol: "sun.max.fill",
-                system: .horoscope,
-                category: .daily
-            )
-        ]
+    private func rhythmActionDetails(
+        for score: Int
+    ) -> (label: String, icon: String, system: FortuneSystem, category: ReadingCategory) {
+        switch score {
+        case 5:
+            return ("大きな決断をするなら今日 — タロットで確かめる",
+                    "moon.stars.fill", .tarot, .general)
+        case 4:
+            return ("追い風に乗って気になることを相談する",
+                    "sun.max.fill", .tarot, .general)
+        case 3:
+            return ("九星気学で今日の気の流れを確認する",
+                    "compass.drawing", .nineStarKi, .career)
+        default:
+            return ("数秘術でじっくり自分のリズムを知る",
+                    "leaf.fill", .numerology, .personality)
+        }
     }
 
     private var heroNarrative: String {
         if let fortune = viewModel.dailyFortune {
-            return "今日は\(scoreNarrative(for: fortune.overallScore))。流れを見るか、気になるテーマから始めましょう。"
+            return "今日は\(scoreNarrative(for: fortune.overallScore))。気になるテーマから始めてみましょう。"
         }
-        return "\(viewModel.seasonalContext.solarTerm)に合う導きを用意しています。"
+        return "\(viewModel.seasonalContext.solarTerm)の時期にぴったりの導きを用意しました。"
     }
 
     private var heroTitle: String {
@@ -308,6 +533,44 @@ struct HomeScreen: View {
         formatter.dateFormat = "M月d日（EEEE）"
         formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
         return formatter.string(from: Date())
+    }
+
+    /// ナビバー用の短い日付表示（例: 5月3日（土））
+    private var formattedDateShort: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ja_JP")
+        formatter.dateFormat = "M月d日（E）"
+        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        return formatter.string(from: Date())
+    }
+
+    /// ナビバー左（.topBarLeading）に表示する横長ピル。
+    /// CreditBadge と同じ vertical padding・フォントサイズでY軸の高さを揃える。
+    private var todayGuidancePill: some View {
+        HStack(spacing: 4) {
+            Text(formattedDateShort)
+                .foregroundColor(Color.sorayomiTextPrimary)
+
+            Text("·")
+                .foregroundColor(Color.sorayomiTextSecondary.opacity(0.4))
+
+            Text(viewModel.seasonalContext.solarTerm)
+                .foregroundColor(Color.sorayomiTextSecondary)
+
+            if let rank = env.dailyFortuneTracker.todayOmikujiResult?.rank.japaneseName {
+                Text("·")
+                    .foregroundColor(Color.sorayomiTextSecondary.opacity(0.4))
+                Text(rank)
+                    .foregroundColor(Color.sorayomiAccent)
+                    .fontWeight(.semibold)
+            }
+        }
+        .font(.system(size: 12, weight: .medium))
+        .fixedSize()
+        .padding(.horizontal, 11)
+        .padding(.vertical, 4)
+        .background(Capsule().fill(Color.sorayomiPrimary.opacity(0.07)))
+        .overlay(Capsule().strokeBorder(Color.sorayomiPrimary.opacity(0.16), lineWidth: 0.5))
     }
 
     private func sectionTitle(eyebrow: String, title: String, subtitle: String) -> some View {
@@ -326,62 +589,6 @@ struct HomeScreen: View {
                 .lineSpacing(4)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private func primaryActionCard(
-        title: String,
-        subtitle: String,
-        symbol: String,
-        tint: Color,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            HStack(alignment: .top, spacing: Spacing.md) {
-                Image(systemName: symbol)
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 42, height: 42)
-                    .background(tint)
-                    .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous))
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(SorayomiTypography.headline)
-                        .foregroundStyle(Color.sorayomiTextPrimary)
-
-                    Text(subtitle)
-                        .font(SorayomiTypography.caption)
-                        .foregroundStyle(Color.sorayomiTextSecondary)
-                        .lineSpacing(4)
-                }
-
-                Spacer(minLength: 0)
-
-                Image(systemName: "arrow.right")
-                    .font(.caption)
-                    .foregroundStyle(Color.sorayomiPrimary)
-            }
-            .frame(maxWidth: .infinity, minHeight: 108, alignment: .topLeading)
-            .sorayomiPanel(tone: .elevated, padding: Spacing.md)
-        }
-        .buttonStyle(.plain)
-    }
-
-    private func heroPill(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(title)
-                .font(SorayomiTypography.caption2)
-                .foregroundStyle(Color.white.opacity(0.68))
-
-            Text(value)
-                .font(SorayomiTypography.footnote)
-                .fontWeight(.semibold)
-                .foregroundStyle(.white)
-        }
-        .padding(.horizontal, Spacing.sm)
-        .padding(.vertical, Spacing.xs)
-        .background(Color.white.opacity(0.10))
-        .clipShape(Capsule())
     }
 
     private func rhythmBadge(icon: String, title: String, value: String) -> some View {
@@ -420,78 +627,236 @@ struct HomeScreen: View {
     }
 
     private func startReading(system: FortuneSystem, category: ReadingCategory) {
-        env.navigationRouter.pendingFortuneSystem = system
-        env.navigationRouter.pendingReadingCategory = category
-        env.navigationRouter.navigate(to: .reading)
+        // 1日1回制限の無料コンテンツは再使用不可（usedSystemIDs を直接参照）
+        guard !env.dailyFortuneTracker.usedSystemIDs.contains(system.rawValue) else { return }
+
+        switch system {
+        case .omikuji:
+            // 導きページを経由せずホームから直接全画面表示
+            showingOmikujiDraw = true
+        case .rokuyo:
+            // 導きページを経由せずホームから直接全画面表示
+            showingRokuyoDraw = true
+        default:
+            env.navigationRouter.pendingFortuneSystem = system
+            env.navigationRouter.pendingReadingCategory = category
+            env.navigationRouter.navigate(to: .reading)
+        }
     }
 }
 
-private struct ThemeShortcut: Identifiable {
-    var id: String { title }
+// MARK: - Concern Entry Models
+
+private struct ConcernEntry: Identifiable {
+    var id: String { analyticsKey }
     let title: String
     let subtitle: String
     let symbol: String
+    let tint: Color
     let system: FortuneSystem
     let category: ReadingCategory
+    let analyticsKey: String
 }
 
-private struct ThemeShortcutCard: View {
-    let shortcut: ThemeShortcut
+private struct ConcernEntryCard: View {
+    let entry: ConcernEntry
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: Spacing.sm) {
-                HStack(alignment: .top) {
-                    Image(systemName: shortcut.symbol)
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .frame(width: 44, height: 44)
-                        .background(
-                            LinearGradient(
-                                colors: [.sorayomiAccent, .sorayomiPrimary],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous))
+                Image(systemName: entry.symbol)
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 40, height: 40)
+                    .background(entry.tint)
+                    .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous))
 
-                    Spacer()
-
-                    Image(systemName: "arrow.up.right")
-                        .font(.caption)
-                        .foregroundStyle(Color.sorayomiPrimary)
-                }
-
-                Text(shortcut.title)
+                Text(entry.title)
                     .font(SorayomiTypography.headline)
                     .foregroundStyle(Color.sorayomiTextPrimary)
 
-                Text(shortcut.subtitle)
+                Text(entry.subtitle)
                     .font(SorayomiTypography.caption)
                     .foregroundStyle(Color.sorayomiTextSecondary)
                     .lineSpacing(4)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                Spacer()
+                Spacer(minLength: Spacing.xs)
 
-                HStack(spacing: Spacing.xs) {
-                    Text(shortcut.system.shortName)
-                        .font(SorayomiTypography.caption2)
-                        .fontWeight(.bold)
-                        .foregroundStyle(Color.sorayomiAccent)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.sorayomiAccent.opacity(0.10))
-                        .clipShape(Capsule())
-
+                HStack {
                     Spacer()
+                    CreditCostTag(system: entry.system)
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 190, alignment: .topLeading)
+            .frame(maxWidth: .infinity, minHeight: 130, alignment: .topLeading)
             .sorayomiPanel(tone: .elevated, padding: Spacing.md)
         }
         .buttonStyle(.plain)
+        .hoverEffect(.lift)
+    }
+}
+
+// MARK: - Credit Cost Tag
+
+/// カード下部に表示するクレジット消費バッジ
+private struct CreditCostTag: View {
+    let system: FortuneSystem
+
+    var body: some View {
+        Group {
+            if system.creditCost == 0 {
+                Text("無料")
+                    .foregroundStyle(Color.sorayomiSuccess)
+                    .background(Color.sorayomiSuccess.opacity(0.10))
+            } else {
+                HStack(spacing: 3) {
+                    Image(systemName: "diamond.fill")
+                        .font(.system(size: 7, weight: .bold))
+                    Text("\(system.creditCost)")
+                }
+                .foregroundStyle(Color.sorayomiSecondary)
+                .background(Color.sorayomiSecondary.opacity(0.10))
+            }
+        }
+        .font(SorayomiTypography.caption2)
+        .fontWeight(.bold)
+        .padding(.horizontal, 7)
+        .padding(.vertical, 3)
+        .clipShape(Capsule())
+    }
+}
+
+// MARK: - Rokuyo Teaser Card
+
+/// 六曜未引き時にホーム画面に表示するティーザーカード。
+/// OmikujiSpotlightCard の未引き状態と同じ視覚言語で統一。
+private struct RokuyoTeaserCard: View {
+    let action: () -> Void
+
+    @State private var ringRotation: Double = 0
+    @State private var glowPulse: CGFloat = 1.0
+    @State private var arrowOffset: CGFloat = 0
+
+    private let goldColor = Color(red: 1.0, green: 0.86, blue: 0.46)
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: Spacing.lg) {
+
+                // 暦スタンプアニメーション（左）
+                ZStack {
+                    Circle()
+                        .fill(goldColor.opacity(0.10))
+                        .frame(width: 104, height: 104)
+                        .blur(radius: 14)
+                        .scaleEffect(glowPulse)
+
+                    Circle()
+                        .strokeBorder(
+                            AngularGradient(
+                                colors: [
+                                    goldColor.opacity(0.9),
+                                    goldColor.opacity(0.15),
+                                    goldColor.opacity(0.9),
+                                    goldColor.opacity(0.15),
+                                    goldColor.opacity(0.9)
+                                ],
+                                center: .center
+                            ),
+                            lineWidth: 1.2
+                        )
+                        .frame(width: 88, height: 88)
+                        .rotationEffect(.degrees(ringRotation))
+
+                    Circle()
+                        .fill(Color(red: 0.12, green: 0.06, blue: 0.26))
+                        .frame(width: 64, height: 64)
+
+                    Text("暦")
+                        .font(.system(size: 28, weight: .medium, design: .serif))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [goldColor.opacity(0.95), goldColor.opacity(0.65)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                        .shadow(color: goldColor.opacity(0.4), radius: 6)
+                }
+                .frame(width: 96, height: 96)
+
+                // テキスト + CTA（右）
+                VStack(alignment: .leading, spacing: Spacing.sm) {
+                    VStack(alignment: .leading, spacing: Spacing.xxs) {
+                        Text("今日の六曜")
+                            .font(SorayomiTypography.caption)
+                            .foregroundStyle(.white.opacity(0.65))
+
+                        Text("今日の暦を確かめる")
+                            .font(.system(size: 20, weight: .bold, design: .serif))
+                            .foregroundStyle(.white)
+                    }
+
+                    Text("吉凶・時間帯の運気・行事の向き不向き")
+                        .font(SorayomiTypography.caption)
+                        .foregroundStyle(.white.opacity(0.80))
+                        .lineSpacing(3)
+
+                    HStack(spacing: 4) {
+                        Text("六曜を見る")
+                            .font(SorayomiTypography.footnote)
+                            .fontWeight(.semibold)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 10, weight: .semibold))
+                            .offset(x: arrowOffset)
+                    }
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, Spacing.sm)
+                    .padding(.vertical, Spacing.xs)
+                    .background(Color.white.opacity(0.18))
+                    .clipShape(Capsule())
+                }
+
+                Spacer(minLength: 0)
+            }
+            .padding(Spacing.lg)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.10, green: 0.06, blue: 0.24),
+                        Color(red: 0.16, green: 0.10, blue: 0.34)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: Spacing.cornerRadiusLarge, style: .continuous)
+                    .strokeBorder(goldColor.opacity(0.20), lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusLarge, style: .continuous))
+            .shadow(
+                color: Color(red: 0.10, green: 0.06, blue: 0.24).opacity(0.45),
+                radius: 18, x: 0, y: 8
+            )
+        }
+        .buttonStyle(.plain)
+        .hoverEffect(.lift)
+        .onAppear(perform: startAnimations)
+    }
+
+    private func startAnimations() {
+        withAnimation(.linear(duration: 12).repeatForever(autoreverses: false)) {
+            ringRotation = 360
+        }
+        withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
+            glowPulse = 1.22
+        }
+        withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true).delay(0.4)) {
+            arrowOffset = 3
+        }
     }
 }
 

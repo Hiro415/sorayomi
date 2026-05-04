@@ -9,13 +9,15 @@ struct FortuneCard: View {
     var creditCost: Int? = nil
     var action: (() -> Void)? = nil
 
+    @ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 44
+
     var body: some View {
         Button(action: { action?() }) {
             HStack(spacing: Spacing.md) {
                 Image(systemName: iconName)
                     .font(.title2)
                     .foregroundStyle(.white)
-                    .frame(width: 44, height: 44)
+                    .frame(width: iconSize, height: iconSize)
                     .background(
                         LinearGradient(
                             colors: gradientColors,
@@ -49,7 +51,7 @@ struct FortuneCard: View {
                             .clipShape(Capsule())
                     } else {
                         HStack(spacing: 2) {
-                            Image(systemName: "diamond.fill")
+                            Image(systemName: "sparkle")
                                 .font(.caption2)
                             Text("\(cost)")
                                 .font(SorayomiTypography.caption)
@@ -69,6 +71,7 @@ struct FortuneCard: View {
             .shadow(color: .black.opacity(0.04), radius: 4, x: 0, y: 2)
         }
         .buttonStyle(.plain)
+        .hoverEffect(.lift)
     }
 }
 

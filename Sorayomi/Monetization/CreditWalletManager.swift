@@ -35,6 +35,11 @@ final class CreditWalletManager {
         walletService.totalAvailable
     }
 
+    /// 今日の広告リワードが利用可能かどうか
+    var isAdRewardAvailableToday: Bool {
+        walletService.isAdRewardAvailableToday
+    }
+
     // MARK: - Methods
 
     /// ウォレットを読み込む
@@ -60,5 +65,16 @@ final class CreditWalletManager {
     /// 初回無料クレジットを付与
     func grantInitialFreeCredits() {
         walletService.grantInitialFreeCredits()
+    }
+
+    /// 月次プレミアムクレジットを付与（繰越上限あり）
+    func grantMonthlyPremiumCredits(allowance: Int, carryoverCap: Int) {
+        walletService.grantMonthlyPremiumCredits(allowance: allowance, carryoverCap: carryoverCap)
+    }
+
+    /// 広告視聴によるクレジット付与
+    @discardableResult
+    func grantAdRewardCredit() -> Bool {
+        walletService.grantAdRewardCredit()
     }
 }

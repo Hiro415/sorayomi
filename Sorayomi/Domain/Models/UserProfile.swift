@@ -10,13 +10,70 @@ struct UserProfile: Codable, Identifiable {
     var birthday: Date?
     var bloodType: BloodType?
     var themeInterests: [ThemeInterest]
+    /// お気に入り占術の rawValue リスト。Codable 互換のため String 配列で保持。
+    var favoriteSystemIDs: [String]
     var hasConsentedToAI: Bool
     var consentTimestamp: Date?
     var profilePhotoData: Data?
     var createdAt: Date
     var updatedAt: Date
 
+    // MARK: - Codable (custom init for backward-compat with pre-favorites data)
+
+    enum CodingKeys: String, CodingKey {
+        case id, nickname, birthday, bloodType, themeInterests
+        case favoriteSystemIDs
+        case hasConsentedToAI, consentTimestamp, profilePhotoData, createdAt, updatedAt
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id                = try c.decode(String.self,                  forKey: .id)
+        nickname          = try c.decodeIfPresent(String.self,         forKey: .nickname)
+        birthday          = try c.decodeIfPresent(Date.self,           forKey: .birthday)
+        bloodType         = try c.decodeIfPresent(BloodType.self,      forKey: .bloodType)
+        themeInterests    = try c.decodeIfPresent([ThemeInterest].self, forKey: .themeInterests) ?? []
+        favoriteSystemIDs = try c.decodeIfPresent([String].self,       forKey: .favoriteSystemIDs) ?? []
+        hasConsentedToAI  = try c.decode(Bool.self,                    forKey: .hasConsentedToAI)
+        consentTimestamp  = try c.decodeIfPresent(Date.self,           forKey: .consentTimestamp)
+        profilePhotoData  = try c.decodeIfPresent(Data.self,           forKey: .profilePhotoData)
+        createdAt         = try c.decode(Date.self,                    forKey: .createdAt)
+        updatedAt         = try c.decode(Date.self,                    forKey: .updatedAt)
+    }
+
+    // Memberwise init (used by the rest of the codebase)
+    init(
+        id: String,
+        nickname: String? = nil,
+        birthday: Date? = nil,
+        bloodType: BloodType? = nil,
+        themeInterests: [ThemeInterest] = [],
+        favoriteSystemIDs: [String] = [],
+        hasConsentedToAI: Bool = false,
+        consentTimestamp: Date? = nil,
+        profilePhotoData: Data? = nil,
+        createdAt: Date,
+        updatedAt: Date
+    ) {
+        self.id                = id
+        self.nickname          = nickname
+        self.birthday          = birthday
+        self.bloodType         = bloodType
+        self.themeInterests    = themeInterests
+        self.favoriteSystemIDs = favoriteSystemIDs
+        self.hasConsentedToAI  = hasConsentedToAI
+        self.consentTimestamp  = consentTimestamp
+        self.profilePhotoData  = profilePhotoData
+        self.createdAt         = createdAt
+        self.updatedAt         = updatedAt
+    }
+
     // MARK: - Computed Properties
+
+    /// お気に入り占術（FortuneSystem に変換済み）
+    var favoriteSystems: [FortuneSystem] {
+        favoriteSystemIDs.compactMap { FortuneSystem(rawValue: $0) }
+    }
 
     /// 星座（誕生日から算出）
     var zodiacSign: ZodiacSign? {
@@ -39,13 +96,9 @@ struct UserProfile: Codable, Identifiable {
     /// ゲストユーザー（未ログイン状態）
     static let guest = UserProfile(
         id: "guest",
-        nickname: nil,
-        birthday: nil,
-        bloodType: nil,
         themeInterests: [],
+        favoriteSystemIDs: [],
         hasConsentedToAI: false,
-        consentTimestamp: nil,
-        profilePhotoData: nil,
         createdAt: Date(),
         updatedAt: Date()
     )
@@ -63,9 +116,9 @@ struct UserProfile: Codable, Identifiable {
             birthday: birthday,
             bloodType: .a,
             themeInterests: [.love, .career, .dailyFortune],
+            favoriteSystemIDs: [FortuneSystem.tarot.rawValue, FortuneSystem.nineStarKi.rawValue],
             hasConsentedToAI: true,
             consentTimestamp: Date(),
-            profilePhotoData: nil,
             createdAt: Date().addingTimeInterval(-86400 * 30),
             updatedAt: Date()
         )

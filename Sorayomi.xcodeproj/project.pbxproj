@@ -7,274 +7,346 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E783AD89D8D7095E0027D8F8 /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECA4EF22A939B1AC257CBD9 /* AnalyticsEvent.swift */; };
-		643ECBC7C1F06B76BA4BA557 /* AnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA6683EAA573AB0D7812E44D /* AnalyticsProvider.swift */; };
-		7EFDEEC422CA81A86D723862 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FC71A684F2B4C59403F482 /* AnalyticsService.swift */; };
-		F3554D700A3EE97545109DEC /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C216FFC1F97044E54BE2E8 /* AppConstants.swift */; };
-		B463C5122B03C5743D273D51 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC9B7B63925CB3BAE71028 /* AppEnvironment.swift */; };
-		A5D10FFFC7061DFDC48FA77C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949312CF70B1A3F2A3802BF5 /* ContentView.swift */; };
-		A34A5090AA7D02445CDB954D /* SorayomiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5F8710E35020BD3CA3EEB9 /* SorayomiApp.swift */; };
-		911FF1E105C66BE32C119648 /* FeatureFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8753BB247BAD4AAEA24B6CFF /* FeatureFlagManager.swift */; };
-		ACA4BB53FF365B1476E49B29 /* PricingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E8F000ED1FD26FB7D628CC /* PricingConfig.swift */; };
-		E3F423E0617C5B5096D9D6EF /* RemoteConfigKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673FE1BD649B5C6FCE80E858 /* RemoteConfigKeys.swift */; };
-		E5D5F3EB38F93643B34AC260 /* CopyKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B89082A2936E5CB41C701F3 /* CopyKeys.swift */; };
-		3AC254935D99F26AC2A47684 /* CopyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881C70CC7A23EE22AF31CCF9 /* CopyProvider.swift */; };
-		0E5D84520D3CB0F2CE950840 /* CopyVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC76D50E3BF2864FA29FA80 /* CopyVariant.swift */; };
-		5D6068D989247BAD3EC24691 /* JapaneseCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B127604E4EAA05689050A102 /* JapaneseCopy.swift */; };
-		24D1031E84C202067F9A0C62 /* CloudFunctionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A73888FB19E7A10FC67F11 /* CloudFunctionClient.swift */; };
-		E40311439BABD910F4638CDC /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637068087F2439F2C4005004 /* FirebaseAuthService.swift */; };
-		EF33F4F98868D6EA3956A744 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0E1F0B501C80FC5CD1DB6 /* FirestoreService.swift */; };
-		7BC313A77E7C90AEE88E1366 /* RemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7269C75CFB8753A9079F44 /* RemoteConfigService.swift */; };
-		BFE46FC2A596F7929D27558F /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131EBE54E36686D7272C0B9E /* CacheManager.swift */; };
-		312AAED5C11F9316CF2CFA15 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4083B66B511D1C84A928B946 /* KeychainStore.swift */; };
-		2C8B7CB90F4182BBFCC89015 /* UserDefaultsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBD7E30062633F2F239090D /* UserDefaultsStore.swift */; };
-		3E4F0789CF2099CBC9E9FE58 /* CreditRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2D6673D3B0557FE08B6FE1 /* CreditRepository.swift */; };
-		4DE25F6D026F21904ED62A05 /* ReadingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88EB9342A063F1EB3ED54A /* ReadingRepository.swift */; };
-		47E7AFAC3EC07FBABDB89C51 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC9CEC35C1A88F3D76A190E /* UserRepository.swift */; };
-		17B19146EE6788F652B22B81 /* BloodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631CCFB45425F355AF46051 /* BloodType.swift */; };
-		3E3F1B4347F6BB004CC2DEB3 /* CreditTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E240AE7D613901B4D81BF /* CreditTransaction.swift */; };
-		E2BC5371CF60CF5EE52D12C2 /* CreditWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838A3E59961DAC865C5B6401 /* CreditWallet.swift */; };
-		75C931C7F751913AACF76069 /* DailyFortune.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCDB3754A4B63D6748460F9 /* DailyFortune.swift */; };
-		2234DA4A0DB963B4BCDFA40C /* FortuneReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFFE7959C6660ABF4E3E047 /* FortuneReading.swift */; };
-		78AB86918CDBB047823CE37A /* FortuneSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE536C7F3630541F41849F7 /* FortuneSystem.swift */; };
-		961424301B5B9AB118AB3543 /* NineStarKi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A73003637E10AE51496F4ED /* NineStarKi.swift */; };
-		3C884363625348C779BB4714 /* NumerologyProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5248D5BD8EF1463A0F21F5 /* NumerologyProfile.swift */; };
-		B19CBF14AB8260E9DBEC09D9 /* Omikuji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44AA9B01BA216CAB88218AB2 /* Omikuji.swift */; };
-		B5A2DE91160206C89424F093 /* ReadingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A30C3C48D5B840CDC95F553 /* ReadingMessage.swift */; };
-		CCDFA50DDFB8BD9E199A0C37 /* Rokuyo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D88B088F9E3E936B9452B /* Rokuyo.swift */; };
-		07092A83F94C22C523F5FCFB /* TarotCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2658CF8A875E1EABE4FBF6 /* TarotCard.swift */; };
-		EBFE8387C95DD195A4EBC79A /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87407F699B5302263F295AA1 /* UserProfile.swift */; };
-		885E3B1772980E9DAF80557C /* ZodiacSign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19EDF1B0E5216147BD29580C /* ZodiacSign.swift */; };
-		762A366B8549D099BEF1BBFA /* AIProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56607EE19CA2BD0DEA1B861A /* AIProviderProtocol.swift */; };
-		E1CE033C417338E04AB97A44 /* FortuneCalculatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B11DDB65486147B0F1EAB4 /* FortuneCalculatorProtocol.swift */; };
-		C01BBD763A58C134F63FB03D /* CreditWalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA9C0F73DCD5B8B3831F05 /* CreditWalletService.swift */; };
-		2D627EF47410EAC42B076E75 /* DailyContentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DFFC53FAA125D4391E7C89 /* DailyContentService.swift */; };
-		C1072A24199D759F59101679 /* FortuneEngineService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE3F0BC01A80F3633CC62F4 /* FortuneEngineService.swift */; };
-		560FEB96CBA1928C65053AC7 /* ReadingHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 391C618CA332D189C094CD19 /* ReadingHistoryService.swift */; };
-		CCCDED1ADEE6F484EABEBF2A /* ReadingShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E513502F0E2EFD49BF73FC53 /* ReadingShareService.swift */; };
 		051F6163EBB4970B4C1B67DE /* StreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5635698BFA221569858B0A /* StreakManager.swift */; };
-		E3D34D1FDA9B62347B7B34CA /* UserProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC9703DED0E565C46E59A8E /* UserProfileService.swift */; };
-		F4938BDF01C4FB2F4C8EBA7F /* Calendar+Rokuyo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B2039273E68462076B04C4 /* Calendar+Rokuyo.swift */; };
-		73DBB5E4889D4942D43B9318 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F3879A63F4B9CC958D6A9F /* Date+Extensions.swift */; };
-		93A031F9AAEDB21CD53B7742 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C8D830CD346B6BCB7C2D82 /* String+Extensions.swift */; };
-		C7FC8E25C4D80C2E2974279E /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379B56A81A8F684A77AADD09 /* View+Extensions.swift */; };
-		F49B0FF9FE38559F292D1203 /* BirthdayPersonalityCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6BE1F5D5DA3F771F0A2FC46 /* BirthdayPersonalityCalculator.swift */; };
-		2AD08D06CA597504C546087C /* BloodTypeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A37DA073D9FEBA4EC951C4A /* BloodTypeCalculator.swift */; };
-		8264F9B120D9DA6946716C0C /* NineStarKiCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC8D65E20E80ECFD50660A97 /* NineStarKiCalculator.swift */; };
-		F9B59A65CF736064A27B68FF /* NumerologyCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954B61BC6B89E6C27460F402 /* NumerologyCalculator.swift */; };
-		272CE7EB9E975CF044942BA1 /* OmikujiCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8286E4296DB060AEBC951D /* OmikujiCalculator.swift */; };
+		07092A83F94C22C523F5FCFB /* TarotCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2658CF8A875E1EABE4FBF6 /* TarotCard.swift */; };
+		07D688277D0619E448D124CB /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F1FD937A94E3D1DD314285 /* HistoryViewModel.swift */; };
+		0E5D84520D3CB0F2CE950840 /* CopyVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC76D50E3BF2864FA29FA80 /* CopyVariant.swift */; };
+		0EA724FB34D4C29D02F053F0 /* BirthdayInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE625A630C9C2C260B9BFF /* BirthdayInputView.swift */; };
+		14865C249EAB371A1389CFAA /* Sorayomi.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 1343514AFA3A290B4CBF4A2B /* Sorayomi.entitlements */; };
 		15165BAD8262814C52D8617D /* RokuyoCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095EA336404A90C8B2DD0309 /* RokuyoCalculator.swift */; };
-		4D7A67CB6F01FE1AFF7FB8E5 /* TarotDrawEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3614F2EDFA6A79C67A78FC /* TarotDrawEngine.swift */; };
-		CFC7A21709597E8030724D99 /* ZodiacCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD9A91C297D898BDEF7DFB /* ZodiacCalculator.swift */; };
-		3E2DAF6841A63CEC73DB8BF5 /* ContentTaxonomy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC8C1009161C84B365F37BF /* ContentTaxonomy.swift */; };
-		6EF5708FA045654B3E0D04B6 /* FortuneComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032B3353FB1B3EA78CB5FB3 /* FortuneComposer.swift */; };
-		A700227D635DCB3FD71A6C59 /* FortuneResultParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EDE58793F0AA5F1BE4E70F /* FortuneResultParser.swift */; };
-		3F9F375681CF5F2841D3BA96 /* BasePromptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB3A9A6A785D77B3399EA81 /* BasePromptContext.swift */; };
-		FC80A9218EFEFDABCDE5E06C /* BirthdayPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38FBF8023437D8595A6FFDD /* BirthdayPrompt.swift */; };
-		FEA4DD779BA9128C953EC1DC /* BloodTypePrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F09ADAF0C7C031E5729F52 /* BloodTypePrompt.swift */; };
-		EE28A3A4D011F27E54E48138 /* HoroscopePrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3537AC45F58750EE93D00AF /* HoroscopePrompt.swift */; };
-		9847FC87D722126E99F9E39A /* NineStarKiPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE598B44FC718A8D2A80AC2 /* NineStarKiPrompt.swift */; };
-		D83EDC49BF40DE3245D90D89 /* NumerologyPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBB8CDCDC5831CCA8621759 /* NumerologyPrompt.swift */; };
-		DD1B02330A8C09F461B967D9 /* OmikujiPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AEC5261754B91A90900FE8 /* OmikujiPrompt.swift */; };
-		9CE6750F00AA7B6E6C9209B0 /* PromptTemplateEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38B543DC3A201F064658E1E /* PromptTemplateEngine.swift */; };
+		15A75F64DDDC71195337DD9A /* ReadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7043FDD8E41DDC2C0680589 /* ReadingScreen.swift */; };
+		16C657E59FC0321083D703F9 /* OnboardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77ABF90E3A143BA79BA28 /* OnboardingScreen.swift */; };
+		17B19146EE6788F652B22B81 /* BloodType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631CCFB45425F355AF46051 /* BloodType.swift */; };
+		187A1FCB21667DAFCC7A8676 /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D912E55E2CC27447429A87 /* LoadingIndicator.swift */; };
+		1C97F272BF7E5F6568118409 /* StoreScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AECC09C521BBDC153E5A9C7 /* StoreScreen.swift */; };
+		20C437CDD49E898878A4E539 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D038255A61895A2C3F47FE /* SplashScreen.swift */; };
+		2234DA4A0DB963B4BCDFA40C /* FortuneReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFFE7959C6660ABF4E3E047 /* FortuneReading.swift */; };
+		24D1031E84C202067F9A0C62 /* CloudFunctionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A73888FB19E7A10FC67F11 /* CloudFunctionClient.swift */; };
+		272CE7EB9E975CF044942BA1 /* OmikujiCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8286E4296DB060AEBC951D /* OmikujiCalculator.swift */; };
+		28EA6BD24EAA584AD21D9755 /* CreditPackCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E3FF6F1C77DF954CB7137C /* CreditPackCard.swift */; };
+		2AD08D06CA597504C546087C /* BloodTypeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A37DA073D9FEBA4EC951C4A /* BloodTypeCalculator.swift */; };
+		2B0100000000000000000001 /* AppCheckProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0100000000000000000001 /* AppCheckProviderFactory.swift */; };
+		2B0200000000000000000002 /* FlowerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0200000000000000000002 /* FlowerData.swift */; };
+		2B0300000000000000000003 /* StoneData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0300000000000000000003 /* StoneData.swift */; };
+		2B0400000000000000000004 /* DailyFortuneUsageTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0400000000000000000004 /* DailyFortuneUsageTracker.swift */; };
+		2B0500000000000000000005 /* FreeTrialManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0500000000000000000005 /* FreeTrialManager.swift */; };
+		2B0600000000000000000006 /* ReviewRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0600000000000000000006 /* ReviewRequestManager.swift */; };
+		2B0700000000000000000007 /* FlowerFortuneCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0700000000000000000007 /* FlowerFortuneCalculator.swift */; };
+		2B0800000000000000000008 /* StoneFortuneCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0800000000000000000008 /* StoneFortuneCalculator.swift */; };
+		2B0900000000000000000009 /* FlowerFortunePrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0900000000000000000009 /* FlowerFortunePrompt.swift */; };
+		2B0A0000000000000000000A /* StoneFortunePrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A0000000000000000000A /* StoneFortunePrompt.swift */; };
+		2B0B0000000000000000000B /* AdRewardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0B0000000000000000000B /* AdRewardManager.swift */; };
+		2B0C0000000000000000000C /* AdaptiveGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0C0000000000000000000C /* AdaptiveGrid.swift */; };
+		2B0D0000000000000000000D /* ZodiacConstellationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D0000000000000000000D /* ZodiacConstellationView.swift */; };
+		2B0E0000000000000000000E /* AdaptiveModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E0000000000000000000E /* AdaptiveModifiers.swift */; };
+		2B0F0000000000000000000F /* ReadingDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0F0000000000000000000F /* ReadingDetailScreen.swift */; };
+		2B100000000000000000001A /* BloodTypeModePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A100000000000000000001A /* BloodTypeModePickerView.swift */; };
+		2B110000000000000000001B /* BloodTypeRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A110000000000000000001B /* BloodTypeRevealView.swift */; };
+		2B120000000000000000001C /* FlowerRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A120000000000000000001C /* FlowerRevealView.swift */; };
+		2B130000000000000000001D /* NineStarKiRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A130000000000000000001D /* NineStarKiRevealView.swift */; };
+		2B140000000000000000001E /* NumerologyRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A140000000000000000001E /* NumerologyRevealView.swift */; };
+		2B150000000000000000001F /* OmikujiRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A150000000000000000001F /* OmikujiRevealView.swift */; };
+		2B160000000000000000002A /* RokuyoRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A160000000000000000002A /* RokuyoRevealView.swift */; };
+		2B170000000000000000002B /* StoneRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A170000000000000000002B /* StoneRevealView.swift */; };
+		2B180000000000000000002C /* TarotCardArtwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A180000000000000000002C /* TarotCardArtwork.swift */; };
+		2B190000000000000000002D /* TarotCardDetailOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A190000000000000000002D /* TarotCardDetailOverlay.swift */; };
+		2B1A0000000000000000002E /* TarotRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1A0000000000000000002E /* TarotRevealView.swift */; };
+		2B1B0000000000000000002F /* ThinkingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1B0000000000000000002F /* ThinkingIndicatorView.swift */; };
+		2B1C000000000000000000AA /* ZodiacRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1C000000000000000000AA /* ZodiacRevealView.swift */; };
+		2B1D000000000000000000BB /* PrivacyPolicyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1D000000000000000000BB /* PrivacyPolicyScreen.swift */; };
+		2B1E000000000000000000CC /* TermsOfServiceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1E000000000000000000CC /* TermsOfServiceScreen.swift */; };
+		2B1F000000000000000000DD /* AdaptiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1F000000000000000000DD /* AdaptiveLayout.swift */; };
+		2B20000000000000000000EE /* RevealSizeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A20000000000000000000EE /* RevealSizeProvider.swift */; };
+		2C8B7CB90F4182BBFCC89015 /* UserDefaultsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBD7E30062633F2F239090D /* UserDefaultsStore.swift */; };
+		2D627EF47410EAC42B076E75 /* DailyContentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DFFC53FAA125D4391E7C89 /* DailyContentService.swift */; };
 		2FF46D17DB32340DC5E3FBBB /* RokuyoPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE3CD1F08CB87B5B438D685 /* RokuyoPrompt.swift */; };
-		41C54E693721615D9906B3DD /* SystemPromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA3236AF374F817C299CCD9 /* SystemPromptBuilder.swift */; };
-		B0583A2599C58CFF27FA4498 /* TarotPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA33F614A5905E2CB59ABB3 /* TarotPrompt.swift */; };
-		60EB2B948A4DD1A4FD93D428 /* CreditWalletManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA6F64E78BE884C62C50EE2 /* CreditWalletManager.swift */; };
-		F95ADBAABC0E62FBE538E72E /* PaywallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C45EFD21616184ED1AE710 /* PaywallManager.swift */; };
-		68E1137106AF46A8734B1C82 /* ProductIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DE2687A49523CB1238AED /* ProductIdentifiers.swift */; };
-		AC9E4F092920E5F5F3F66582 /* ReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B81291AF2B6AE90BE2AB670 /* ReceiptValidator.swift */; };
-		FA9825B34DB15A51F9FDBE73 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3086383B6F69E27C1BB2930F /* StoreKitManager.swift */; };
+		312AAED5C11F9316CF2CFA15 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4083B66B511D1C84A928B946 /* KeychainStore.swift */; };
+		330A38FE3960EC375A9B07EA /* SafetyDisclaimerBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FE6B3DB69E156DCA980721 /* SafetyDisclaimerBanner.swift */; };
+		33132AA2155F5EE7CEF9D050 /* ReadingMessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2774DC91764A4B933164F3DA /* ReadingMessageBubble.swift */; };
 		35FBDAB636B2D8141E848C93 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441FF3E58D61AAD96E0E18BB /* NotificationManager.swift */; };
 		3A51BBC923D48593C19A1401 /* CrisisDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF807F12A4E60299A29A82F0 /* CrisisDetector.swift */; };
-		B9F364023EF161404FA9163D /* DisclaimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0703D63D7F328AED7248EE /* DisclaimerManager.swift */; };
-		E806DF00B8884BFAD8AD22EC /* InputClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA227EF666D97B13D6536E3 /* InputClassifier.swift */; };
-		72D53D336EF3D904E8205A6C /* OutputFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FFC07F46CED3BD6C6FAD92 /* OutputFilter.swift */; };
-		D0B7611465A19D9C24108EE0 /* SafeResponseProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A127BFE01B8922936BF55E62 /* SafeResponseProvider.swift */; };
-		63FF3A5A0D083519242F1C13 /* SafetyCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757ABB6D76FFDCE3ECDF07C5 /* SafetyCopy.swift */; };
-		59924E03ADE798CFD5398ACA /* CreditBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4828813FD02ED1CE6576C348 /* CreditBadge.swift */; };
-		7A2ECD3C43A71289FBE3ECD8 /* ErrorBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBDDA6D4EFE0357B5A4E63E2 /* ErrorBanner.swift */; };
-		58CBE0C584C4ECC61CB5EDD1 /* FortuneCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD726C6AB5756AC8660870B /* FortuneCard.swift */; };
-		187A1FCB21667DAFCC7A8676 /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D912E55E2CC27447429A87 /* LoadingIndicator.swift */; };
-		50A0B8A9FFFF2E74DEECCD60 /* OrnamentalBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CD6BDBBB4C8777D16F48EA /* OrnamentalBackgroundView.swift */; };
-		A9B89A9F0E3816066C03F0AC /* PaywallSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F62823EE8B9EDA6188DEDD73 /* PaywallSheet.swift */; };
-		330A38FE3960EC375A9B07EA /* SafetyDisclaimerBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FE6B3DB69E156DCA980721 /* SafetyDisclaimerBanner.swift */; };
-		871539C9D74B7167DC23E595 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984ED6BC5667B21245012EF7 /* ShareSheet.swift */; };
-		BDF7AE7286376168E83BDCDD /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B6D0060F5A8515DA5CBD38 /* AppTabView.swift */; };
-		990272A8E7935783E1E9ABE8 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4778E597FB6BF3FB84DE4137 /* NavigationRouter.swift */; };
-		EC13274030FA00984196F8A7 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1E7C26DF367F7786EAE636 /* Tab.swift */; };
-		D1D655EEC0CCBA292F847A8E /* HistoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE671DFBD3FD7FF6192B006 /* HistoryRowView.swift */; };
-		94708615458F23FD52159A36 /* HistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0A7CC509914AE367F882FC /* HistoryScreen.swift */; };
-		07D688277D0619E448D124CB /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F1FD937A94E3D1DD314285 /* HistoryViewModel.swift */; };
-		E157F68725C091E9B8AEB03D /* DailyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E466138EE45169ECA9E7626 /* DailyCardView.swift */; };
-		F950B36A47B6BDDEEA9AC42F /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD49583A2FEF484602E7E2F6 /* HomeScreen.swift */; };
+		3AC254935D99F26AC2A47684 /* CopyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881C70CC7A23EE22AF31CCF9 /* CopyProvider.swift */; };
+		3C884363625348C779BB4714 /* NumerologyProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5248D5BD8EF1463A0F21F5 /* NumerologyProfile.swift */; };
+		3E2DAF6841A63CEC73DB8BF5 /* ContentTaxonomy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC8C1009161C84B365F37BF /* ContentTaxonomy.swift */; };
+		3E3F1B4347F6BB004CC2DEB3 /* CreditTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E240AE7D613901B4D81BF /* CreditTransaction.swift */; };
+		3E4F0789CF2099CBC9E9FE58 /* CreditRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2D6673D3B0557FE08B6FE1 /* CreditRepository.swift */; };
 		3EEB6E751CE168588E856440 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A59A7F3CF2E1A9E5E6FEB /* HomeViewModel.swift */; };
-		567B95608B086DE828C7239C /* OmikujiSpotlightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD5D8896DEF6CAA15F3B393 /* OmikujiSpotlightCard.swift */; };
-		376F34D3791BF6FDED5EA46B /* QuickAccessGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF29F9D276D030144730AE0 /* QuickAccessGrid.swift */; };
-		F57834ACBFC67559A7C6DA73 /* RokuyoBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70975AA9BEC973FB72240F4B /* RokuyoBannerView.swift */; };
-		E572C2129686C5FCFD6A905D /* AIConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48309FCDC557D26C5E2C6FE /* AIConsentView.swift */; };
-		0EA724FB34D4C29D02F053F0 /* BirthdayInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE625A630C9C2C260B9BFF /* BirthdayInputView.swift */; };
-		F8471462F2D45A975E6B7E6B /* BloodTypePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF012E957114487F383F1869 /* BloodTypePickerView.swift */; };
-		16C657E59FC0321083D703F9 /* OnboardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA77ABF90E3A143BA79BA28 /* OnboardingScreen.swift */; };
-		854963681CC3CD6F57D01196 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A5183A13B4D936A7CF3704 /* OnboardingViewModel.swift */; };
-		A32D9A3160E85FE162D9AC25 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC633D41D7D7407F3381C78E /* ProfileScreen.swift */; };
-		76256C98C52CD6A64CBF44E4 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A6DB32748E46F1E9E5B72 /* ProfileViewModel.swift */; };
-		7FF50F88C22034F9E3BCA3E3 /* FortuneResultCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080081ACADB8A875D52338D3 /* FortuneResultCardView.swift */; };
-		5ED024D72B63EEB95363052E /* FortuneSystemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58751B0BA4B0F6631CFE3C8E /* FortuneSystemPickerView.swift */; };
-		CAD3BB89243479CC408C2723 /* ReadingChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D966566FA2F8BA92DE801AC /* ReadingChatView.swift */; };
-		F8ADC1F0280E951C7350F7EB /* ReadingLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A107DA8F7CE8F94244DC4939 /* ReadingLoadingView.swift */; };
-		33132AA2155F5EE7CEF9D050 /* ReadingMessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2774DC91764A4B933164F3DA /* ReadingMessageBubble.swift */; };
-		15A75F64DDDC71195337DD9A /* ReadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7043FDD8E41DDC2C0680589 /* ReadingScreen.swift */; };
-		9AA57B60DE2838281F59D95A /* ReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92B3BFB483B0B6AD80273D7 /* ReadingViewModel.swift */; };
-		A66E5C7F0DED702DA9376B15 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E7E36255FD5979600A178D /* SettingsScreen.swift */; };
-		5BC7A484924503D16CFBEDB4 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D673FCAC57F8806CE5FA87 /* SettingsViewModel.swift */; };
-		20C437CDD49E898878A4E539 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D038255A61895A2C3F47FE /* SplashScreen.swift */; };
-		28EA6BD24EAA584AD21D9755 /* CreditPackCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E3FF6F1C77DF954CB7137C /* CreditPackCard.swift */; };
-		1C97F272BF7E5F6568118409 /* StoreScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AECC09C521BBDC153E5A9C7 /* StoreScreen.swift */; };
-		A188AD127F45BEF10B011278 /* StoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5639DA96E325A1B261B4D321 /* StoreViewModel.swift */; };
-		89C50848E07C7AFA7D03C2EE /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EF7C32919C770B6E39A9AE /* ColorPalette.swift */; };
+		3F9F375681CF5F2841D3BA96 /* BasePromptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB3A9A6A785D77B3399EA81 /* BasePromptContext.swift */; };
+		41C54E693721615D9906B3DD /* SystemPromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA3236AF374F817C299CCD9 /* SystemPromptBuilder.swift */; };
+		47E7AFAC3EC07FBABDB89C51 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC9CEC35C1A88F3D76A190E /* UserRepository.swift */; };
+		4D7A67CB6F01FE1AFF7FB8E5 /* TarotDrawEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3614F2EDFA6A79C67A78FC /* TarotDrawEngine.swift */; };
+		4DE25F6D026F21904ED62A05 /* ReadingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A88EB9342A063F1EB3ED54A /* ReadingRepository.swift */; };
+		50A0B8A9FFFF2E74DEECCD60 /* OrnamentalBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CD6BDBBB4C8777D16F48EA /* OrnamentalBackgroundView.swift */; };
 		5203A28BAA8989EAB9969E48 /* SorayomiTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C143B663B81A0B15F8B044F /* SorayomiTheme.swift */; };
-		EC47FB47A1B681C04EB12C3C /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD276337DB5DB5F752F3E221 /* Spacing.swift */; };
-		E57281AC19EA0ECF76D9C41C /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09EB676F895FCB80356B387 /* Typography.swift */; };
-		B5E32A4C541B090C773A3E4C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 65B7AE6A75A3B2F34CD03DBA /* PrivacyInfo.xcprivacy */; };
+		560FEB96CBA1928C65053AC7 /* ReadingHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 391C618CA332D189C094CD19 /* ReadingHistoryService.swift */; };
+		567B95608B086DE828C7239C /* OmikujiSpotlightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD5D8896DEF6CAA15F3B393 /* OmikujiSpotlightCard.swift */; };
+		58CBE0C584C4ECC61CB5EDD1 /* FortuneCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD726C6AB5756AC8660870B /* FortuneCard.swift */; };
+		59924E03ADE798CFD5398ACA /* CreditBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4828813FD02ED1CE6576C348 /* CreditBadge.swift */; };
+		5BC7A484924503D16CFBEDB4 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D673FCAC57F8806CE5FA87 /* SettingsViewModel.swift */; };
+		5D6068D989247BAD3EC24691 /* JapaneseCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B127604E4EAA05689050A102 /* JapaneseCopy.swift */; };
+		5ED024D72B63EEB95363052E /* FortuneSystemPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58751B0BA4B0F6631CFE3C8E /* FortuneSystemPickerView.swift */; };
+		60EB2B948A4DD1A4FD93D428 /* CreditWalletManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA6F64E78BE884C62C50EE2 /* CreditWalletManager.swift */; };
+		63FF3A5A0D083519242F1C13 /* SafetyCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757ABB6D76FFDCE3ECDF07C5 /* SafetyCopy.swift */; };
+		643ECBC7C1F06B76BA4BA557 /* AnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA6683EAA573AB0D7812E44D /* AnalyticsProvider.swift */; };
+		68E1137106AF46A8734B1C82 /* ProductIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DE2687A49523CB1238AED /* ProductIdentifiers.swift */; };
 		6954B17F6BF5E8B7D0787A55 /* Sorayomi.storekit in Resources */ = {isa = PBXBuildFile; fileRef = D227558881C8C925AC3C1E06 /* Sorayomi.storekit */; };
-		14865C249EAB371A1389CFAA /* Sorayomi.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 1343514AFA3A290B4CBF4A2B /* Sorayomi.entitlements */; };
+		6EF5708FA045654B3E0D04B6 /* FortuneComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6032B3353FB1B3EA78CB5FB3 /* FortuneComposer.swift */; };
+		72D53D336EF3D904E8205A6C /* OutputFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FFC07F46CED3BD6C6FAD92 /* OutputFilter.swift */; };
+		73DBB5E4889D4942D43B9318 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F3879A63F4B9CC958D6A9F /* Date+Extensions.swift */; };
+		75C931C7F751913AACF76069 /* DailyFortune.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCDB3754A4B63D6748460F9 /* DailyFortune.swift */; };
+		76256C98C52CD6A64CBF44E4 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82A6DB32748E46F1E9E5B72 /* ProfileViewModel.swift */; };
+		762A366B8549D099BEF1BBFA /* AIProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56607EE19CA2BD0DEA1B861A /* AIProviderProtocol.swift */; };
+		78AB86918CDBB047823CE37A /* FortuneSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE536C7F3630541F41849F7 /* FortuneSystem.swift */; };
+		7A2ECD3C43A71289FBE3ECD8 /* ErrorBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBDDA6D4EFE0357B5A4E63E2 /* ErrorBanner.swift */; };
+		7BC313A77E7C90AEE88E1366 /* RemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7269C75CFB8753A9079F44 /* RemoteConfigService.swift */; };
+		7EFDEEC422CA81A86D723862 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FC71A684F2B4C59403F482 /* AnalyticsService.swift */; };
+		7FF50F88C22034F9E3BCA3E3 /* FortuneResultCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080081ACADB8A875D52338D3 /* FortuneResultCardView.swift */; };
+		8264F9B120D9DA6946716C0C /* NineStarKiCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC8D65E20E80ECFD50660A97 /* NineStarKiCalculator.swift */; };
+		854963681CC3CD6F57D01196 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A5183A13B4D936A7CF3704 /* OnboardingViewModel.swift */; };
+		871539C9D74B7167DC23E595 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984ED6BC5667B21245012EF7 /* ShareSheet.swift */; };
+		885E3B1772980E9DAF80557C /* ZodiacSign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19EDF1B0E5216147BD29580C /* ZodiacSign.swift */; };
+		89C50848E07C7AFA7D03C2EE /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EF7C32919C770B6E39A9AE /* ColorPalette.swift */; };
+		911FF1E105C66BE32C119648 /* FeatureFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8753BB247BAD4AAEA24B6CFF /* FeatureFlagManager.swift */; };
+		93A031F9AAEDB21CD53B7742 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C8D830CD346B6BCB7C2D82 /* String+Extensions.swift */; };
+		94708615458F23FD52159A36 /* HistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0A7CC509914AE367F882FC /* HistoryScreen.swift */; };
+		961424301B5B9AB118AB3543 /* NineStarKi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A73003637E10AE51496F4ED /* NineStarKi.swift */; };
+		9847FC87D722126E99F9E39A /* NineStarKiPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE598B44FC718A8D2A80AC2 /* NineStarKiPrompt.swift */; };
+		990272A8E7935783E1E9ABE8 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4778E597FB6BF3FB84DE4137 /* NavigationRouter.swift */; };
+		9AA57B60DE2838281F59D95A /* ReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92B3BFB483B0B6AD80273D7 /* ReadingViewModel.swift */; };
+		9CE6750F00AA7B6E6C9209B0 /* PromptTemplateEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38B543DC3A201F064658E1E /* PromptTemplateEngine.swift */; };
+		A188AD127F45BEF10B011278 /* StoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5639DA96E325A1B261B4D321 /* StoreViewModel.swift */; };
+		A29D700B2FA851C0006FCD88 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = A29D700A2FA851C0006FCD88 /* FirebaseAppCheck */; };
+		A29D700D2FA851C0006FCD88 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = A29D700C2FA851C0006FCD88 /* FirebaseCore */; };
+		A32D9A3160E85FE162D9AC25 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC633D41D7D7407F3381C78E /* ProfileScreen.swift */; };
+		A34A5090AA7D02445CDB954D /* SorayomiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5F8710E35020BD3CA3EEB9 /* SorayomiApp.swift */; };
+		A5D10FFFC7061DFDC48FA77C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949312CF70B1A3F2A3802BF5 /* ContentView.swift */; };
+		A66E5C7F0DED702DA9376B15 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E7E36255FD5979600A178D /* SettingsScreen.swift */; };
+		A700227D635DCB3FD71A6C59 /* FortuneResultParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EDE58793F0AA5F1BE4E70F /* FortuneResultParser.swift */; };
+		A9B89A9F0E3816066C03F0AC /* PaywallSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F62823EE8B9EDA6188DEDD73 /* PaywallSheet.swift */; };
+		AA22BB33CC44DD55EE66FF11 /* BloodTypeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF11AA22BB33CC44DD55EE66 /* BloodTypeMode.swift */; };
+		AA33BB44CC55DD66EE77FF22 /* BloodTypeCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF22BB33CC44DD55EE66AA11 /* BloodTypeCompatibility.swift */; };
+		AA44BB55CC66DD77EE88FF33 /* SpecialDayCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF33CC44DD55EE66AA11BB22 /* SpecialDayCalculator.swift */; };
+		AC9E4F092920E5F5F3F66582 /* ReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B81291AF2B6AE90BE2AB670 /* ReceiptValidator.swift */; };
+		ACA4BB53FF365B1476E49B29 /* PricingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E8F000ED1FD26FB7D628CC /* PricingConfig.swift */; };
+		B0583A2599C58CFF27FA4498 /* TarotPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA33F614A5905E2CB59ABB3 /* TarotPrompt.swift */; };
+		B19CBF14AB8260E9DBEC09D9 /* Omikuji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44AA9B01BA216CAB88218AB2 /* Omikuji.swift */; };
+		B463C5122B03C5743D273D51 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC9B7B63925CB3BAE71028 /* AppEnvironment.swift */; };
+		B5A2DE91160206C89424F093 /* ReadingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A30C3C48D5B840CDC95F553 /* ReadingMessage.swift */; };
+		B5E32A4C541B090C773A3E4C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 65B7AE6A75A3B2F34CD03DBA /* PrivacyInfo.xcprivacy */; };
+		FF00AA11BB22CC33DD44EE55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA00FF11BB22CC33DD44EE55 /* Assets.xcassets */; };
+		EE22FF33AA44BB55CC66DD77 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE11FF22AA33BB44CC55DD66 /* GoogleService-Info.plist */; };
+		B9F364023EF161404FA9163D /* DisclaimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0703D63D7F328AED7248EE /* DisclaimerManager.swift */; };
+		BDF7AE7286376168E83BDCDD /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B6D0060F5A8515DA5CBD38 /* AppTabView.swift */; };
+		BFE46FC2A596F7929D27558F /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131EBE54E36686D7272C0B9E /* CacheManager.swift */; };
+		C01BBD763A58C134F63FB03D /* CreditWalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FEA9C0F73DCD5B8B3831F05 /* CreditWalletService.swift */; };
+		C1072A24199D759F59101679 /* FortuneEngineService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE3F0BC01A80F3633CC62F4 /* FortuneEngineService.swift */; };
+		C7FC8E25C4D80C2E2974279E /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379B56A81A8F684A77AADD09 /* View+Extensions.swift */; };
+		CAD3BB89243479CC408C2723 /* ReadingChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D966566FA2F8BA92DE801AC /* ReadingChatView.swift */; };
+		CCCDED1ADEE6F484EABEBF2A /* ReadingShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E513502F0E2EFD49BF73FC53 /* ReadingShareService.swift */; };
+		CCDFA50DDFB8BD9E199A0C37 /* Rokuyo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D88B088F9E3E936B9452B /* Rokuyo.swift */; };
+		CFC7A21709597E8030724D99 /* ZodiacCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD9A91C297D898BDEF7DFB /* ZodiacCalculator.swift */; };
+		D0B7611465A19D9C24108EE0 /* SafeResponseProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A127BFE01B8922936BF55E62 /* SafeResponseProvider.swift */; };
+		D1D655EEC0CCBA292F847A8E /* HistoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE671DFBD3FD7FF6192B006 /* HistoryRowView.swift */; };
+		D83EDC49BF40DE3245D90D89 /* NumerologyPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBB8CDCDC5831CCA8621759 /* NumerologyPrompt.swift */; };
+		DD1B02330A8C09F461B967D9 /* OmikujiPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AEC5261754B91A90900FE8 /* OmikujiPrompt.swift */; };
+		E157F68725C091E9B8AEB03D /* DailyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E466138EE45169ECA9E7626 /* DailyCardView.swift */; };
+		E1CE033C417338E04AB97A44 /* FortuneCalculatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B11DDB65486147B0F1EAB4 /* FortuneCalculatorProtocol.swift */; };
+		E2BC5371CF60CF5EE52D12C2 /* CreditWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838A3E59961DAC865C5B6401 /* CreditWallet.swift */; };
+		E3D34D1FDA9B62347B7B34CA /* UserProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC9703DED0E565C46E59A8E /* UserProfileService.swift */; };
+		E3F423E0617C5B5096D9D6EF /* RemoteConfigKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673FE1BD649B5C6FCE80E858 /* RemoteConfigKeys.swift */; };
+		E40311439BABD910F4638CDC /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637068087F2439F2C4005004 /* FirebaseAuthService.swift */; };
+		E57281AC19EA0ECF76D9C41C /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09EB676F895FCB80356B387 /* Typography.swift */; };
+		E5D5F3EB38F93643B34AC260 /* CopyKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B89082A2936E5CB41C701F3 /* CopyKeys.swift */; };
+		E783AD89D8D7095E0027D8F8 /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECA4EF22A939B1AC257CBD9 /* AnalyticsEvent.swift */; };
+		E806DF00B8884BFAD8AD22EC /* InputClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA227EF666D97B13D6536E3 /* InputClassifier.swift */; };
+		EBFE8387C95DD195A4EBC79A /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87407F699B5302263F295AA1 /* UserProfile.swift */; };
+		EC13274030FA00984196F8A7 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1E7C26DF367F7786EAE636 /* Tab.swift */; };
+		EC47FB47A1B681C04EB12C3C /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD276337DB5DB5F752F3E221 /* Spacing.swift */; };
+		EE28A3A4D011F27E54E48138 /* HoroscopePrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3537AC45F58750EE93D00AF /* HoroscopePrompt.swift */; };
+		EF33F4F98868D6EA3956A744 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0E1F0B501C80FC5CD1DB6 /* FirestoreService.swift */; };
+		F3554D700A3EE97545109DEC /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C216FFC1F97044E54BE2E8 /* AppConstants.swift */; };
+		F4938BDF01C4FB2F4C8EBA7F /* Calendar+Rokuyo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B2039273E68462076B04C4 /* Calendar+Rokuyo.swift */; };
+		F49B0FF9FE38559F292D1203 /* BirthdayPersonalityCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6BE1F5D5DA3F771F0A2FC46 /* BirthdayPersonalityCalculator.swift */; };
+		F57834ACBFC67559A7C6DA73 /* RokuyoBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70975AA9BEC973FB72240F4B /* RokuyoBannerView.swift */; };
+		F8471462F2D45A975E6B7E6B /* BloodTypePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF012E957114487F383F1869 /* BloodTypePickerView.swift */; };
+		F8ADC1F0280E951C7350F7EB /* ReadingLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A107DA8F7CE8F94244DC4939 /* ReadingLoadingView.swift */; };
+		F950B36A47B6BDDEEA9AC42F /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD49583A2FEF484602E7E2F6 /* HomeScreen.swift */; };
+		F95ADBAABC0E62FBE538E72E /* PaywallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C45EFD21616184ED1AE710 /* PaywallManager.swift */; };
+		F9B59A65CF736064A27B68FF /* NumerologyCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954B61BC6B89E6C27460F402 /* NumerologyCalculator.swift */; };
+		FA9825B34DB15A51F9FDBE73 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3086383B6F69E27C1BB2930F /* StoreKitManager.swift */; };
+		FC80A9218EFEFDABCDE5E06C /* BirthdayPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38FBF8023437D8595A6FFDD /* BirthdayPrompt.swift */; };
+		FEA4DD779BA9128C953EC1DC /* BloodTypePrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F09ADAF0C7C031E5729F52 /* BloodTypePrompt.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BECA4EF22A939B1AC257CBD9 /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnalyticsEvent.swift"; sourceTree = "<group>"; };
-		EA6683EAA573AB0D7812E44D /* AnalyticsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnalyticsProvider.swift"; sourceTree = "<group>"; };
-		58FC71A684F2B4C59403F482 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnalyticsService.swift"; sourceTree = "<group>"; };
-		90C216FFC1F97044E54BE2E8 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppConstants.swift"; sourceTree = "<group>"; };
-		ECFC9B7B63925CB3BAE71028 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppEnvironment.swift"; sourceTree = "<group>"; };
-		949312CF70B1A3F2A3802BF5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView.swift"; sourceTree = "<group>"; };
-		6A5F8710E35020BD3CA3EEB9 /* SorayomiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SorayomiApp.swift"; sourceTree = "<group>"; };
-		8753BB247BAD4AAEA24B6CFF /* FeatureFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureFlagManager.swift"; sourceTree = "<group>"; };
-		A6E8F000ED1FD26FB7D628CC /* PricingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PricingConfig.swift"; sourceTree = "<group>"; };
-		673FE1BD649B5C6FCE80E858 /* RemoteConfigKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteConfigKeys.swift"; sourceTree = "<group>"; };
-		9B89082A2936E5CB41C701F3 /* CopyKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CopyKeys.swift"; sourceTree = "<group>"; };
-		881C70CC7A23EE22AF31CCF9 /* CopyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CopyProvider.swift"; sourceTree = "<group>"; };
-		4DC76D50E3BF2864FA29FA80 /* CopyVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CopyVariant.swift"; sourceTree = "<group>"; };
-		B127604E4EAA05689050A102 /* JapaneseCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JapaneseCopy.swift"; sourceTree = "<group>"; };
-		23A73888FB19E7A10FC67F11 /* CloudFunctionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CloudFunctionClient.swift"; sourceTree = "<group>"; };
-		637068087F2439F2C4005004 /* FirebaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirebaseAuthService.swift"; sourceTree = "<group>"; };
-		DDF0E1F0B501C80FC5CD1DB6 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreService.swift"; sourceTree = "<group>"; };
-		8A7269C75CFB8753A9079F44 /* RemoteConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteConfigService.swift"; sourceTree = "<group>"; };
-		131EBE54E36686D7272C0B9E /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CacheManager.swift"; sourceTree = "<group>"; };
-		4083B66B511D1C84A928B946 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeychainStore.swift"; sourceTree = "<group>"; };
-		3EBD7E30062633F2F239090D /* UserDefaultsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaultsStore.swift"; sourceTree = "<group>"; };
-		FE2D6673D3B0557FE08B6FE1 /* CreditRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreditRepository.swift"; sourceTree = "<group>"; };
-		1A88EB9342A063F1EB3ED54A /* ReadingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReadingRepository.swift"; sourceTree = "<group>"; };
-		2AC9CEC35C1A88F3D76A190E /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserRepository.swift"; sourceTree = "<group>"; };
-		E631CCFB45425F355AF46051 /* BloodType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BloodType.swift"; sourceTree = "<group>"; };
-		460E240AE7D613901B4D81BF /* CreditTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreditTransaction.swift"; sourceTree = "<group>"; };
-		838A3E59961DAC865C5B6401 /* CreditWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreditWallet.swift"; sourceTree = "<group>"; };
-		9FCDB3754A4B63D6748460F9 /* DailyFortune.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyFortune.swift"; sourceTree = "<group>"; };
-		EAFFE7959C6660ABF4E3E047 /* FortuneReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FortuneReading.swift"; sourceTree = "<group>"; };
-		6CE536C7F3630541F41849F7 /* FortuneSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FortuneSystem.swift"; sourceTree = "<group>"; };
-		3A73003637E10AE51496F4ED /* NineStarKi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NineStarKi.swift"; sourceTree = "<group>"; };
-		CA5248D5BD8EF1463A0F21F5 /* NumerologyProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumerologyProfile.swift"; sourceTree = "<group>"; };
-		44AA9B01BA216CAB88218AB2 /* Omikuji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Omikuji.swift"; sourceTree = "<group>"; };
-		2A30C3C48D5B840CDC95F553 /* ReadingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReadingMessage.swift"; sourceTree = "<group>"; };
-		C71D88B088F9E3E936B9452B /* Rokuyo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rokuyo.swift"; sourceTree = "<group>"; };
-		EC2658CF8A875E1EABE4FBF6 /* TarotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TarotCard.swift"; sourceTree = "<group>"; };
-		87407F699B5302263F295AA1 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserProfile.swift"; sourceTree = "<group>"; };
-		19EDF1B0E5216147BD29580C /* ZodiacSign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZodiacSign.swift"; sourceTree = "<group>"; };
-		56607EE19CA2BD0DEA1B861A /* AIProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIProviderProtocol.swift"; sourceTree = "<group>"; };
-		54B11DDB65486147B0F1EAB4 /* FortuneCalculatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FortuneCalculatorProtocol.swift"; sourceTree = "<group>"; };
-		7FEA9C0F73DCD5B8B3831F05 /* CreditWalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreditWalletService.swift"; sourceTree = "<group>"; };
-		D3DFFC53FAA125D4391E7C89 /* DailyContentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyContentService.swift"; sourceTree = "<group>"; };
-		1DE3F0BC01A80F3633CC62F4 /* FortuneEngineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FortuneEngineService.swift"; sourceTree = "<group>"; };
-		391C618CA332D189C094CD19 /* ReadingHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReadingHistoryService.swift"; sourceTree = "<group>"; };
-		E513502F0E2EFD49BF73FC53 /* ReadingShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReadingShareService.swift"; sourceTree = "<group>"; };
-		CB5635698BFA221569858B0A /* StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StreakManager.swift"; sourceTree = "<group>"; };
-		BEC9703DED0E565C46E59A8E /* UserProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserProfileService.swift"; sourceTree = "<group>"; };
-		41B2039273E68462076B04C4 /* Calendar+Rokuyo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Rokuyo.swift"; sourceTree = "<group>"; };
-		66F3879A63F4B9CC958D6A9F /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
-		98C8D830CD346B6BCB7C2D82 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		02CD6BDBBB4C8777D16F48EA /* OrnamentalBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrnamentalBackgroundView.swift; sourceTree = "<group>"; };
+		03D673FCAC57F8806CE5FA87 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		080081ACADB8A875D52338D3 /* FortuneResultCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FortuneResultCardView.swift; sourceTree = "<group>"; };
+		095EA336404A90C8B2DD0309 /* RokuyoCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RokuyoCalculator.swift; sourceTree = "<group>"; };
+		09FE6B3DB69E156DCA980721 /* SafetyDisclaimerBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyDisclaimerBanner.swift; sourceTree = "<group>"; };
+		0AE3CD1F08CB87B5B438D685 /* RokuyoPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RokuyoPrompt.swift; sourceTree = "<group>"; };
+		0B5A59A7F3CF2E1A9E5E6FEB /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		131EBE54E36686D7272C0B9E /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
+		1343514AFA3A290B4CBF4A2B /* Sorayomi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text; path = Sorayomi.entitlements; sourceTree = "<group>"; };
+		19EDF1B0E5216147BD29580C /* ZodiacSign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZodiacSign.swift; sourceTree = "<group>"; };
+		1A0100000000000000000001 /* AppCheckProviderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCheckProviderFactory.swift; sourceTree = "<group>"; };
+		1A0200000000000000000002 /* FlowerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowerData.swift; sourceTree = "<group>"; };
+		1A0300000000000000000003 /* StoneData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoneData.swift; sourceTree = "<group>"; };
+		1A0400000000000000000004 /* DailyFortuneUsageTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyFortuneUsageTracker.swift; sourceTree = "<group>"; };
+		1A0500000000000000000005 /* FreeTrialManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeTrialManager.swift; sourceTree = "<group>"; };
+		1A0600000000000000000006 /* ReviewRequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRequestManager.swift; sourceTree = "<group>"; };
+		1A0700000000000000000007 /* FlowerFortuneCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowerFortuneCalculator.swift; sourceTree = "<group>"; };
+		1A0703D63D7F328AED7248EE /* DisclaimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerManager.swift; sourceTree = "<group>"; };
+		1A0800000000000000000008 /* StoneFortuneCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoneFortuneCalculator.swift; sourceTree = "<group>"; };
+		1A0900000000000000000009 /* FlowerFortunePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowerFortunePrompt.swift; sourceTree = "<group>"; };
+		1A0A0000000000000000000A /* StoneFortunePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoneFortunePrompt.swift; sourceTree = "<group>"; };
+		1A0B0000000000000000000B /* AdRewardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdRewardManager.swift; sourceTree = "<group>"; };
+		1A0C0000000000000000000C /* AdaptiveGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveGrid.swift; sourceTree = "<group>"; };
+		1A0D0000000000000000000D /* ZodiacConstellationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZodiacConstellationView.swift; sourceTree = "<group>"; };
+		1A0E0000000000000000000E /* AdaptiveModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveModifiers.swift; sourceTree = "<group>"; };
+		1A0F0000000000000000000F /* ReadingDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingDetailScreen.swift; sourceTree = "<group>"; };
+		1A100000000000000000001A /* BloodTypeModePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodTypeModePickerView.swift; sourceTree = "<group>"; };
+		1A110000000000000000001B /* BloodTypeRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodTypeRevealView.swift; sourceTree = "<group>"; };
+		1A120000000000000000001C /* FlowerRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowerRevealView.swift; sourceTree = "<group>"; };
+		1A130000000000000000001D /* NineStarKiRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineStarKiRevealView.swift; sourceTree = "<group>"; };
+		1A140000000000000000001E /* NumerologyRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumerologyRevealView.swift; sourceTree = "<group>"; };
+		1A150000000000000000001F /* OmikujiRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmikujiRevealView.swift; sourceTree = "<group>"; };
+		1A160000000000000000002A /* RokuyoRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RokuyoRevealView.swift; sourceTree = "<group>"; };
+		1A170000000000000000002B /* StoneRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoneRevealView.swift; sourceTree = "<group>"; };
+		1A180000000000000000002C /* TarotCardArtwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotCardArtwork.swift; sourceTree = "<group>"; };
+		1A190000000000000000002D /* TarotCardDetailOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotCardDetailOverlay.swift; sourceTree = "<group>"; };
+		1A1A0000000000000000002E /* TarotRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotRevealView.swift; sourceTree = "<group>"; };
+		1A1B0000000000000000002F /* ThinkingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingIndicatorView.swift; sourceTree = "<group>"; };
+		1A1C000000000000000000AA /* ZodiacRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZodiacRevealView.swift; sourceTree = "<group>"; };
+		1A1D000000000000000000BB /* PrivacyPolicyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyScreen.swift; sourceTree = "<group>"; };
+		1A1E000000000000000000CC /* TermsOfServiceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceScreen.swift; sourceTree = "<group>"; };
+		1A1F000000000000000000DD /* AdaptiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLayout.swift; sourceTree = "<group>"; };
+		1A20000000000000000000EE /* RevealSizeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevealSizeProvider.swift; sourceTree = "<group>"; };
+		1A88EB9342A063F1EB3ED54A /* ReadingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingRepository.swift; sourceTree = "<group>"; };
+		1DE3F0BC01A80F3633CC62F4 /* FortuneEngineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FortuneEngineService.swift; sourceTree = "<group>"; };
+		1FD726C6AB5756AC8660870B /* FortuneCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FortuneCard.swift; sourceTree = "<group>"; };
+		23A73888FB19E7A10FC67F11 /* CloudFunctionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunctionClient.swift; sourceTree = "<group>"; };
+		2774DC91764A4B933164F3DA /* ReadingMessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingMessageBubble.swift; sourceTree = "<group>"; };
+		2A30C3C48D5B840CDC95F553 /* ReadingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingMessage.swift; sourceTree = "<group>"; };
+		2AC9CEC35C1A88F3D76A190E /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
+		2BD5D8896DEF6CAA15F3B393 /* OmikujiSpotlightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmikujiSpotlightCard.swift; sourceTree = "<group>"; };
+		3086383B6F69E27C1BB2930F /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
+		30D038255A61895A2C3F47FE /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
+		33D912E55E2CC27447429A87 /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		379B56A81A8F684A77AADD09 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
-		A6BE1F5D5DA3F771F0A2FC46 /* BirthdayPersonalityCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BirthdayPersonalityCalculator.swift"; sourceTree = "<group>"; };
-		4A37DA073D9FEBA4EC951C4A /* BloodTypeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BloodTypeCalculator.swift"; sourceTree = "<group>"; };
-		AC8D65E20E80ECFD50660A97 /* NineStarKiCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NineStarKiCalculator.swift"; sourceTree = "<group>"; };
-		954B61BC6B89E6C27460F402 /* NumerologyCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumerologyCalculator.swift"; sourceTree = "<group>"; };
-		BA8286E4296DB060AEBC951D /* OmikujiCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OmikujiCalculator.swift"; sourceTree = "<group>"; };
-		095EA336404A90C8B2DD0309 /* RokuyoCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RokuyoCalculator.swift"; sourceTree = "<group>"; };
-		9F3614F2EDFA6A79C67A78FC /* TarotDrawEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TarotDrawEngine.swift"; sourceTree = "<group>"; };
-		95FD9A91C297D898BDEF7DFB /* ZodiacCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZodiacCalculator.swift"; sourceTree = "<group>"; };
-		6AC8C1009161C84B365F37BF /* ContentTaxonomy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentTaxonomy.swift"; sourceTree = "<group>"; };
-		6032B3353FB1B3EA78CB5FB3 /* FortuneComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FortuneComposer.swift"; sourceTree = "<group>"; };
-		D0EDE58793F0AA5F1BE4E70F /* FortuneResultParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FortuneResultParser.swift"; sourceTree = "<group>"; };
-		6BB3A9A6A785D77B3399EA81 /* BasePromptContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasePromptContext.swift"; sourceTree = "<group>"; };
-		D38FBF8023437D8595A6FFDD /* BirthdayPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BirthdayPrompt.swift"; sourceTree = "<group>"; };
-		A2F09ADAF0C7C031E5729F52 /* BloodTypePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BloodTypePrompt.swift"; sourceTree = "<group>"; };
-		E3537AC45F58750EE93D00AF /* HoroscopePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HoroscopePrompt.swift"; sourceTree = "<group>"; };
-		7EE598B44FC718A8D2A80AC2 /* NineStarKiPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NineStarKiPrompt.swift"; sourceTree = "<group>"; };
-		BEBB8CDCDC5831CCA8621759 /* NumerologyPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumerologyPrompt.swift"; sourceTree = "<group>"; };
-		59AEC5261754B91A90900FE8 /* OmikujiPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OmikujiPrompt.swift"; sourceTree = "<group>"; };
-		F38B543DC3A201F064658E1E /* PromptTemplateEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PromptTemplateEngine.swift"; sourceTree = "<group>"; };
-		0AE3CD1F08CB87B5B438D685 /* RokuyoPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RokuyoPrompt.swift"; sourceTree = "<group>"; };
-		8EA3236AF374F817C299CCD9 /* SystemPromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SystemPromptBuilder.swift"; sourceTree = "<group>"; };
-		7AA33F614A5905E2CB59ABB3 /* TarotPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TarotPrompt.swift"; sourceTree = "<group>"; };
-		EDA6F64E78BE884C62C50EE2 /* CreditWalletManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreditWalletManager.swift"; sourceTree = "<group>"; };
-		88C45EFD21616184ED1AE710 /* PaywallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaywallManager.swift"; sourceTree = "<group>"; };
-		7F1DE2687A49523CB1238AED /* ProductIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProductIdentifiers.swift"; sourceTree = "<group>"; };
-		5B81291AF2B6AE90BE2AB670 /* ReceiptValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReceiptValidator.swift"; sourceTree = "<group>"; };
-		3086383B6F69E27C1BB2930F /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreKitManager.swift"; sourceTree = "<group>"; };
-		441FF3E58D61AAD96E0E18BB /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationManager.swift"; sourceTree = "<group>"; };
-		FF807F12A4E60299A29A82F0 /* CrisisDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CrisisDetector.swift"; sourceTree = "<group>"; };
-		1A0703D63D7F328AED7248EE /* DisclaimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DisclaimerManager.swift"; sourceTree = "<group>"; };
-		FFA227EF666D97B13D6536E3 /* InputClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputClassifier.swift"; sourceTree = "<group>"; };
-		40FFC07F46CED3BD6C6FAD92 /* OutputFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OutputFilter.swift"; sourceTree = "<group>"; };
-		A127BFE01B8922936BF55E62 /* SafeResponseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SafeResponseProvider.swift"; sourceTree = "<group>"; };
-		757ABB6D76FFDCE3ECDF07C5 /* SafetyCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SafetyCopy.swift"; sourceTree = "<group>"; };
-		4828813FD02ED1CE6576C348 /* CreditBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreditBadge.swift"; sourceTree = "<group>"; };
-		DBDDA6D4EFE0357B5A4E63E2 /* ErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ErrorBanner.swift"; sourceTree = "<group>"; };
-		1FD726C6AB5756AC8660870B /* FortuneCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FortuneCard.swift"; sourceTree = "<group>"; };
-		33D912E55E2CC27447429A87 /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoadingIndicator.swift"; sourceTree = "<group>"; };
-		02CD6BDBBB4C8777D16F48EA /* OrnamentalBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrnamentalBackgroundView.swift"; sourceTree = "<group>"; };
-		F62823EE8B9EDA6188DEDD73 /* PaywallSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaywallSheet.swift"; sourceTree = "<group>"; };
-		09FE6B3DB69E156DCA980721 /* SafetyDisclaimerBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SafetyDisclaimerBanner.swift"; sourceTree = "<group>"; };
-		984ED6BC5667B21245012EF7 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShareSheet.swift"; sourceTree = "<group>"; };
-		99B6D0060F5A8515DA5CBD38 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppTabView.swift"; sourceTree = "<group>"; };
-		4778E597FB6BF3FB84DE4137 /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationRouter.swift"; sourceTree = "<group>"; };
-		5D1E7C26DF367F7786EAE636 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tab.swift"; sourceTree = "<group>"; };
-		6DE671DFBD3FD7FF6192B006 /* HistoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryRowView.swift"; sourceTree = "<group>"; };
-		BB0A7CC509914AE367F882FC /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryScreen.swift"; sourceTree = "<group>"; };
-		52F1FD937A94E3D1DD314285 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryViewModel.swift"; sourceTree = "<group>"; };
-		3E466138EE45169ECA9E7626 /* DailyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyCardView.swift"; sourceTree = "<group>"; };
-		AD49583A2FEF484602E7E2F6 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreen.swift"; sourceTree = "<group>"; };
-		0B5A59A7F3CF2E1A9E5E6FEB /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeViewModel.swift"; sourceTree = "<group>"; };
-		2BD5D8896DEF6CAA15F3B393 /* OmikujiSpotlightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OmikujiSpotlightCard.swift"; sourceTree = "<group>"; };
-		3AF29F9D276D030144730AE0 /* QuickAccessGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuickAccessGrid.swift"; sourceTree = "<group>"; };
-		70975AA9BEC973FB72240F4B /* RokuyoBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RokuyoBannerView.swift"; sourceTree = "<group>"; };
-		C48309FCDC557D26C5E2C6FE /* AIConsentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIConsentView.swift"; sourceTree = "<group>"; };
-		8BEE625A630C9C2C260B9BFF /* BirthdayInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BirthdayInputView.swift"; sourceTree = "<group>"; };
-		EF012E957114487F383F1869 /* BloodTypePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BloodTypePickerView.swift"; sourceTree = "<group>"; };
-		3BA77ABF90E3A143BA79BA28 /* OnboardingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingScreen.swift"; sourceTree = "<group>"; };
-		C1A5183A13B4D936A7CF3704 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingViewModel.swift"; sourceTree = "<group>"; };
-		AC633D41D7D7407F3381C78E /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileScreen.swift"; sourceTree = "<group>"; };
-		D82A6DB32748E46F1E9E5B72 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileViewModel.swift"; sourceTree = "<group>"; };
-		080081ACADB8A875D52338D3 /* FortuneResultCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FortuneResultCardView.swift"; sourceTree = "<group>"; };
-		58751B0BA4B0F6631CFE3C8E /* FortuneSystemPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FortuneSystemPickerView.swift"; sourceTree = "<group>"; };
-		5D966566FA2F8BA92DE801AC /* ReadingChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReadingChatView.swift"; sourceTree = "<group>"; };
-		A107DA8F7CE8F94244DC4939 /* ReadingLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReadingLoadingView.swift"; sourceTree = "<group>"; };
-		2774DC91764A4B933164F3DA /* ReadingMessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReadingMessageBubble.swift"; sourceTree = "<group>"; };
-		E7043FDD8E41DDC2C0680589 /* ReadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReadingScreen.swift"; sourceTree = "<group>"; };
-		C92B3BFB483B0B6AD80273D7 /* ReadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReadingViewModel.swift"; sourceTree = "<group>"; };
-		C7E7E36255FD5979600A178D /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsScreen.swift"; sourceTree = "<group>"; };
-		03D673FCAC57F8806CE5FA87 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsViewModel.swift"; sourceTree = "<group>"; };
-		30D038255A61895A2C3F47FE /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplashScreen.swift"; sourceTree = "<group>"; };
-		97E3FF6F1C77DF954CB7137C /* CreditPackCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreditPackCard.swift"; sourceTree = "<group>"; };
-		9AECC09C521BBDC153E5A9C7 /* StoreScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreScreen.swift"; sourceTree = "<group>"; };
-		5639DA96E325A1B261B4D321 /* StoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreViewModel.swift"; sourceTree = "<group>"; };
-		60EF7C32919C770B6E39A9AE /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ColorPalette.swift"; sourceTree = "<group>"; };
-		7C143B663B81A0B15F8B044F /* SorayomiTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SorayomiTheme.swift"; sourceTree = "<group>"; };
-		AD276337DB5DB5F752F3E221 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spacing.swift"; sourceTree = "<group>"; };
-		B09EB676F895FCB80356B387 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Typography.swift"; sourceTree = "<group>"; };
-		65B7AE6A75A3B2F34CD03DBA /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
-		D227558881C8C925AC3C1E06 /* Sorayomi.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Sorayomi.storekit"; sourceTree = "<group>"; };
-		1343514AFA3A290B4CBF4A2B /* Sorayomi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Sorayomi.entitlements"; sourceTree = "<group>"; };
-		A97C29AD63741CF438998CE6 /* Sorayomi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sorayomi.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		391C618CA332D189C094CD19 /* ReadingHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingHistoryService.swift; sourceTree = "<group>"; };
+		3A73003637E10AE51496F4ED /* NineStarKi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineStarKi.swift; sourceTree = "<group>"; };
+		3BA77ABF90E3A143BA79BA28 /* OnboardingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingScreen.swift; sourceTree = "<group>"; };
+		3E466138EE45169ECA9E7626 /* DailyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyCardView.swift; sourceTree = "<group>"; };
+		3EBD7E30062633F2F239090D /* UserDefaultsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStore.swift; sourceTree = "<group>"; };
+		4083B66B511D1C84A928B946 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		40FFC07F46CED3BD6C6FAD92 /* OutputFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputFilter.swift; sourceTree = "<group>"; };
+		41B2039273E68462076B04C4 /* Calendar+Rokuyo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Rokuyo.swift"; sourceTree = "<group>"; };
+		441FF3E58D61AAD96E0E18BB /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		44AA9B01BA216CAB88218AB2 /* Omikuji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Omikuji.swift; sourceTree = "<group>"; };
+		460E240AE7D613901B4D81BF /* CreditTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditTransaction.swift; sourceTree = "<group>"; };
+		4778E597FB6BF3FB84DE4137 /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
+		4828813FD02ED1CE6576C348 /* CreditBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditBadge.swift; sourceTree = "<group>"; };
+		4A37DA073D9FEBA4EC951C4A /* BloodTypeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodTypeCalculator.swift; sourceTree = "<group>"; };
+		4DC76D50E3BF2864FA29FA80 /* CopyVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyVariant.swift; sourceTree = "<group>"; };
+		52F1FD937A94E3D1DD314285 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
+		54B11DDB65486147B0F1EAB4 /* FortuneCalculatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FortuneCalculatorProtocol.swift; sourceTree = "<group>"; };
+		5639DA96E325A1B261B4D321 /* StoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewModel.swift; sourceTree = "<group>"; };
+		56607EE19CA2BD0DEA1B861A /* AIProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProviderProtocol.swift; sourceTree = "<group>"; };
+		58751B0BA4B0F6631CFE3C8E /* FortuneSystemPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FortuneSystemPickerView.swift; sourceTree = "<group>"; };
+		58FC71A684F2B4C59403F482 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		59AEC5261754B91A90900FE8 /* OmikujiPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmikujiPrompt.swift; sourceTree = "<group>"; };
+		5B81291AF2B6AE90BE2AB670 /* ReceiptValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptValidator.swift; sourceTree = "<group>"; };
+		5D1E7C26DF367F7786EAE636 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
+		5D966566FA2F8BA92DE801AC /* ReadingChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingChatView.swift; sourceTree = "<group>"; };
+		6032B3353FB1B3EA78CB5FB3 /* FortuneComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FortuneComposer.swift; sourceTree = "<group>"; };
+		60EF7C32919C770B6E39A9AE /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
+		637068087F2439F2C4005004 /* FirebaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
+		65B7AE6A75A3B2F34CD03DBA /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		66F3879A63F4B9CC958D6A9F /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		673FE1BD649B5C6FCE80E858 /* RemoteConfigKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigKeys.swift; sourceTree = "<group>"; };
+		6A5F8710E35020BD3CA3EEB9 /* SorayomiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SorayomiApp.swift; sourceTree = "<group>"; };
+		6AC8C1009161C84B365F37BF /* ContentTaxonomy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTaxonomy.swift; sourceTree = "<group>"; };
+		6BB3A9A6A785D77B3399EA81 /* BasePromptContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePromptContext.swift; sourceTree = "<group>"; };
+		6CE536C7F3630541F41849F7 /* FortuneSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FortuneSystem.swift; sourceTree = "<group>"; };
+		6DE671DFBD3FD7FF6192B006 /* HistoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRowView.swift; sourceTree = "<group>"; };
+		70975AA9BEC973FB72240F4B /* RokuyoBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RokuyoBannerView.swift; sourceTree = "<group>"; };
+		757ABB6D76FFDCE3ECDF07C5 /* SafetyCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyCopy.swift; sourceTree = "<group>"; };
+		7AA33F614A5905E2CB59ABB3 /* TarotPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotPrompt.swift; sourceTree = "<group>"; };
+		7C143B663B81A0B15F8B044F /* SorayomiTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SorayomiTheme.swift; sourceTree = "<group>"; };
+		7EE598B44FC718A8D2A80AC2 /* NineStarKiPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineStarKiPrompt.swift; sourceTree = "<group>"; };
+		7F1DE2687A49523CB1238AED /* ProductIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductIdentifiers.swift; sourceTree = "<group>"; };
+		7FEA9C0F73DCD5B8B3831F05 /* CreditWalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditWalletService.swift; sourceTree = "<group>"; };
+		838A3E59961DAC865C5B6401 /* CreditWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditWallet.swift; sourceTree = "<group>"; };
+		87407F699B5302263F295AA1 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		8753BB247BAD4AAEA24B6CFF /* FeatureFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagManager.swift; sourceTree = "<group>"; };
+		881C70CC7A23EE22AF31CCF9 /* CopyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyProvider.swift; sourceTree = "<group>"; };
+		88C45EFD21616184ED1AE710 /* PaywallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallManager.swift; sourceTree = "<group>"; };
+		8A7269C75CFB8753A9079F44 /* RemoteConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigService.swift; sourceTree = "<group>"; };
+		8BEE625A630C9C2C260B9BFF /* BirthdayInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayInputView.swift; sourceTree = "<group>"; };
+		8EA3236AF374F817C299CCD9 /* SystemPromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPromptBuilder.swift; sourceTree = "<group>"; };
+		90C216FFC1F97044E54BE2E8 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		949312CF70B1A3F2A3802BF5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		954B61BC6B89E6C27460F402 /* NumerologyCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumerologyCalculator.swift; sourceTree = "<group>"; };
+		95FD9A91C297D898BDEF7DFB /* ZodiacCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZodiacCalculator.swift; sourceTree = "<group>"; };
+		97E3FF6F1C77DF954CB7137C /* CreditPackCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditPackCard.swift; sourceTree = "<group>"; };
+		984ED6BC5667B21245012EF7 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		98C8D830CD346B6BCB7C2D82 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		99B6D0060F5A8515DA5CBD38 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
+		9AECC09C521BBDC153E5A9C7 /* StoreScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreScreen.swift; sourceTree = "<group>"; };
+		9B89082A2936E5CB41C701F3 /* CopyKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyKeys.swift; sourceTree = "<group>"; };
+		9F3614F2EDFA6A79C67A78FC /* TarotDrawEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotDrawEngine.swift; sourceTree = "<group>"; };
+		9FCDB3754A4B63D6748460F9 /* DailyFortune.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyFortune.swift; sourceTree = "<group>"; };
+		A107DA8F7CE8F94244DC4939 /* ReadingLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLoadingView.swift; sourceTree = "<group>"; };
+		A127BFE01B8922936BF55E62 /* SafeResponseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeResponseProvider.swift; sourceTree = "<group>"; };
+		A2F09ADAF0C7C031E5729F52 /* BloodTypePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodTypePrompt.swift; sourceTree = "<group>"; };
+		A6BE1F5D5DA3F771F0A2FC46 /* BirthdayPersonalityCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayPersonalityCalculator.swift; sourceTree = "<group>"; };
+		A6E8F000ED1FD26FB7D628CC /* PricingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingConfig.swift; sourceTree = "<group>"; };
+		A97C29AD63741CF438998CE6 /* Sorayomi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sorayomi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC633D41D7D7407F3381C78E /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
+		AC8D65E20E80ECFD50660A97 /* NineStarKiCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineStarKiCalculator.swift; sourceTree = "<group>"; };
+		AD276337DB5DB5F752F3E221 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
+		AD49583A2FEF484602E7E2F6 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
+		B09EB676F895FCB80356B387 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		B127604E4EAA05689050A102 /* JapaneseCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseCopy.swift; sourceTree = "<group>"; };
+		BA8286E4296DB060AEBC951D /* OmikujiCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmikujiCalculator.swift; sourceTree = "<group>"; };
+		BB0A7CC509914AE367F882FC /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
+		BEBB8CDCDC5831CCA8621759 /* NumerologyPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumerologyPrompt.swift; sourceTree = "<group>"; };
+		BEC9703DED0E565C46E59A8E /* UserProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileService.swift; sourceTree = "<group>"; };
+		BECA4EF22A939B1AC257CBD9 /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
+		C1A5183A13B4D936A7CF3704 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+		C71D88B088F9E3E936B9452B /* Rokuyo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rokuyo.swift; sourceTree = "<group>"; };
+		C7E7E36255FD5979600A178D /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		C92B3BFB483B0B6AD80273D7 /* ReadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingViewModel.swift; sourceTree = "<group>"; };
+		CA5248D5BD8EF1463A0F21F5 /* NumerologyProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumerologyProfile.swift; sourceTree = "<group>"; };
+		CB5635698BFA221569858B0A /* StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakManager.swift; sourceTree = "<group>"; };
+		D0EDE58793F0AA5F1BE4E70F /* FortuneResultParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FortuneResultParser.swift; sourceTree = "<group>"; };
+		AA00FF11BB22CC33DD44EE55 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EE11FF22AA33BB44CC55DD66 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D227558881C8C925AC3C1E06 /* Sorayomi.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Sorayomi.storekit; sourceTree = "<group>"; };
+		D38FBF8023437D8595A6FFDD /* BirthdayPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayPrompt.swift; sourceTree = "<group>"; };
+		D3DFFC53FAA125D4391E7C89 /* DailyContentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyContentService.swift; sourceTree = "<group>"; };
+		D82A6DB32748E46F1E9E5B72 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		DBDDA6D4EFE0357B5A4E63E2 /* ErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorBanner.swift; sourceTree = "<group>"; };
+		DDF0E1F0B501C80FC5CD1DB6 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
+		E3537AC45F58750EE93D00AF /* HoroscopePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoroscopePrompt.swift; sourceTree = "<group>"; };
+		E513502F0E2EFD49BF73FC53 /* ReadingShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingShareService.swift; sourceTree = "<group>"; };
+		E631CCFB45425F355AF46051 /* BloodType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodType.swift; sourceTree = "<group>"; };
+		E7043FDD8E41DDC2C0680589 /* ReadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingScreen.swift; sourceTree = "<group>"; };
+		EA6683EAA573AB0D7812E44D /* AnalyticsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsProvider.swift; sourceTree = "<group>"; };
+		EAFFE7959C6660ABF4E3E047 /* FortuneReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FortuneReading.swift; sourceTree = "<group>"; };
+		EC2658CF8A875E1EABE4FBF6 /* TarotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotCard.swift; sourceTree = "<group>"; };
+		ECFC9B7B63925CB3BAE71028 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		EDA6F64E78BE884C62C50EE2 /* CreditWalletManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditWalletManager.swift; sourceTree = "<group>"; };
+		EF012E957114487F383F1869 /* BloodTypePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodTypePickerView.swift; sourceTree = "<group>"; };
+		F38B543DC3A201F064658E1E /* PromptTemplateEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptTemplateEngine.swift; sourceTree = "<group>"; };
+		F62823EE8B9EDA6188DEDD73 /* PaywallSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallSheet.swift; sourceTree = "<group>"; };
+		FE2D6673D3B0557FE08B6FE1 /* CreditRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditRepository.swift; sourceTree = "<group>"; };
+		FF11AA22BB33CC44DD55EE66 /* BloodTypeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodTypeMode.swift; sourceTree = "<group>"; };
+		FF22BB33CC44DD55EE66AA11 /* BloodTypeCompatibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodTypeCompatibility.swift; sourceTree = "<group>"; };
+		FF33CC44DD55EE66AA11BB22 /* SpecialDayCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialDayCalculator.swift; sourceTree = "<group>"; };
+		FF807F12A4E60299A29A82F0 /* CrisisDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrisisDetector.swift; sourceTree = "<group>"; };
+		FFA227EF666D97B13D6536E3 /* InputClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputClassifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,191 +354,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A29D700D2FA851C0006FCD88 /* FirebaseCore in Frameworks */,
+				A29D700B2FA851C0006FCD88 /* FirebaseAppCheck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7882D14E196057770B59E53D = {
-			isa = PBXGroup;
-			children = (
-				AB3AF3DB1E116A610D78B6CF /* Sorayomi */,
-				BF7A2D27A78D590BDEF15AF2 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		BF7A2D27A78D590BDEF15AF2 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A97C29AD63741CF438998CE6 /* Sorayomi.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		C765C6776D04A2CB394FAFCA /* Analytics */ = {
-			isa = PBXGroup;
-			children = (
-				BECA4EF22A939B1AC257CBD9 /* AnalyticsEvent.swift */,
-				EA6683EAA573AB0D7812E44D /* AnalyticsProvider.swift */,
-				58FC71A684F2B4C59403F482 /* AnalyticsService.swift */,
-			);
-			path = "Analytics";
-			sourceTree = "<group>";
-		};
-		60B7A0449BE0BDC2017D3B1A /* App */ = {
-			isa = PBXGroup;
-			children = (
-				90C216FFC1F97044E54BE2E8 /* AppConstants.swift */,
-				ECFC9B7B63925CB3BAE71028 /* AppEnvironment.swift */,
-				949312CF70B1A3F2A3802BF5 /* ContentView.swift */,
-				6A5F8710E35020BD3CA3EEB9 /* SorayomiApp.swift */,
-			);
-			path = "App";
-			sourceTree = "<group>";
-		};
-		90CE050DB35600927126643A /* Config */ = {
-			isa = PBXGroup;
-			children = (
-				8753BB247BAD4AAEA24B6CFF /* FeatureFlagManager.swift */,
-				A6E8F000ED1FD26FB7D628CC /* PricingConfig.swift */,
-				673FE1BD649B5C6FCE80E858 /* RemoteConfigKeys.swift */,
-			);
-			path = "Config";
-			sourceTree = "<group>";
-		};
-		C3F79093064272CA2066DDC2 /* Copy */ = {
-			isa = PBXGroup;
-			children = (
-				9B89082A2936E5CB41C701F3 /* CopyKeys.swift */,
-				881C70CC7A23EE22AF31CCF9 /* CopyProvider.swift */,
-				4DC76D50E3BF2864FA29FA80 /* CopyVariant.swift */,
-				B127604E4EAA05689050A102 /* JapaneseCopy.swift */,
-			);
-			path = "Copy";
-			sourceTree = "<group>";
-		};
-		54C84815D6234D3FCF4A7B7A /* Firebase */ = {
-			isa = PBXGroup;
-			children = (
-				23A73888FB19E7A10FC67F11 /* CloudFunctionClient.swift */,
-				637068087F2439F2C4005004 /* FirebaseAuthService.swift */,
-				DDF0E1F0B501C80FC5CD1DB6 /* FirestoreService.swift */,
-				8A7269C75CFB8753A9079F44 /* RemoteConfigService.swift */,
-			);
-			path = "Firebase";
-			sourceTree = "<group>";
-		};
-		6D867CE2096A1466BD007FEB /* Persistence */ = {
-			isa = PBXGroup;
-			children = (
-				131EBE54E36686D7272C0B9E /* CacheManager.swift */,
-				4083B66B511D1C84A928B946 /* KeychainStore.swift */,
-				3EBD7E30062633F2F239090D /* UserDefaultsStore.swift */,
-			);
-			path = "Persistence";
-			sourceTree = "<group>";
-		};
-		C198E0632B7244497BD0299E /* Repositories */ = {
-			isa = PBXGroup;
-			children = (
-				FE2D6673D3B0557FE08B6FE1 /* CreditRepository.swift */,
-				1A88EB9342A063F1EB3ED54A /* ReadingRepository.swift */,
-				2AC9CEC35C1A88F3D76A190E /* UserRepository.swift */,
-			);
-			path = "Repositories";
-			sourceTree = "<group>";
-		};
-		E6CB865F24392C4B61033EFE /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				54C84815D6234D3FCF4A7B7A /* Firebase */,
-				6D867CE2096A1466BD007FEB /* Persistence */,
-				C198E0632B7244497BD0299E /* Repositories */,
-			);
-			path = "Data";
-			sourceTree = "<group>";
-		};
-		FAC419610D153043C91D400C /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				E631CCFB45425F355AF46051 /* BloodType.swift */,
-				460E240AE7D613901B4D81BF /* CreditTransaction.swift */,
-				838A3E59961DAC865C5B6401 /* CreditWallet.swift */,
-				9FCDB3754A4B63D6748460F9 /* DailyFortune.swift */,
-				EAFFE7959C6660ABF4E3E047 /* FortuneReading.swift */,
-				6CE536C7F3630541F41849F7 /* FortuneSystem.swift */,
-				3A73003637E10AE51496F4ED /* NineStarKi.swift */,
-				CA5248D5BD8EF1463A0F21F5 /* NumerologyProfile.swift */,
-				44AA9B01BA216CAB88218AB2 /* Omikuji.swift */,
-				2A30C3C48D5B840CDC95F553 /* ReadingMessage.swift */,
-				C71D88B088F9E3E936B9452B /* Rokuyo.swift */,
-				EC2658CF8A875E1EABE4FBF6 /* TarotCard.swift */,
-				87407F699B5302263F295AA1 /* UserProfile.swift */,
-				19EDF1B0E5216147BD29580C /* ZodiacSign.swift */,
-			);
-			path = "Models";
-			sourceTree = "<group>";
-		};
-		39AEBB879A8AFB2AA9F7E80C /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				56607EE19CA2BD0DEA1B861A /* AIProviderProtocol.swift */,
-				54B11DDB65486147B0F1EAB4 /* FortuneCalculatorProtocol.swift */,
-			);
-			path = "Protocols";
-			sourceTree = "<group>";
-		};
-		EC795DEA9736B28D73E24A40 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				7FEA9C0F73DCD5B8B3831F05 /* CreditWalletService.swift */,
-				D3DFFC53FAA125D4391E7C89 /* DailyContentService.swift */,
-				1DE3F0BC01A80F3633CC62F4 /* FortuneEngineService.swift */,
-				391C618CA332D189C094CD19 /* ReadingHistoryService.swift */,
-				E513502F0E2EFD49BF73FC53 /* ReadingShareService.swift */,
-				CB5635698BFA221569858B0A /* StreakManager.swift */,
-				BEC9703DED0E565C46E59A8E /* UserProfileService.swift */,
-			);
-			path = "Services";
-			sourceTree = "<group>";
-		};
-		77E2DCE469ABA358902D8DFD /* Domain */ = {
-			isa = PBXGroup;
-			children = (
-				FAC419610D153043C91D400C /* Models */,
-				39AEBB879A8AFB2AA9F7E80C /* Protocols */,
-				EC795DEA9736B28D73E24A40 /* Services */,
-			);
-			path = "Domain";
-			sourceTree = "<group>";
-		};
-		BC6C8F75AFED78AB0DA7A849 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				41B2039273E68462076B04C4 /* Calendar+Rokuyo.swift */,
-				66F3879A63F4B9CC958D6A9F /* Date+Extensions.swift */,
-				98C8D830CD346B6BCB7C2D82 /* String+Extensions.swift */,
-				379B56A81A8F684A77AADD09 /* View+Extensions.swift */,
-			);
-			path = "Extensions";
-			sourceTree = "<group>";
-		};
-		3CF9EDA528181D0F6BC7FDC7 /* Calculators */ = {
-			isa = PBXGroup;
-			children = (
-				A6BE1F5D5DA3F771F0A2FC46 /* BirthdayPersonalityCalculator.swift */,
-				4A37DA073D9FEBA4EC951C4A /* BloodTypeCalculator.swift */,
-				AC8D65E20E80ECFD50660A97 /* NineStarKiCalculator.swift */,
-				954B61BC6B89E6C27460F402 /* NumerologyCalculator.swift */,
-				BA8286E4296DB060AEBC951D /* OmikujiCalculator.swift */,
-				095EA336404A90C8B2DD0309 /* RokuyoCalculator.swift */,
-				9F3614F2EDFA6A79C67A78FC /* TarotDrawEngine.swift */,
-				95FD9A91C297D898BDEF7DFB /* ZodiacCalculator.swift */,
-			);
-			path = "Calculators";
-			sourceTree = "<group>";
-		};
 		039E580CF6B50E02126B571D /* Prompts */ = {
 			isa = PBXGroup;
 			children = (
@@ -481,48 +376,19 @@
 				0AE3CD1F08CB87B5B438D685 /* RokuyoPrompt.swift */,
 				8EA3236AF374F817C299CCD9 /* SystemPromptBuilder.swift */,
 				7AA33F614A5905E2CB59ABB3 /* TarotPrompt.swift */,
+				1A0900000000000000000009 /* FlowerFortunePrompt.swift */,
+				1A0A0000000000000000000A /* StoneFortunePrompt.swift */,
 			);
-			path = "Prompts";
+			path = Prompts;
 			sourceTree = "<group>";
 		};
-		59F3D8D8483F8FC79D326F4B /* FortuneEngine */ = {
+		043D6518CBC1E1F073A0DFFA /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				3CF9EDA528181D0F6BC7FDC7 /* Calculators */,
-				039E580CF6B50E02126B571D /* Prompts */,
-				6AC8C1009161C84B365F37BF /* ContentTaxonomy.swift */,
-				6032B3353FB1B3EA78CB5FB3 /* FortuneComposer.swift */,
-				D0EDE58793F0AA5F1BE4E70F /* FortuneResultParser.swift */,
+				AC633D41D7D7407F3381C78E /* ProfileScreen.swift */,
+				D82A6DB32748E46F1E9E5B72 /* ProfileViewModel.swift */,
 			);
-			path = "FortuneEngine";
-			sourceTree = "<group>";
-		};
-		2EE259FC95F7587D00C8CC2B /* Monetization */ = {
-			isa = PBXGroup;
-			children = (
-				EDA6F64E78BE884C62C50EE2 /* CreditWalletManager.swift */,
-				88C45EFD21616184ED1AE710 /* PaywallManager.swift */,
-				7F1DE2687A49523CB1238AED /* ProductIdentifiers.swift */,
-				5B81291AF2B6AE90BE2AB670 /* ReceiptValidator.swift */,
-				3086383B6F69E27C1BB2930F /* StoreKitManager.swift */,
-			);
-			path = "Monetization";
-			sourceTree = "<group>";
-		};
-		CF2FAF7B05D4876FCA1AB376 /* Notifications */ = {
-			isa = PBXGroup;
-			children = (
-				441FF3E58D61AAD96E0E18BB /* NotificationManager.swift */,
-			);
-			path = "Notifications";
-			sourceTree = "<group>";
-		};
-		9E1D721762BCF53DC21A9C77 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				D227558881C8C925AC3C1E06 /* Sorayomi.storekit */,
-			);
-			path = "Resources";
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		13E35CE80EB9BC5879688296 /* Safety */ = {
@@ -535,32 +401,7 @@
 				A127BFE01B8922936BF55E62 /* SafeResponseProvider.swift */,
 				757ABB6D76FFDCE3ECDF07C5 /* SafetyCopy.swift */,
 			);
-			path = "Safety";
-			sourceTree = "<group>";
-		};
-		E56A3CDB068C99D0C6031783 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				4828813FD02ED1CE6576C348 /* CreditBadge.swift */,
-				DBDDA6D4EFE0357B5A4E63E2 /* ErrorBanner.swift */,
-				1FD726C6AB5756AC8660870B /* FortuneCard.swift */,
-				33D912E55E2CC27447429A87 /* LoadingIndicator.swift */,
-				02CD6BDBBB4C8777D16F48EA /* OrnamentalBackgroundView.swift */,
-				F62823EE8B9EDA6188DEDD73 /* PaywallSheet.swift */,
-				09FE6B3DB69E156DCA980721 /* SafetyDisclaimerBanner.swift */,
-				984ED6BC5667B21245012EF7 /* ShareSheet.swift */,
-			);
-			path = "Components";
-			sourceTree = "<group>";
-		};
-		70194E4E9C4F0417F3220A02 /* Navigation */ = {
-			isa = PBXGroup;
-			children = (
-				99B6D0060F5A8515DA5CBD38 /* AppTabView.swift */,
-				4778E597FB6BF3FB84DE4137 /* NavigationRouter.swift */,
-				5D1E7C26DF367F7786EAE636 /* Tab.swift */,
-			);
-			path = "Navigation";
+			path = Safety;
 			sourceTree = "<group>";
 		};
 		1E5BE7192305524DA7F19310 /* History */ = {
@@ -569,83 +410,9 @@
 				6DE671DFBD3FD7FF6192B006 /* HistoryRowView.swift */,
 				BB0A7CC509914AE367F882FC /* HistoryScreen.swift */,
 				52F1FD937A94E3D1DD314285 /* HistoryViewModel.swift */,
+				1A0F0000000000000000000F /* ReadingDetailScreen.swift */,
 			);
-			path = "History";
-			sourceTree = "<group>";
-		};
-		BF2935C795BF802097C38CEC /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				3E466138EE45169ECA9E7626 /* DailyCardView.swift */,
-				AD49583A2FEF484602E7E2F6 /* HomeScreen.swift */,
-				0B5A59A7F3CF2E1A9E5E6FEB /* HomeViewModel.swift */,
-				2BD5D8896DEF6CAA15F3B393 /* OmikujiSpotlightCard.swift */,
-				3AF29F9D276D030144730AE0 /* QuickAccessGrid.swift */,
-				70975AA9BEC973FB72240F4B /* RokuyoBannerView.swift */,
-			);
-			path = "Home";
-			sourceTree = "<group>";
-		};
-		8AACF3424F4E7065C5CD0C78 /* Onboarding */ = {
-			isa = PBXGroup;
-			children = (
-				C48309FCDC557D26C5E2C6FE /* AIConsentView.swift */,
-				8BEE625A630C9C2C260B9BFF /* BirthdayInputView.swift */,
-				EF012E957114487F383F1869 /* BloodTypePickerView.swift */,
-				3BA77ABF90E3A143BA79BA28 /* OnboardingScreen.swift */,
-				C1A5183A13B4D936A7CF3704 /* OnboardingViewModel.swift */,
-			);
-			path = "Onboarding";
-			sourceTree = "<group>";
-		};
-		043D6518CBC1E1F073A0DFFA /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-				AC633D41D7D7407F3381C78E /* ProfileScreen.swift */,
-				D82A6DB32748E46F1E9E5B72 /* ProfileViewModel.swift */,
-			);
-			path = "Profile";
-			sourceTree = "<group>";
-		};
-		C409DB3A9547DF8A6EE4C368 /* Reading */ = {
-			isa = PBXGroup;
-			children = (
-				080081ACADB8A875D52338D3 /* FortuneResultCardView.swift */,
-				58751B0BA4B0F6631CFE3C8E /* FortuneSystemPickerView.swift */,
-				5D966566FA2F8BA92DE801AC /* ReadingChatView.swift */,
-				A107DA8F7CE8F94244DC4939 /* ReadingLoadingView.swift */,
-				2774DC91764A4B933164F3DA /* ReadingMessageBubble.swift */,
-				E7043FDD8E41DDC2C0680589 /* ReadingScreen.swift */,
-				C92B3BFB483B0B6AD80273D7 /* ReadingViewModel.swift */,
-			);
-			path = "Reading";
-			sourceTree = "<group>";
-		};
-		2FA34670F728A15195C72F2D /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				C7E7E36255FD5979600A178D /* SettingsScreen.swift */,
-				03D673FCAC57F8806CE5FA87 /* SettingsViewModel.swift */,
-			);
-			path = "Settings";
-			sourceTree = "<group>";
-		};
-		3348179C54F42588CE034B3D /* Splash */ = {
-			isa = PBXGroup;
-			children = (
-				30D038255A61895A2C3F47FE /* SplashScreen.swift */,
-			);
-			path = "Splash";
-			sourceTree = "<group>";
-		};
-		5DED4FEA27641D7E2CC30CFB /* Store */ = {
-			isa = PBXGroup;
-			children = (
-				97E3FF6F1C77DF954CB7137C /* CreditPackCard.swift */,
-				9AECC09C521BBDC153E5A9C7 /* StoreScreen.swift */,
-				5639DA96E325A1B261B4D321 /* StoreViewModel.swift */,
-			);
-			path = "Store";
+			path = History;
 			sourceTree = "<group>";
 		};
 		20CD239A033704CFEC32A307 /* Screens */ = {
@@ -660,7 +427,108 @@
 				3348179C54F42588CE034B3D /* Splash */,
 				5DED4FEA27641D7E2CC30CFB /* Store */,
 			);
-			path = "Screens";
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		2EE259FC95F7587D00C8CC2B /* Monetization */ = {
+			isa = PBXGroup;
+			children = (
+				EDA6F64E78BE884C62C50EE2 /* CreditWalletManager.swift */,
+				88C45EFD21616184ED1AE710 /* PaywallManager.swift */,
+				7F1DE2687A49523CB1238AED /* ProductIdentifiers.swift */,
+				5B81291AF2B6AE90BE2AB670 /* ReceiptValidator.swift */,
+				3086383B6F69E27C1BB2930F /* StoreKitManager.swift */,
+				1A0B0000000000000000000B /* AdRewardManager.swift */,
+			);
+			path = Monetization;
+			sourceTree = "<group>";
+		};
+		2FA34670F728A15195C72F2D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C7E7E36255FD5979600A178D /* SettingsScreen.swift */,
+				03D673FCAC57F8806CE5FA87 /* SettingsViewModel.swift */,
+				1A1D000000000000000000BB /* PrivacyPolicyScreen.swift */,
+				1A1E000000000000000000CC /* TermsOfServiceScreen.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		3348179C54F42588CE034B3D /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				30D038255A61895A2C3F47FE /* SplashScreen.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		39AEBB879A8AFB2AA9F7E80C /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				56607EE19CA2BD0DEA1B861A /* AIProviderProtocol.swift */,
+				54B11DDB65486147B0F1EAB4 /* FortuneCalculatorProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		3CF9EDA528181D0F6BC7FDC7 /* Calculators */ = {
+			isa = PBXGroup;
+			children = (
+				A6BE1F5D5DA3F771F0A2FC46 /* BirthdayPersonalityCalculator.swift */,
+				4A37DA073D9FEBA4EC951C4A /* BloodTypeCalculator.swift */,
+				FF22BB33CC44DD55EE66AA11 /* BloodTypeCompatibility.swift */,
+				AC8D65E20E80ECFD50660A97 /* NineStarKiCalculator.swift */,
+				954B61BC6B89E6C27460F402 /* NumerologyCalculator.swift */,
+				BA8286E4296DB060AEBC951D /* OmikujiCalculator.swift */,
+				095EA336404A90C8B2DD0309 /* RokuyoCalculator.swift */,
+				FF33CC44DD55EE66AA11BB22 /* SpecialDayCalculator.swift */,
+				9F3614F2EDFA6A79C67A78FC /* TarotDrawEngine.swift */,
+				95FD9A91C297D898BDEF7DFB /* ZodiacCalculator.swift */,
+				1A0700000000000000000007 /* FlowerFortuneCalculator.swift */,
+				1A0800000000000000000008 /* StoneFortuneCalculator.swift */,
+			);
+			path = Calculators;
+			sourceTree = "<group>";
+		};
+		3D00000000000000000000AA /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				1A0E0000000000000000000E /* AdaptiveModifiers.swift */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		54C84815D6234D3FCF4A7B7A /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				23A73888FB19E7A10FC67F11 /* CloudFunctionClient.swift */,
+				637068087F2439F2C4005004 /* FirebaseAuthService.swift */,
+				DDF0E1F0B501C80FC5CD1DB6 /* FirestoreService.swift */,
+				8A7269C75CFB8753A9079F44 /* RemoteConfigService.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		59F3D8D8483F8FC79D326F4B /* FortuneEngine */ = {
+			isa = PBXGroup;
+			children = (
+				3CF9EDA528181D0F6BC7FDC7 /* Calculators */,
+				039E580CF6B50E02126B571D /* Prompts */,
+				6AC8C1009161C84B365F37BF /* ContentTaxonomy.swift */,
+				6032B3353FB1B3EA78CB5FB3 /* FortuneComposer.swift */,
+				D0EDE58793F0AA5F1BE4E70F /* FortuneResultParser.swift */,
+			);
+			path = FortuneEngine;
+			sourceTree = "<group>";
+		};
+		5DED4FEA27641D7E2CC30CFB /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				97E3FF6F1C77DF954CB7137C /* CreditPackCard.swift */,
+				9AECC09C521BBDC153E5A9C7 /* StoreScreen.swift */,
+				5639DA96E325A1B261B4D321 /* StoreViewModel.swift */,
+			);
+			path = Store;
 			sourceTree = "<group>";
 		};
 		6045EFEDF2604B10F260D6A1 /* Theme */ = {
@@ -670,19 +538,90 @@
 				7C143B663B81A0B15F8B044F /* SorayomiTheme.swift */,
 				AD276337DB5DB5F752F3E221 /* Spacing.swift */,
 				B09EB676F895FCB80356B387 /* Typography.swift */,
+				1A1F000000000000000000DD /* AdaptiveLayout.swift */,
+				1A20000000000000000000EE /* RevealSizeProvider.swift */,
 			);
-			path = "Theme";
+			path = Theme;
 			sourceTree = "<group>";
 		};
-		F0D45064C6EEBF4C9B9B7D3E /* UI */ = {
+		60B7A0449BE0BDC2017D3B1A /* App */ = {
 			isa = PBXGroup;
 			children = (
-				E56A3CDB068C99D0C6031783 /* Components */,
-				70194E4E9C4F0417F3220A02 /* Navigation */,
-				20CD239A033704CFEC32A307 /* Screens */,
-				6045EFEDF2604B10F260D6A1 /* Theme */,
+				90C216FFC1F97044E54BE2E8 /* AppConstants.swift */,
+				ECFC9B7B63925CB3BAE71028 /* AppEnvironment.swift */,
+				1A0100000000000000000001 /* AppCheckProviderFactory.swift */,
+				949312CF70B1A3F2A3802BF5 /* ContentView.swift */,
+				6A5F8710E35020BD3CA3EEB9 /* SorayomiApp.swift */,
 			);
-			path = "UI";
+			path = App;
+			sourceTree = "<group>";
+		};
+		6D867CE2096A1466BD007FEB /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				131EBE54E36686D7272C0B9E /* CacheManager.swift */,
+				4083B66B511D1C84A928B946 /* KeychainStore.swift */,
+				3EBD7E30062633F2F239090D /* UserDefaultsStore.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		70194E4E9C4F0417F3220A02 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				99B6D0060F5A8515DA5CBD38 /* AppTabView.swift */,
+				4778E597FB6BF3FB84DE4137 /* NavigationRouter.swift */,
+				5D1E7C26DF367F7786EAE636 /* Tab.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		77E2DCE469ABA358902D8DFD /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				FAC419610D153043C91D400C /* Models */,
+				39AEBB879A8AFB2AA9F7E80C /* Protocols */,
+				EC795DEA9736B28D73E24A40 /* Services */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		7882D14E196057770B59E53D = {
+			isa = PBXGroup;
+			children = (
+				AB3AF3DB1E116A610D78B6CF /* Sorayomi */,
+				BF7A2D27A78D590BDEF15AF2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8AACF3424F4E7065C5CD0C78 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				8BEE625A630C9C2C260B9BFF /* BirthdayInputView.swift */,
+				EF012E957114487F383F1869 /* BloodTypePickerView.swift */,
+				3BA77ABF90E3A143BA79BA28 /* OnboardingScreen.swift */,
+				C1A5183A13B4D936A7CF3704 /* OnboardingViewModel.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		90CE050DB35600927126643A /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				8753BB247BAD4AAEA24B6CFF /* FeatureFlagManager.swift */,
+				A6E8F000ED1FD26FB7D628CC /* PricingConfig.swift */,
+				673FE1BD649B5C6FCE80E858 /* RemoteConfigKeys.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		9E1D721762BCF53DC21A9C77 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AA00FF11BB22CC33DD44EE55 /* Assets.xcassets */,
+				D227558881C8C925AC3C1E06 /* Sorayomi.storekit */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		AB3AF3DB1E116A610D78B6CF /* Sorayomi */ = {
@@ -703,8 +642,186 @@
 				F0D45064C6EEBF4C9B9B7D3E /* UI */,
 				65B7AE6A75A3B2F34CD03DBA /* PrivacyInfo.xcprivacy */,
 				1343514AFA3A290B4CBF4A2B /* Sorayomi.entitlements */,
+				EE11FF22AA33BB44CC55DD66 /* GoogleService-Info.plist */,
 			);
-			path = "Sorayomi";
+			path = Sorayomi;
+			sourceTree = "<group>";
+		};
+		BC6C8F75AFED78AB0DA7A849 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				41B2039273E68462076B04C4 /* Calendar+Rokuyo.swift */,
+				66F3879A63F4B9CC958D6A9F /* Date+Extensions.swift */,
+				98C8D830CD346B6BCB7C2D82 /* String+Extensions.swift */,
+				379B56A81A8F684A77AADD09 /* View+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		BF2935C795BF802097C38CEC /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				3E466138EE45169ECA9E7626 /* DailyCardView.swift */,
+				AD49583A2FEF484602E7E2F6 /* HomeScreen.swift */,
+				0B5A59A7F3CF2E1A9E5E6FEB /* HomeViewModel.swift */,
+				2BD5D8896DEF6CAA15F3B393 /* OmikujiSpotlightCard.swift */,
+				70975AA9BEC973FB72240F4B /* RokuyoBannerView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		BF7A2D27A78D590BDEF15AF2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A97C29AD63741CF438998CE6 /* Sorayomi.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C198E0632B7244497BD0299E /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				FE2D6673D3B0557FE08B6FE1 /* CreditRepository.swift */,
+				1A88EB9342A063F1EB3ED54A /* ReadingRepository.swift */,
+				2AC9CEC35C1A88F3D76A190E /* UserRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		C3F79093064272CA2066DDC2 /* Copy */ = {
+			isa = PBXGroup;
+			children = (
+				9B89082A2936E5CB41C701F3 /* CopyKeys.swift */,
+				881C70CC7A23EE22AF31CCF9 /* CopyProvider.swift */,
+				4DC76D50E3BF2864FA29FA80 /* CopyVariant.swift */,
+				B127604E4EAA05689050A102 /* JapaneseCopy.swift */,
+			);
+			path = Copy;
+			sourceTree = "<group>";
+		};
+		C409DB3A9547DF8A6EE4C368 /* Reading */ = {
+			isa = PBXGroup;
+			children = (
+				080081ACADB8A875D52338D3 /* FortuneResultCardView.swift */,
+				58751B0BA4B0F6631CFE3C8E /* FortuneSystemPickerView.swift */,
+				5D966566FA2F8BA92DE801AC /* ReadingChatView.swift */,
+				A107DA8F7CE8F94244DC4939 /* ReadingLoadingView.swift */,
+				2774DC91764A4B933164F3DA /* ReadingMessageBubble.swift */,
+				E7043FDD8E41DDC2C0680589 /* ReadingScreen.swift */,
+				C92B3BFB483B0B6AD80273D7 /* ReadingViewModel.swift */,
+				1A100000000000000000001A /* BloodTypeModePickerView.swift */,
+				1A110000000000000000001B /* BloodTypeRevealView.swift */,
+				1A120000000000000000001C /* FlowerRevealView.swift */,
+				1A130000000000000000001D /* NineStarKiRevealView.swift */,
+				1A140000000000000000001E /* NumerologyRevealView.swift */,
+				1A150000000000000000001F /* OmikujiRevealView.swift */,
+				1A160000000000000000002A /* RokuyoRevealView.swift */,
+				1A170000000000000000002B /* StoneRevealView.swift */,
+				1A180000000000000000002C /* TarotCardArtwork.swift */,
+				1A190000000000000000002D /* TarotCardDetailOverlay.swift */,
+				1A1A0000000000000000002E /* TarotRevealView.swift */,
+				1A1B0000000000000000002F /* ThinkingIndicatorView.swift */,
+				1A1C000000000000000000AA /* ZodiacRevealView.swift */,
+			);
+			path = Reading;
+			sourceTree = "<group>";
+		};
+		C765C6776D04A2CB394FAFCA /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				BECA4EF22A939B1AC257CBD9 /* AnalyticsEvent.swift */,
+				EA6683EAA573AB0D7812E44D /* AnalyticsProvider.swift */,
+				58FC71A684F2B4C59403F482 /* AnalyticsService.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
+		CF2FAF7B05D4876FCA1AB376 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				441FF3E58D61AAD96E0E18BB /* NotificationManager.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		E56A3CDB068C99D0C6031783 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				4828813FD02ED1CE6576C348 /* CreditBadge.swift */,
+				DBDDA6D4EFE0357B5A4E63E2 /* ErrorBanner.swift */,
+				1FD726C6AB5756AC8660870B /* FortuneCard.swift */,
+				33D912E55E2CC27447429A87 /* LoadingIndicator.swift */,
+				02CD6BDBBB4C8777D16F48EA /* OrnamentalBackgroundView.swift */,
+				F62823EE8B9EDA6188DEDD73 /* PaywallSheet.swift */,
+				09FE6B3DB69E156DCA980721 /* SafetyDisclaimerBanner.swift */,
+				984ED6BC5667B21245012EF7 /* ShareSheet.swift */,
+				1A0C0000000000000000000C /* AdaptiveGrid.swift */,
+				1A0D0000000000000000000D /* ZodiacConstellationView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		E6CB865F24392C4B61033EFE /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				54C84815D6234D3FCF4A7B7A /* Firebase */,
+				6D867CE2096A1466BD007FEB /* Persistence */,
+				C198E0632B7244497BD0299E /* Repositories */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		EC795DEA9736B28D73E24A40 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				7FEA9C0F73DCD5B8B3831F05 /* CreditWalletService.swift */,
+				D3DFFC53FAA125D4391E7C89 /* DailyContentService.swift */,
+				1DE3F0BC01A80F3633CC62F4 /* FortuneEngineService.swift */,
+				391C618CA332D189C094CD19 /* ReadingHistoryService.swift */,
+				E513502F0E2EFD49BF73FC53 /* ReadingShareService.swift */,
+				CB5635698BFA221569858B0A /* StreakManager.swift */,
+				BEC9703DED0E565C46E59A8E /* UserProfileService.swift */,
+				1A0400000000000000000004 /* DailyFortuneUsageTracker.swift */,
+				1A0500000000000000000005 /* FreeTrialManager.swift */,
+				1A0600000000000000000006 /* ReviewRequestManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		F0D45064C6EEBF4C9B9B7D3E /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				E56A3CDB068C99D0C6031783 /* Components */,
+				3D00000000000000000000AA /* Modifiers */,
+				70194E4E9C4F0417F3220A02 /* Navigation */,
+				20CD239A033704CFEC32A307 /* Screens */,
+				6045EFEDF2604B10F260D6A1 /* Theme */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		FAC419610D153043C91D400C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E631CCFB45425F355AF46051 /* BloodType.swift */,
+				FF11AA22BB33CC44DD55EE66 /* BloodTypeMode.swift */,
+				460E240AE7D613901B4D81BF /* CreditTransaction.swift */,
+				838A3E59961DAC865C5B6401 /* CreditWallet.swift */,
+				9FCDB3754A4B63D6748460F9 /* DailyFortune.swift */,
+				EAFFE7959C6660ABF4E3E047 /* FortuneReading.swift */,
+				6CE536C7F3630541F41849F7 /* FortuneSystem.swift */,
+				3A73003637E10AE51496F4ED /* NineStarKi.swift */,
+				CA5248D5BD8EF1463A0F21F5 /* NumerologyProfile.swift */,
+				44AA9B01BA216CAB88218AB2 /* Omikuji.swift */,
+				2A30C3C48D5B840CDC95F553 /* ReadingMessage.swift */,
+				C71D88B088F9E3E936B9452B /* Rokuyo.swift */,
+				EC2658CF8A875E1EABE4FBF6 /* TarotCard.swift */,
+				87407F699B5302263F295AA1 /* UserProfile.swift */,
+				19EDF1B0E5216147BD29580C /* ZodiacSign.swift */,
+				1A0200000000000000000002 /* FlowerData.swift */,
+				1A0300000000000000000003 /* StoneData.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -722,8 +839,8 @@
 			);
 			dependencies = (
 			);
-			name = "Sorayomi";
-			productName = "Sorayomi";
+			name = Sorayomi;
+			productName = Sorayomi;
 			productReference = A97C29AD63741CF438998CE6 /* Sorayomi.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -732,6 +849,8 @@
 /* Begin PBXProject section */
 		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 9D908D8792E5642B2623649E /* Build configuration list for PBXProject "Sorayomi" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = ja;
@@ -741,6 +860,9 @@
 				Base,
 			);
 			mainGroup = 7882D14E196057770B59E53D;
+			packageReferences = (
+				A29D70092FA851C0006FCD88 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = BF7A2D27A78D590BDEF15AF2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -756,6 +878,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5E32A4C541B090C773A3E4C /* PrivacyInfo.xcprivacy in Resources */,
+				FF00AA11BB22CC33DD44EE55 /* Assets.xcassets in Resources */,
+				EE22FF33AA44BB55CC66DD77 /* GoogleService-Info.plist in Resources */,
 				6954B17F6BF5E8B7D0787A55 /* Sorayomi.storekit in Resources */,
 				14865C249EAB371A1389CFAA /* Sorayomi.entitlements in Resources */,
 			);
@@ -773,6 +897,7 @@
 				7EFDEEC422CA81A86D723862 /* AnalyticsService.swift in Sources */,
 				F3554D700A3EE97545109DEC /* AppConstants.swift in Sources */,
 				B463C5122B03C5743D273D51 /* AppEnvironment.swift in Sources */,
+				2B0100000000000000000001 /* AppCheckProviderFactory.swift in Sources */,
 				A5D10FFFC7061DFDC48FA77C /* ContentView.swift in Sources */,
 				A34A5090AA7D02445CDB954D /* SorayomiApp.swift in Sources */,
 				911FF1E105C66BE32C119648 /* FeatureFlagManager.swift in Sources */,
@@ -793,6 +918,7 @@
 				4DE25F6D026F21904ED62A05 /* ReadingRepository.swift in Sources */,
 				47E7AFAC3EC07FBABDB89C51 /* UserRepository.swift in Sources */,
 				17B19146EE6788F652B22B81 /* BloodType.swift in Sources */,
+				AA22BB33CC44DD55EE66FF11 /* BloodTypeMode.swift in Sources */,
 				3E3F1B4347F6BB004CC2DEB3 /* CreditTransaction.swift in Sources */,
 				E2BC5371CF60CF5EE52D12C2 /* CreditWallet.swift in Sources */,
 				75C931C7F751913AACF76069 /* DailyFortune.swift in Sources */,
@@ -806,6 +932,10 @@
 				07092A83F94C22C523F5FCFB /* TarotCard.swift in Sources */,
 				EBFE8387C95DD195A4EBC79A /* UserProfile.swift in Sources */,
 				885E3B1772980E9DAF80557C /* ZodiacSign.swift in Sources */,
+				2B0200000000000000000002 /* FlowerData.swift in Sources */,
+				2B0300000000000000000003 /* StoneData.swift in Sources */,
+				2B0700000000000000000007 /* FlowerFortuneCalculator.swift in Sources */,
+				2B0800000000000000000008 /* StoneFortuneCalculator.swift in Sources */,
 				762A366B8549D099BEF1BBFA /* AIProviderProtocol.swift in Sources */,
 				E1CE033C417338E04AB97A44 /* FortuneCalculatorProtocol.swift in Sources */,
 				C01BBD763A58C134F63FB03D /* CreditWalletService.swift in Sources */,
@@ -815,16 +945,21 @@
 				CCCDED1ADEE6F484EABEBF2A /* ReadingShareService.swift in Sources */,
 				051F6163EBB4970B4C1B67DE /* StreakManager.swift in Sources */,
 				E3D34D1FDA9B62347B7B34CA /* UserProfileService.swift in Sources */,
+				2B0400000000000000000004 /* DailyFortuneUsageTracker.swift in Sources */,
+				2B0500000000000000000005 /* FreeTrialManager.swift in Sources */,
+				2B0600000000000000000006 /* ReviewRequestManager.swift in Sources */,
 				F4938BDF01C4FB2F4C8EBA7F /* Calendar+Rokuyo.swift in Sources */,
 				73DBB5E4889D4942D43B9318 /* Date+Extensions.swift in Sources */,
 				93A031F9AAEDB21CD53B7742 /* String+Extensions.swift in Sources */,
 				C7FC8E25C4D80C2E2974279E /* View+Extensions.swift in Sources */,
 				F49B0FF9FE38559F292D1203 /* BirthdayPersonalityCalculator.swift in Sources */,
 				2AD08D06CA597504C546087C /* BloodTypeCalculator.swift in Sources */,
+				AA33BB44CC55DD66EE77FF22 /* BloodTypeCompatibility.swift in Sources */,
 				8264F9B120D9DA6946716C0C /* NineStarKiCalculator.swift in Sources */,
 				F9B59A65CF736064A27B68FF /* NumerologyCalculator.swift in Sources */,
 				272CE7EB9E975CF044942BA1 /* OmikujiCalculator.swift in Sources */,
 				15165BAD8262814C52D8617D /* RokuyoCalculator.swift in Sources */,
+				AA44BB55CC66DD77EE88FF33 /* SpecialDayCalculator.swift in Sources */,
 				4D7A67CB6F01FE1AFF7FB8E5 /* TarotDrawEngine.swift in Sources */,
 				CFC7A21709597E8030724D99 /* ZodiacCalculator.swift in Sources */,
 				3E2DAF6841A63CEC73DB8BF5 /* ContentTaxonomy.swift in Sources */,
@@ -841,11 +976,14 @@
 				2FF46D17DB32340DC5E3FBBB /* RokuyoPrompt.swift in Sources */,
 				41C54E693721615D9906B3DD /* SystemPromptBuilder.swift in Sources */,
 				B0583A2599C58CFF27FA4498 /* TarotPrompt.swift in Sources */,
+				2B0900000000000000000009 /* FlowerFortunePrompt.swift in Sources */,
+				2B0A0000000000000000000A /* StoneFortunePrompt.swift in Sources */,
 				60EB2B948A4DD1A4FD93D428 /* CreditWalletManager.swift in Sources */,
 				F95ADBAABC0E62FBE538E72E /* PaywallManager.swift in Sources */,
 				68E1137106AF46A8734B1C82 /* ProductIdentifiers.swift in Sources */,
 				AC9E4F092920E5F5F3F66582 /* ReceiptValidator.swift in Sources */,
 				FA9825B34DB15A51F9FDBE73 /* StoreKitManager.swift in Sources */,
+				2B0B0000000000000000000B /* AdRewardManager.swift in Sources */,
 				35FBDAB636B2D8141E848C93 /* NotificationManager.swift in Sources */,
 				3A51BBC923D48593C19A1401 /* CrisisDetector.swift in Sources */,
 				B9F364023EF161404FA9163D /* DisclaimerManager.swift in Sources */,
@@ -861,19 +999,21 @@
 				A9B89A9F0E3816066C03F0AC /* PaywallSheet.swift in Sources */,
 				330A38FE3960EC375A9B07EA /* SafetyDisclaimerBanner.swift in Sources */,
 				871539C9D74B7167DC23E595 /* ShareSheet.swift in Sources */,
+				2B0C0000000000000000000C /* AdaptiveGrid.swift in Sources */,
+				2B0D0000000000000000000D /* ZodiacConstellationView.swift in Sources */,
+				2B0E0000000000000000000E /* AdaptiveModifiers.swift in Sources */,
 				BDF7AE7286376168E83BDCDD /* AppTabView.swift in Sources */,
 				990272A8E7935783E1E9ABE8 /* NavigationRouter.swift in Sources */,
 				EC13274030FA00984196F8A7 /* Tab.swift in Sources */,
 				D1D655EEC0CCBA292F847A8E /* HistoryRowView.swift in Sources */,
 				94708615458F23FD52159A36 /* HistoryScreen.swift in Sources */,
 				07D688277D0619E448D124CB /* HistoryViewModel.swift in Sources */,
+				2B0F0000000000000000000F /* ReadingDetailScreen.swift in Sources */,
 				E157F68725C091E9B8AEB03D /* DailyCardView.swift in Sources */,
 				F950B36A47B6BDDEEA9AC42F /* HomeScreen.swift in Sources */,
 				3EEB6E751CE168588E856440 /* HomeViewModel.swift in Sources */,
 				567B95608B086DE828C7239C /* OmikujiSpotlightCard.swift in Sources */,
-				376F34D3791BF6FDED5EA46B /* QuickAccessGrid.swift in Sources */,
 				F57834ACBFC67559A7C6DA73 /* RokuyoBannerView.swift in Sources */,
-				E572C2129686C5FCFD6A905D /* AIConsentView.swift in Sources */,
 				0EA724FB34D4C29D02F053F0 /* BirthdayInputView.swift in Sources */,
 				F8471462F2D45A975E6B7E6B /* BloodTypePickerView.swift in Sources */,
 				16C657E59FC0321083D703F9 /* OnboardingScreen.swift in Sources */,
@@ -887,8 +1027,23 @@
 				33132AA2155F5EE7CEF9D050 /* ReadingMessageBubble.swift in Sources */,
 				15A75F64DDDC71195337DD9A /* ReadingScreen.swift in Sources */,
 				9AA57B60DE2838281F59D95A /* ReadingViewModel.swift in Sources */,
+				2B100000000000000000001A /* BloodTypeModePickerView.swift in Sources */,
+				2B110000000000000000001B /* BloodTypeRevealView.swift in Sources */,
+				2B120000000000000000001C /* FlowerRevealView.swift in Sources */,
+				2B130000000000000000001D /* NineStarKiRevealView.swift in Sources */,
+				2B140000000000000000001E /* NumerologyRevealView.swift in Sources */,
+				2B150000000000000000001F /* OmikujiRevealView.swift in Sources */,
+				2B160000000000000000002A /* RokuyoRevealView.swift in Sources */,
+				2B170000000000000000002B /* StoneRevealView.swift in Sources */,
+				2B180000000000000000002C /* TarotCardArtwork.swift in Sources */,
+				2B190000000000000000002D /* TarotCardDetailOverlay.swift in Sources */,
+				2B1A0000000000000000002E /* TarotRevealView.swift in Sources */,
+				2B1B0000000000000000002F /* ThinkingIndicatorView.swift in Sources */,
+				2B1C000000000000000000AA /* ZodiacRevealView.swift in Sources */,
 				A66E5C7F0DED702DA9376B15 /* SettingsScreen.swift in Sources */,
 				5BC7A484924503D16CFBEDB4 /* SettingsViewModel.swift in Sources */,
+				2B1D000000000000000000BB /* PrivacyPolicyScreen.swift in Sources */,
+				2B1E000000000000000000CC /* TermsOfServiceScreen.swift in Sources */,
 				20C437CDD49E898878A4E539 /* SplashScreen.swift in Sources */,
 				28EA6BD24EAA584AD21D9755 /* CreditPackCard.swift in Sources */,
 				1C97F272BF7E5F6568118409 /* StoreScreen.swift in Sources */,
@@ -897,12 +1052,44 @@
 				5203A28BAA8989EAB9969E48 /* SorayomiTheme.swift in Sources */,
 				EC47FB47A1B681C04EB12C3C /* Spacing.swift in Sources */,
 				E57281AC19EA0ECF76D9C41C /* Typography.swift in Sources */,
+				2B1F000000000000000000DD /* AdaptiveLayout.swift in Sources */,
+				2B20000000000000000000EE /* RevealSizeProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		5C1FCF821166A8E947DC58DE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "宙よみ";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sorayomi.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		8EE6B6ADC095CDC56BE16A9E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1022,35 +1209,6 @@
 			};
 			name = Release;
 		};
-		5C1FCF821166A8E947DC58DE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "宙よみ";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sorayomi.app";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_STRICT_CONCURRENCY = complete;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		D8A34C63742B602B66E1CD36 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1061,6 +1219,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "宙よみ";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1071,7 +1230,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sorayomi.app";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sorayomi.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -1103,6 +1262,29 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		A29D70092FA851C0006FCD88 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.12.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A29D700A2FA851C0006FCD88 /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A29D70092FA851C0006FCD88 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+		A29D700C2FA851C0006FCD88 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A29D70092FA851C0006FCD88 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
 }

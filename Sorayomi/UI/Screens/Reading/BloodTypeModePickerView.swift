@@ -22,7 +22,8 @@ struct BloodTypeModePickerView: View {
                 modeGrid
                 backButton
             }
-            .padding(.horizontal, Spacing.screenPadding)
+            .adaptiveScreenPadding()
+            .contentWidthConstraint()
             .padding(.top, Spacing.xl)
             .padding(.bottom, Spacing.bottomSafeArea)
         }
@@ -160,6 +161,7 @@ private struct BloodTypeModeCard: View {
             )
         }
         .buttonStyle(.plain)
+        .hoverEffect(.lift)
         .shadow(
             color: Color.sorayomiPrimary.opacity(0.04),
             radius: Spacing.shadowRadius,

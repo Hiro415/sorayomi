@@ -1,5 +1,7 @@
 # macOS
 .DS_Store
+.DS_Store?
+._*
 *.swp
 *~
 
@@ -8,6 +10,8 @@ build/
 DerivedData/
 *.xcuserstate
 *.xcscmblueprint
+xcuserdata/
+*.moved-aside
 
 # Firebase
 firebase/functions/node_modules/
@@ -17,5 +21,8 @@ firebase/functions/lib/
 .env
 .env.*
 
-# Temporary build output
-/tmp/sorayomi-build/
+# Temporary / generated output
+tmp/
+output/
+*.o
+*.d

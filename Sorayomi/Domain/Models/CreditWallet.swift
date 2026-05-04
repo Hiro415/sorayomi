@@ -43,6 +43,13 @@ struct CreditWallet: Codable {
         totalAvailable >= creditsCost
     }
 
+    /// 有償クレジット（balance）のみから消費後のウォレットを返す（深掘り専用）
+    func consumingPaidOnly(credits: Int) -> CreditWallet {
+        var newWallet = self
+        newWallet.balance = max(0, newWallet.balance - credits)
+        return newWallet
+    }
+
     /// クレジット消費後の新しいウォレットを返す（無料分を優先消費）
     func consuming(credits: Int) -> CreditWallet {
         var newWallet = self

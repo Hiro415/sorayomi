@@ -90,6 +90,16 @@ final class ReadingHistoryService {
         #endif
     }
 
+    /// ユーザーのすべての鑑定履歴を削除する（アカウント削除時）
+    func deleteAllReadings(for userId: String) {
+        repository.deleteAll(userId: userId)
+        readings = []
+
+        #if DEBUG
+        print("[ReadingHistoryService] All readings deleted for user: \(userId)")
+        #endif
+    }
+
     // MARK: - Helpers
 
     /// 鑑定履歴が空かどうか

@@ -65,6 +65,8 @@ final class StoreViewModel {
         isPurchasing = true
         errorMessage = nil
 
+        env.analyticsService.track(.purchaseStarted(productId: product.id))
+
         let credits = await env.storeKitManager.purchase(product)
 
         if let credits, credits > 0 {
@@ -76,10 +78,16 @@ final class StoreViewModel {
 
             purchasedCredits = credits
 
-            env.analyticsService.track(.monetizationPurchaseCompleted(
+            env.analyticsService.track(.purchaseCompleted(
                 productId: product.id,
-                credits: credits
+                credits: credits,
+                revenue: 0
             ))
+
+            // スターターパック購入追跡
+            if ProductIdentifiers.isStarterPack(product.id) {
+                env.analyticsService.track(.starterPackPurchased)
+            }
 
             #if DEBUG
             print("[StoreViewModel] Purchase successful: +\(credits) credits")
@@ -87,7 +95,7 @@ final class StoreViewModel {
         } else if case .failed(let error) = env.storeKitManager.purchaseState {
             errorMessage = "購入に失敗しました: \(error.localizedDescription)"
 
-            env.analyticsService.track(.monetizationPurchaseFailed(
+            env.analyticsService.track(.purchaseFailed(
                 productId: product.id,
                 errorDescription: error.localizedDescription
             ))
@@ -103,16 +111,15 @@ final class StoreViewModel {
         isPurchasing = true
         errorMessage = nil
 
+        env.analyticsService.track(.purchaseStarted(productId: product.id))
+
         _ = await env.storeKitManager.purchase(product)
 
         if case .subscribedSuccess = env.storeKitManager.purchaseState {
             isSubscribed = true
             didSubscribe = true
 
-            env.analyticsService.track(.monetizationPurchaseCompleted(
-                productId: product.id,
-                credits: 0
-            ))
+            env.analyticsService.track(.subscriptionStarted(productId: product.id))
 
             #if DEBUG
             print("[StoreViewModel] Subscription activated: \(product.id)")
@@ -120,7 +127,7 @@ final class StoreViewModel {
         } else if case .failed(let error) = env.storeKitManager.purchaseState {
             errorMessage = "購入に失敗しました: \(error.localizedDescription)"
 
-            env.analyticsService.track(.monetizationPurchaseFailed(
+            env.analyticsService.track(.purchaseFailed(
                 productId: product.id,
                 errorDescription: error.localizedDescription
             ))
@@ -153,22 +160,23 @@ final class StoreViewModel {
         ProductIdentifiers.creditsFor(productId: product.id)
     }
 
-    /// パックのおすすめバッジ（12 クレジットに "人気" を付与）
+    /// パックのおすすめバッジ
     func badge(for product: Product) -> String? {
         switch product.id {
-        case ProductIdentifiers.pack12: return "人気"
-        case ProductIdentifiers.pack24: return "お得"
+        case ProductIdentifiers.starterPack: return "初回限定"
+        case ProductIdentifiers.pack12:      return "人気"
+        case ProductIdentifiers.pack60:      return "最安"
         default: return nil
         }
     }
 
     /// パックのラベル
     func label(for product: Product) -> String {
-        switch product.id {
-        case ProductIdentifiers.pack4:  return "おためしパック"
-        case ProductIdentifiers.pack12: return "おすすめパック"
-        case ProductIdentifiers.pack24: return "お得パック"
-        default: return "\(credits(for: product))クレジット"
-        }
+        ProductIdentifiers.displayName(for: product.id)
+    }
+
+    /// スターターパックかどうか
+    func isStarterPack(_ product: Product) -> Bool {
+        ProductIdentifiers.isStarterPack(product.id)
     }
 }

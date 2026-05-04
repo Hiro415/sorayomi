@@ -28,14 +28,4 @@ final class SettingsViewModel {
         #endif
     }
 
-    // MARK: - Actions
-
-    /// キャッシュをクリア
-    func clearCache() {
-        URLCache.shared.removeAllCachedResponses()
-
-        #if DEBUG
-        print("[SettingsViewModel] Cache cleared")
-        #endif
-    }
 }

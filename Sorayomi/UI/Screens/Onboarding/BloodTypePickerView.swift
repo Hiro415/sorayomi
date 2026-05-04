@@ -63,7 +63,7 @@ struct BloodTypePickerView: View {
 
             VStack(spacing: Spacing.sm) {
                 Button(action: onNext) {
-                    Text(selectedType != nil ? "次へ" : "スキップ")
+                    Text(selectedType != nil ? "始める" : "スキップして始める")
                         .font(SorayomiTypography.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)

@@ -7,6 +7,8 @@ import SwiftUI
 struct SettingsScreen: View {
     @Environment(AppEnvironment.self) private var env
     @State private var viewModel = SettingsViewModel()
+    @State private var showDeleteConfirmation = false
+    @State private var showDeletedFeedback = false
 
     var body: some View {
         ScrollView {
@@ -17,10 +19,14 @@ struct SettingsScreen: View {
                 // Legal section
                 legalSection
 
+                // Data management section
+                dataManagementSection
+
                 // App info
                 appInfoSection
             }
-            .padding(.horizontal, Spacing.screenPadding)
+            .adaptiveScreenPadding()
+            .contentWidthConstraint()
             .padding(.bottom, Spacing.xxl)
         }
         .background(Color.sorayomiBackground)
@@ -28,6 +34,24 @@ struct SettingsScreen: View {
         .navigationBarTitleDisplayMode(.large)
         .task {
             viewModel.loadSettings(env: env)
+        }
+        .alert("データをすべて削除しますか？", isPresented: $showDeleteConfirmation) {
+            Button("削除する", role: .destructive) {
+                env.userProfileService.deleteAllUserData(
+                    readingHistoryService: env.readingHistoryService,
+                    creditWalletService: env.creditWalletService,
+                    freeTrialManager: env.freeTrialManager
+                )
+                showDeletedFeedback = true
+            }
+            Button("キャンセル", role: .cancel) {}
+        } message: {
+            Text("プロフィール、鑑定履歴、クレジット残高を含むすべてのデータが端末から削除されます。この操作は取り消せません。")
+        }
+        .alert("データを削除しました", isPresented: $showDeletedFeedback) {
+            Button("OK") {}
+        } message: {
+            Text("すべてのデータが端末から削除されました。")
         }
     }
 
@@ -53,23 +77,7 @@ struct SettingsScreen: View {
                 .tint(Color.sorayomiPrimary)
                 .padding(Spacing.md)
 
-                Divider()
-                    .foregroundStyle(Color.sorayomiDivider)
 
-                // Cache clear
-                Button {
-                    viewModel.clearCache()
-                } label: {
-                    HStack {
-                        settingsLabel(title: "キャッシュをクリア", icon: "trash", color: .sorayomiTextSecondary)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(Color.sorayomiTextSecondary.opacity(0.5))
-                    }
-                    .padding(Spacing.md)
-                }
-                .buttonStyle(.plain)
             }
             .background(Color.sorayomiSurface)
             .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous))
@@ -84,45 +92,39 @@ struct SettingsScreen: View {
             sectionHeader(title: "法的情報", icon: "doc.text")
 
             VStack(spacing: 0) {
-                Link(destination: AppConstants.termsURL) {
+                NavigationLink {
+                    TermsOfServiceScreen()
+                        .environment(env)
+                } label: {
                     HStack {
                         settingsLabel(title: "利用規約", icon: "doc.plaintext", color: .sorayomiPrimary)
                         Spacer()
-                        Image(systemName: "arrow.up.right.square")
+                        Image(systemName: "chevron.right")
                             .font(.caption)
                             .foregroundStyle(Color.sorayomiTextSecondary.opacity(0.5))
                     }
                     .padding(Spacing.md)
                 }
+                .buttonStyle(.plain)
 
                 Divider()
                     .foregroundStyle(Color.sorayomiDivider)
 
-                Link(destination: AppConstants.privacyPolicyURL) {
+                NavigationLink {
+                    PrivacyPolicyScreen()
+                        .environment(env)
+                } label: {
                     HStack {
                         settingsLabel(title: "プライバシーポリシー", icon: "hand.raised", color: .sorayomiPrimary)
                         Spacer()
-                        Image(systemName: "arrow.up.right.square")
+                        Image(systemName: "chevron.right")
                             .font(.caption)
                             .foregroundStyle(Color.sorayomiTextSecondary.opacity(0.5))
                     }
                     .padding(Spacing.md)
                 }
+                .buttonStyle(.plain)
 
-                Divider()
-                    .foregroundStyle(Color.sorayomiDivider)
-
-                // Contact support
-                Link(destination: URL(string: "mailto:\(AppConstants.supportEmail)")!) {
-                    HStack {
-                        settingsLabel(title: "お問い合わせ", icon: "envelope", color: .sorayomiPrimary)
-                        Spacer()
-                        Image(systemName: "arrow.up.right.square")
-                            .font(.caption)
-                            .foregroundStyle(Color.sorayomiTextSecondary.opacity(0.5))
-                    }
-                    .padding(Spacing.md)
-                }
             }
             .background(Color.sorayomiSurface)
             .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous))
@@ -131,6 +133,39 @@ struct SettingsScreen: View {
     }
 
 
+
+    // MARK: - Data Management Section
+
+    private var dataManagementSection: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            sectionHeader(title: "データ管理", icon: "person.crop.circle.badge.minus")
+
+            VStack(spacing: 0) {
+                Button {
+                    showDeleteConfirmation = true
+                } label: {
+                    HStack {
+                        settingsLabel(title: "アカウントとデータを削除", icon: "trash.fill", color: .sorayomiError)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(Color.sorayomiError.opacity(0.5))
+                    }
+                    .padding(Spacing.md)
+                }
+                .buttonStyle(.plain)
+            }
+            .background(Color.sorayomiSurface)
+            .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusMedium, style: .continuous))
+            .shadow(color: .black.opacity(0.04), radius: 4, x: 0, y: 2)
+
+            Text("プロフィール、鑑定履歴、クレジット残高をこの端末から削除します。App Storeでの購入履歴は残ります。")
+                .font(SorayomiTypography.caption)
+                .foregroundStyle(Color.sorayomiTextSecondary)
+                .lineSpacing(4)
+                .padding(.horizontal, Spacing.xs)
+        }
+    }
 
     // MARK: - App Info Section
 

@@ -14,6 +14,26 @@ struct ReadingChatView: View {
     let onSend: () -> Void
     var showPartnerBloodTypePicker: Bool = false
     var onSelectPartnerBloodType: ((BloodType) -> Void)? = nil
+    var showTopicSuggestions: Bool = false
+    var onSelectTopic: ((String) -> Void)? = nil
+    var onShare: (() -> Void)? = nil
+
+    @FocusState private var isInputFocused: Bool
+
+    /// 鑑定結果が含まれているかどうか
+    private var hasReadingResult: Bool {
+        messages.contains { $0.presentation == .readingResult }
+    }
+
+    /// 鑑定結果メッセージのID（スクロールアンカー用）
+    private var firstReadingResultId: String? {
+        visibleMessages.first(where: { $0.presentation == .readingResult })?.id
+    }
+
+    /// 最新のAIメッセージID（キーボード表示時のスクロールアンカー用）
+    private var lastAssistantMessageId: String? {
+        visibleMessages.last(where: { $0.role == .assistant })?.id
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -28,9 +48,16 @@ struct ReadingChatView: View {
                         ForEach(visibleMessages) { message in
                             ReadingMessageBubble(
                                 message: message,
-                                isFirstReading: message.presentation == .readingResult
+                                isFirstReading: message.presentation == .readingResult,
+                                onShare: message.presentation == .readingResult ? onShare : nil
                             )
                             .id(message.id)
+                        }
+
+                        // トピック提案チップス
+                        if showTopicSuggestions {
+                            topicSuggestionChips
+                                .transition(.opacity.combined(with: .move(edge: .bottom)))
                         }
 
                         // Typing indicator
@@ -39,22 +66,53 @@ struct ReadingChatView: View {
                                 .id("typing-indicator")
                         }
                     }
+                    .contentWidthConstraint(maxWidth: 640)
                     .padding(.vertical, Spacing.md)
                 }
                 .onAppear {
-                    // タロットリビールからの遷移時に最新メッセージへスクロール
+                    // 鑑定結果がある場合は結果トップにスクロール
+                    // （LoadingView → ChatView遷移時、リビール完了後の遷移時）
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        scrollToBottom(proxy: proxy)
+                        if let resultId = firstReadingResultId {
+                            scrollToTop(of: resultId, proxy: proxy)
+                        } else {
+                            scrollToBottom(proxy: proxy)
+                        }
                     }
                 }
-                .onChange(of: messages.count) { _, _ in
-                    scrollToBottom(proxy: proxy)
+                .onChange(of: messages.count) { oldCount, newCount in
+                    guard newCount > oldCount else { return }
+                    // 新しいメッセージが鑑定結果の場合、結果のトップにスクロール
+                    if let lastMessage = visibleMessages.last,
+                       lastMessage.presentation == .readingResult {
+                        // 少し遅延を入れてレンダリング完了を待つ
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                            scrollToTop(of: lastMessage.id, proxy: proxy)
+                        }
+                    } else {
+                        scrollToBottom(proxy: proxy)
+                    }
                 }
                 .onChange(of: isGenerating) { _, newValue in
                     if newValue {
+                        // AI生成開始時にキーボードを閉じる
+                        isInputFocused = false
                         scrollToBottom(proxy: proxy)
                     }
                 }
+                .onChange(of: isInputFocused) { _, focused in
+                    if focused {
+                        // キーボード表示時に最新のAIメッセージの先頭が見えるようにスクロール
+                        if let lastAssistantId = lastAssistantMessageId {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                                withAnimation(.easeOut(duration: 0.25)) {
+                                    proxy.scrollTo(lastAssistantId, anchor: .top)
+                                }
+                            }
+                        }
+                    }
+                }
+                .scrollDismissesKeyboard(.interactively)
             }
 
             Divider()
@@ -97,6 +155,58 @@ struct ReadingChatView: View {
         .padding(.horizontal, Spacing.md)
     }
 
+    // MARK: - Topic Suggestion Chips
+
+    private var topicSuggestionChips: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            HStack(spacing: Spacing.xxs) {
+                Image(systemName: "lightbulb.fill")
+                    .font(.caption2)
+                    .foregroundStyle(Color.sorayomiAccent)
+                Text("こんなテーマで話せます")
+                    .font(SorayomiTypography.caption)
+                    .foregroundStyle(Color.sorayomiTextSecondary)
+            }
+
+            // 2段構成のトピックチップス
+            FlowLayout(spacing: Spacing.xs) {
+                ForEach(suggestedTopics, id: \.self) { topic in
+                    Button {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            onSelectTopic?(topic)
+                        }
+                    } label: {
+                        Text(topic)
+                            .font(SorayomiTypography.caption)
+                            .foregroundStyle(Color.sorayomiTextPrimary)
+                            .padding(.horizontal, Spacing.sm)
+                            .padding(.vertical, Spacing.xs)
+                            .background(Color.sorayomiSurface)
+                            .clipShape(Capsule())
+                            .overlay(
+                                Capsule()
+                                    .strokeBorder(Color.sorayomiDivider, lineWidth: 1)
+                            )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .padding(.horizontal, Spacing.lg)
+        .padding(.vertical, Spacing.sm)
+    }
+
+    private var suggestedTopics: [String] {
+        [
+            "気になる人がいる",
+            "転職するか迷っている",
+            "人間関係がうまくいかない",
+            "将来が漠然と不安",
+            "最近ツイてない",
+            "大きな決断を控えている",
+        ]
+    }
+
     // MARK: - Typing Indicator (Claude Code style)
 
     private var typingIndicator: some View {
@@ -111,6 +221,7 @@ struct ReadingChatView: View {
         HStack(spacing: Spacing.xs) {
             TextField(inputPlaceholder, text: $userInput, axis: .vertical)
                 .font(SorayomiTypography.body)
+                .focused($isInputFocused)
                 .lineLimit(1...4)
                 .padding(.horizontal, Spacing.sm)
                 .padding(.vertical, Spacing.xs)
@@ -185,6 +296,69 @@ struct ReadingChatView: View {
                 proxy.scrollTo(lastMessage.id, anchor: .bottom)
             }
         }
+    }
+
+    /// 鑑定結果など長いメッセージの先頭が画面上部に来るようにスクロール
+    private func scrollToTop(of messageId: String, proxy: ScrollViewProxy) {
+        withAnimation(.easeOut(duration: 0.35)) {
+            proxy.scrollTo(messageId, anchor: .top)
+        }
+    }
+}
+
+// MARK: - FlowLayout
+
+/// 自動折り返しレイアウト（トピックチップス用）
+struct FlowLayout: Layout {
+    var spacing: CGFloat = 8
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let result = arrangeSubviews(proposal: proposal, subviews: subviews)
+        return result.size
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let result = arrangeSubviews(
+            proposal: ProposedViewSize(width: bounds.width, height: bounds.height),
+            subviews: subviews
+        )
+        for (index, position) in result.positions.enumerated() {
+            subviews[index].place(
+                at: CGPoint(x: bounds.minX + position.x, y: bounds.minY + position.y),
+                proposal: .unspecified
+            )
+        }
+    }
+
+    private func arrangeSubviews(
+        proposal: ProposedViewSize,
+        subviews: Subviews
+    ) -> (size: CGSize, positions: [CGPoint]) {
+        let proposedWidth = proposal.width ?? 0
+        let maxWidth: CGFloat = proposedWidth.isFinite && proposedWidth > 0 ? proposedWidth : 320
+        var positions: [CGPoint] = []
+        var x: CGFloat = 0
+        var y: CGFloat = 0
+        var rowHeight: CGFloat = 0
+        var totalHeight: CGFloat = 0
+        var totalWidth: CGFloat = 0
+
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            if x + size.width > maxWidth && x > 0 {
+                // 改行
+                x = 0
+                y += rowHeight + spacing
+                rowHeight = 0
+            }
+            positions.append(CGPoint(x: x, y: y))
+            rowHeight = max(rowHeight, size.height)
+            x += size.width + spacing
+            totalWidth = max(totalWidth, x - spacing)
+            totalHeight = max(totalHeight, y + rowHeight)
+        }
+
+        return (CGSize(width: totalWidth, height: totalHeight), positions)
     }
 }
 

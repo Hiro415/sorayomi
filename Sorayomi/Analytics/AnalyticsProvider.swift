@@ -45,13 +45,17 @@ final class ConsoleAnalyticsProvider: AnalyticsProviderProtocol, @unchecked Send
                 .map { "\($0.key)=\($0.value)" }
                 .joined(separator: ", ")
         }
+        #if DEBUG
         print("[Analytics] \(name): \(paramsString)")
+        #endif
     }
 
     // MARK: - User Property
 
     func setUserProperty(name: String, value: String?) {
         let displayValue = value ?? "(nil)"
+        #if DEBUG
         print("[Analytics] UserProperty \(name)=\(displayValue)")
+        #endif
     }
 }

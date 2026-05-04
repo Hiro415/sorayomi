@@ -77,7 +77,7 @@ final class FortuneEngineService {
             switch classification {
             case .safe:
                 break // 安全 - 続行
-            case .crisis, .medical, .legal, .financial, .inappropriate:
+            case .crisis, .inappropriate:
                 throw FortuneEngineError.safetyBlocked(classification)
             }
         }
@@ -229,6 +229,32 @@ final class FortuneEngineService {
                 contextParts.append("本命星: \(nineStarProfile.honmeisei.japaneseName)")
                 contextParts.append("月命星: \(nineStarProfile.getsumeisei.japaneseName)")
                 contextParts.append("本日の星: \(dailyStar.japaneseName)")
+            }
+
+        case .generalConsultation:
+            let seasonal = SeasonalContext.from(date: today)
+            contextParts.append("【総合相談】")
+            contextParts.append("季節: \(seasonal.season)（\(seasonal.solarTerm)）")
+
+        case .flowerFortune:
+            if let birthday = profile.birthday {
+                let flowerProfile = FlowerFortuneCalculator.profile(from: birthday)
+                let dailyEnergy = FlowerFortuneCalculator.dailyEnergy(birthday: birthday, on: today)
+                contextParts.append("【花占い】")
+                contextParts.append("誕生月の花: \(flowerProfile.birthMonthFlower.japaneseName)")
+                contextParts.append("花言葉: \(flowerProfile.primaryHanakotoba)")
+                contextParts.append("今日の花: \(dailyEnergy.todaysFlower.japaneseName)")
+                contextParts.append("共鳴: \(dailyEnergy.resonanceScore)/5")
+            }
+
+        case .stoneFortune:
+            if let birthday = profile.birthday {
+                let stoneProfile = StoneFortuneCalculator.profile(from: birthday)
+                let dailyEnergy = StoneFortuneCalculator.dailyEnergy(birthday: birthday, on: today)
+                contextParts.append("【ストーン占い】")
+                contextParts.append("誕生石: \(stoneProfile.birthstone.japaneseName)")
+                contextParts.append("今日のパワーストーン: \(dailyEnergy.todaysStone.japaneseName)")
+                contextParts.append("共鳴: \(dailyEnergy.resonanceScore)/5")
             }
         }
 
