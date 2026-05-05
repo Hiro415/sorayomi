@@ -68,11 +68,16 @@ final class DailyFortuneUsageTracker {
 
     // MARK: - Persistence
 
+    /// 日付キー生成用フォーマッター（生成コストが高いため static でキャッシュ）
+    private static let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        f.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        return f
+    }()
+
     private var todayDateString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
-        return formatter.string(from: Date())
+        Self.dateFormatter.string(from: Date())
     }
 
     private var todayUsedKey: String {
@@ -102,9 +107,29 @@ final class DailyFortuneUsageTracker {
             todayOmikujiResult = nil
         }
 
+        // 今日以外の古い日付キーを削除（蓄積防止）
+        purgeStaleDateKeys(today: today)
+
         #if DEBUG
         print("[DailyFortuneUsageTracker] Loaded used systems: \(usedSystemIDs)")
         if todayOmikujiResult != nil { print("[DailyFortuneUsageTracker] Loaded stored omikuji result") }
+        #endif
+    }
+
+    /// 今日以外の日付をキーに持つ古いエントリを UserDefaults から削除する。
+    private func purgeStaleDateKeys(today: String) {
+        let defaults = UserDefaults.standard
+        let prefixes = ["sorayomi_daily_used_", "sorayomi_omikuji_result_"]
+        let staleKeys = defaults.dictionaryRepresentation().keys.filter { key in
+            prefixes.contains(where: { key.hasPrefix($0) }) && !key.hasSuffix(today)
+        }
+        for key in staleKeys {
+            defaults.removeObject(forKey: key)
+        }
+        #if DEBUG
+        if !staleKeys.isEmpty {
+            print("[DailyFortuneUsageTracker] Purged \(staleKeys.count) stale date key(s)")
+        }
         #endif
     }
 

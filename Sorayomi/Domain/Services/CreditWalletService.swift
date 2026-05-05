@@ -27,6 +27,21 @@ final class CreditWalletService {
     private let repository: CreditRepository
     private let authService: FirebaseAuthService
 
+    // MARK: - UserDefaults Keys
+
+    /// 月次プレミアムクレジット付与済み月のキー（例: "2026-03"）
+    private static let lastPremiumGrantKey = "sorayomi_last_premium_grant_month"
+
+    /// 最後に広告リワードを付与した日のキー（TimeInterval として保存）
+    private static let lastAdRewardKey = "sorayomi_last_ad_reward_date"
+
+    /// 月次付与の月キー生成用フォーマッター（生成コストが高いため static でキャッシュ）
+    private static let monthFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM"
+        return f
+    }()
+
     // MARK: - Init
 
     init(
@@ -131,14 +146,11 @@ final class CreditWalletService {
         guard allowance > 0 else { return }
 
         let today = Calendar.current.startOfDay(for: Date())
-        let lastGrantKey = "sorayomi_last_premium_grant_month"
 
         // 今月のキー（例: "2026-03"）
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM"
-        let currentMonth = formatter.string(from: today)
+        let currentMonth = Self.monthFormatter.string(from: today)
 
-        if let lastMonth = UserDefaults.standard.string(forKey: lastGrantKey),
+        if let lastMonth = UserDefaults.standard.string(forKey: Self.lastPremiumGrantKey),
            lastMonth == currentMonth {
             #if DEBUG
             print("[CreditWalletService] Monthly premium credits already granted for \(currentMonth)")
@@ -159,7 +171,7 @@ final class CreditWalletService {
 
         guard effectiveGrant > 0 else {
             // 繰越上限に達しているため付与なし（月のマーキングだけ行う）
-            UserDefaults.standard.set(currentMonth, forKey: lastGrantKey)
+            UserDefaults.standard.set(currentMonth, forKey: Self.lastPremiumGrantKey)
             #if DEBUG
             print("[CreditWalletService] Carryover cap reached (\(currentTotal)/\(carryoverCap)), no credits granted")
             #endif
@@ -175,20 +187,11 @@ final class CreditWalletService {
 
         balance = updatedWallet.balance
         freeCreditsRemaining = updatedWallet.freeCreditsRemaining
-        UserDefaults.standard.set(currentMonth, forKey: lastGrantKey)
+        UserDefaults.standard.set(currentMonth, forKey: Self.lastPremiumGrantKey)
 
         #if DEBUG
         print("[CreditWalletService] Granted \(effectiveGrant) monthly premium credits (cap: \(carryoverCap)). Balance: \(totalAvailable)")
         #endif
-    }
-
-    // MARK: - Daily Subscription Grant (Legacy compat — redirects to monthly)
-
-    /// サブスクリプション会員への日次クレジット付与
-    /// 新プランでは月次付与に変更。互換性のために残すが、内部的には月次処理を呼ぶ。
-    func grantDailySubscriptionCredits(allowance: Int) {
-        // 月次プレミアムに移行済み — 月次付与を使用
-        grantMonthlyPremiumCredits(allowance: 30, carryoverCap: 30)
     }
 
     // MARK: - Addition
@@ -230,9 +233,8 @@ final class CreditWalletService {
     @discardableResult
     func grantAdRewardCredit() -> Bool {
         let today = Calendar.current.startOfDay(for: Date())
-        let lastKey = "sorayomi_last_ad_reward_date"
 
-        if let lastReward = UserDefaults.standard.object(forKey: lastKey) as? TimeInterval {
+        if let lastReward = UserDefaults.standard.object(forKey: Self.lastAdRewardKey) as? TimeInterval {
             let lastDate = Calendar.current.startOfDay(for: Date(timeIntervalSince1970: lastReward))
             if lastDate >= today {
                 #if DEBUG
@@ -253,7 +255,7 @@ final class CreditWalletService {
 
         balance = updatedWallet.balance
         freeCreditsRemaining = updatedWallet.freeCreditsRemaining
-        UserDefaults.standard.set(today.timeIntervalSince1970, forKey: lastKey)
+        UserDefaults.standard.set(today.timeIntervalSince1970, forKey: Self.lastAdRewardKey)
 
         #if DEBUG
         print("[CreditWalletService] Granted 1 ad reward credit. Balance: \(totalAvailable)")
@@ -264,9 +266,8 @@ final class CreditWalletService {
     /// 今日の広告リワードが利用可能かどうか
     var isAdRewardAvailableToday: Bool {
         let today = Calendar.current.startOfDay(for: Date())
-        let lastKey = "sorayomi_last_ad_reward_date"
 
-        if let lastReward = UserDefaults.standard.object(forKey: lastKey) as? TimeInterval {
+        if let lastReward = UserDefaults.standard.object(forKey: Self.lastAdRewardKey) as? TimeInterval {
             let lastDate = Calendar.current.startOfDay(for: Date(timeIntervalSince1970: lastReward))
             return lastDate < today
         }

@@ -16,9 +16,6 @@ final class CreditRepository {
 
     private let store: UserDefaultsStore
 
-    /// ウォレット操作の排他制御用ロック
-    private let lock = NSLock()
-
     // MARK: - Init
 
     init(store: UserDefaultsStore = .shared) {
@@ -59,9 +56,6 @@ final class CreditRepository {
 
     /// ウォレットを取得（存在しない場合は残高0の新規ウォレットを作成）
     func getWallet(userId: String) -> CreditWallet {
-        lock.lock()
-        defer { lock.unlock() }
-
         if let wallet: CreditWallet = store.load(forKey: walletKey(for: userId)) {
             return wallet
         }
@@ -95,9 +89,6 @@ final class CreditRepository {
 
     /// ウォレットを更新
     func updateWallet(_ wallet: CreditWallet) {
-        lock.lock()
-        defer { lock.unlock() }
-
         let updatedWallet = CreditWallet(
             userId: wallet.userId,
             balance: wallet.balance,
@@ -126,9 +117,6 @@ final class CreditRepository {
         description: String? = nil,
         storeKitTransactionId: String? = nil
     ) -> CreditWallet {
-        lock.lock()
-        defer { lock.unlock() }
-
         // StoreKit トランザクションの重複付与を防止
         if let txId = storeKitTransactionId {
             guard !hasProcessedTransaction(txId) else {
@@ -196,9 +184,6 @@ final class CreditRepository {
         amount: Int,
         readingId: String? = nil
     ) throws -> CreditWallet {
-        lock.lock()
-        defer { lock.unlock() }
-
         let wallet = getWalletUnsafe(userId: userId)
 
         guard wallet.totalAvailable >= amount else {
@@ -244,9 +229,6 @@ final class CreditRepository {
         amount: Int,
         readingId: String? = nil
     ) throws -> CreditWallet {
-        lock.lock()
-        defer { lock.unlock() }
-
         let wallet = getWalletUnsafe(userId: userId)
 
         guard wallet.balance >= amount else {

@@ -83,7 +83,12 @@ final class AppEnvironment {
         self.featureFlags = FeatureFlagManager()
         self.pricingConfig = PricingConfig()
         self.navigationRouter = NavigationRouter()
-        self.storeKitManager = StoreKitManager()
+        // トランザクションリスナー開始前にコールバックを渡して StoreKitManager を生成する。
+        // これにより、init 内で listenForTransactions() が始まる前にハンドラが確実にセットされる。
+        let walletServiceRef = creditWalletService
+        self.storeKitManager = StoreKitManager(creditTransactionHandler: { credits, productId, transactionId in
+            await walletServiceRef.addCredits(credits, productId: productId, transactionId: transactionId)
+        })
         self.notificationManager = NotificationManager()
         self.streakManager = StreakManager()
         self.freeTrialManager = FreeTrialManager()
@@ -104,13 +109,6 @@ final class AppEnvironment {
 
         // 起動時にウォレット残高をストレージから読み込み
         creditWalletService.loadWallet()
-
-        // トランザクションリスナーとウォレットを接続
-        // クラッシュ/中断後の未完了購入を復旧し、idempotency ガード付きでクレジットを付与する
-        let walletService = creditWalletService
-        storeKitManager.onCreditTransaction = { credits, productId, transactionId in
-            await walletService.addCredits(credits, productId: productId, transactionId: transactionId)
-        }
     }
 
     // MARK: - Actions

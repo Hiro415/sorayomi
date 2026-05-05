@@ -83,7 +83,12 @@ final class StoreKitManager {
 
     // MARK: - Init
 
-    init() {
+    /// - Parameter creditTransactionHandler: クレジット付与コールバック。
+    ///   `listenForTransactions()` 開始前に設定されるため、
+    ///   トランザクションの取りこぼしが発生しない。
+    init(creditTransactionHandler: ((Int, String, String) async -> Void)? = nil) {
+        // コールバックをリスナー開始前に設定（M8 修正: 割り当て順序の保証）
+        self.onCreditTransaction = creditTransactionHandler
         // One-time migration: UserDefaults → Keychain
         if UserDefaults.standard.bool(forKey: starterPackUsedKey) {
             KeychainStore.shared.saveString("1", forKey: starterPackUsedKey)

@@ -192,15 +192,6 @@ extension CopyKey {
         case .storeConsumableNotice:
             return "クレジットは消費型のアプリ内課金です。使用後の返金はできません。未使用クレジットに有効期限はありません。"
 
-        case .storePack4Label:
-            return "4クレジット"
-
-        case .storePack12Label:
-            return "12クレジット"
-
-        case .storePack24Label:
-            return "24クレジット"
-
         // =====================================================================
         // MARK: - Paywall
         // =====================================================================

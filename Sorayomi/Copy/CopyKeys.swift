@@ -48,9 +48,6 @@ enum CopyKey: String, CaseIterable, Sendable {
     case storeTitle
     case storeSubtitle
     case storeConsumableNotice
-    case storePack4Label
-    case storePack12Label
-    case storePack24Label
 
     // MARK: - Paywall
 

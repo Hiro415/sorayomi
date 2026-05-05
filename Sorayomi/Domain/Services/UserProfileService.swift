@@ -138,19 +138,42 @@ final class UserProfileService {
     // MARK: - Favorite Systems
 
     /// お気に入り占術をトグル（追加 or 削除）
+    /// プロフィール未作成の場合は新規作成してからトグルする。
     func toggleFavoriteSystem(_ system: FortuneSystem) {
-        guard var profile = currentProfile else { return }
-        if profile.favoriteSystemIDs.contains(system.rawValue) {
-            profile.favoriteSystemIDs.removeAll { $0 == system.rawValue }
+        guard let userId = authService.currentUserId else { return }
+
+        if var profile = currentProfile {
+            if profile.favoriteSystemIDs.contains(system.rawValue) {
+                profile.favoriteSystemIDs.removeAll { $0 == system.rawValue }
+            } else {
+                profile.favoriteSystemIDs.append(system.rawValue)
+            }
+            profile.updatedAt = Date()
+            repository.save(profile)
+            currentProfile = profile
         } else {
-            profile.favoriteSystemIDs.append(system.rawValue)
+            // プロフィールがまだ存在しない場合は新規作成して登録
+            let newProfile = UserProfile(
+                id: userId,
+                nickname: nil,
+                birthday: nil,
+                bloodType: nil,
+                themeInterests: [],
+                hasConsentedToAI: false,
+                consentTimestamp: nil,
+                profilePhotoData: nil,
+                createdAt: Date(),
+                updatedAt: Date()
+            )
+            var profileToSave = newProfile
+            profileToSave.favoriteSystemIDs = [system.rawValue]
+            profileToSave.updatedAt = Date()
+            repository.save(profileToSave)
+            currentProfile = profileToSave
         }
-        profile.updatedAt = Date()
-        repository.save(profile)
-        currentProfile = profile
 
         #if DEBUG
-        print("[UserProfileService] Toggled favorite: \(system.rawValue) → \(profile.favoriteSystemIDs)")
+        print("[UserProfileService] Toggled favorite: \(system.rawValue) → \(currentProfile?.favoriteSystemIDs ?? [])")
         #endif
     }
 

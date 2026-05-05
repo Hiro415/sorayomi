@@ -158,6 +158,7 @@ struct NumerologyRevealView: View {
                         .scaleEffect(lifePathScale)
 
                     if NumerologyCalculator.isMasterNumber(energy.lifePathNumber) {
+                        // 数秘術の国際的専門用語として英語表記を意図的に使用
                         Text("MASTER NUMBER")
                             .font(.system(size: 10, weight: .bold, design: .monospaced))
                             .tracking(3)
@@ -173,6 +174,7 @@ struct NumerologyRevealView: View {
                     .font(.system(size: isLargeScreen ? 36 : 28, weight: .light, design: .serif))
                     .foregroundStyle(.white)
 
+                // 数秘術の国際的専門用語として英語表記を意図的に使用
                 Text("LIFE PATH NUMBER")
                     .font(.system(size: 11, weight: .medium, design: .monospaced))
                     .tracking(4)
