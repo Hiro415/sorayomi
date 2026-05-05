@@ -6,6 +6,8 @@ import SwiftUI
 struct ReadingScreen: View {
     @Environment(AppEnvironment.self) private var env
     @State private var viewModel = ReadingViewModel()
+    /// PaywallSheet の購入処理中フラグ（連打防止・ボタン無効化に使用）
+    @State private var isPaywallPurchasing = false
 
     var body: some View {
         ZStack {
@@ -71,18 +73,28 @@ struct ReadingScreen: View {
                 hasUsedStarterPack: env.storeKitManager.hasUsedStarterPack,
                 onPurchase: { productId in
                     Task {
-                        if let product = env.storeKitManager.product(for: productId) {
-                            let storeVM = StoreViewModel()
-                            await storeVM.purchase(product: product, env: env)
-                            env.creditWalletService.loadWallet()
+                        isPaywallPurchasing = true
+                        defer { isPaywallPurchasing = false }
+                        guard let product = env.storeKitManager.product(for: productId) else { return }
+                        let storeVM = StoreViewModel()
+                        await storeVM.purchase(product: product, env: env)
+                        env.creditWalletService.loadWallet()
+                        // 購入成功時はシートを自動クローズ
+                        if storeVM.purchasedCredits != nil {
+                            viewModel.showPaywall = false
                         }
                     }
                 },
                 onSubscribe: { productId in
                     Task {
-                        if let product = env.storeKitManager.subscription(for: productId) {
-                            let storeVM = StoreViewModel()
-                            await storeVM.purchaseSubscription(product: product, env: env)
+                        isPaywallPurchasing = true
+                        defer { isPaywallPurchasing = false }
+                        guard let product = env.storeKitManager.subscription(for: productId) else { return }
+                        let storeVM = StoreViewModel()
+                        await storeVM.purchaseSubscription(product: product, env: env)
+                        // サブスク購入成功時はシートを自動クローズ
+                        if storeVM.didSubscribe {
+                            viewModel.showPaywall = false
                         }
                     }
                 },
@@ -97,9 +109,15 @@ struct ReadingScreen: View {
                     env.creditWalletService.loadWallet()
                 },
                 isAdRewardAvailable: env.featureFlags.isAdRewardEnabled && env.creditWalletService.isAdRewardAvailableToday && !env.storeKitManager.isSubscribed,
+                isPurchasing: isPaywallPurchasing,
                 prices: (env.storeKitManager.products + env.storeKitManager.subscriptions)
                     .reduce(into: [:]) { $0[$1.id] = $1.displayPrice }
             )
+        }
+        .onChange(of: viewModel.showPaywall) { _, isShowing in
+            // Paywall表示時にプロダクトが未ロードなら自動フェッチ（StoreScreen未訪問時の対策）
+            guard isShowing, env.storeKitManager.products.isEmpty else { return }
+            Task { await env.storeKitManager.loadProducts() }
         }
         .onAppear {
             env.dailyFortuneTracker.refreshIfNeeded()

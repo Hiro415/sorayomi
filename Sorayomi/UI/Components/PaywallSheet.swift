@@ -13,6 +13,8 @@ struct PaywallSheet: View {
     var onRestore: (() -> Void)? = nil
     var onWatchAd: (() -> Void)? = nil
     var isAdRewardAvailable: Bool = false
+    /// 購入処理中フラグ（true の間はすべての購入ボタンを無効化して連打を防止）
+    var isPurchasing: Bool = false
     /// StoreKit から取得したライブ価格（productId → displayPrice）
     /// 空の場合はビュー内のフォールバック価格を使用する
     var prices: [String: String] = [:]
@@ -27,6 +29,13 @@ struct PaywallSheet: View {
             ScrollView {
                 VStack(spacing: Spacing.lg) {
                     urgencyHeader
+                    // 購入処理中スピナー
+                    if isPurchasing {
+                        ProgressView("処理中…")
+                            .progressViewStyle(.circular)
+                            .foregroundStyle(Color.sorayomiTextSecondary)
+                            .padding(.vertical, Spacing.sm)
+                    }
 
                     // スターターパック（未購入時のみ、最優先表示）
                     if !hasUsedStarterPack {
@@ -109,6 +118,7 @@ struct PaywallSheet: View {
                 }
                 .padding(.horizontal, Spacing.md)
             }
+            .disabled(isPurchasing)
             .background(Color.sorayomiBackground)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
