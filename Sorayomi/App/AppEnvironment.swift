@@ -86,7 +86,7 @@ final class AppEnvironment {
         // トランザクションリスナー開始前にコールバックを渡して StoreKitManager を生成する。
         // これにより、init 内で listenForTransactions() が始まる前にハンドラが確実にセットされる。
         let walletServiceRef = creditWalletService
-        self.storeKitManager = StoreKitManager(creditTransactionHandler: { credits, productId, transactionId in
+        self.storeKitManager = StoreKitManager(creditTransactionHandler: { @Sendable credits, productId, transactionId in
             await walletServiceRef.addCredits(credits, productId: productId, transactionId: transactionId)
         })
         self.notificationManager = NotificationManager()

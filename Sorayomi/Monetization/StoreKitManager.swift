@@ -75,7 +75,8 @@ final class StoreKitManager {
     /// クラッシュ/中断後に未完了クレジットトランザクションを検出したときのコールバック
     /// AppEnvironment が CreditWalletService と接続する。
     /// - Parameters: (credits, productId, transactionId)
-    var onCreditTransaction: ((Int, String, String) async -> Void)?
+    /// @Sendable: Task.detached（非 MainActor）からクロージャ参照が渡るため必須
+    var onCreditTransaction: (@Sendable (Int, String, String) async -> Void)?
 
     // MARK: - Starter Pack Persistence Key
 
@@ -86,7 +87,7 @@ final class StoreKitManager {
     /// - Parameter creditTransactionHandler: クレジット付与コールバック。
     ///   `listenForTransactions()` 開始前に設定されるため、
     ///   トランザクションの取りこぼしが発生しない。
-    init(creditTransactionHandler: ((Int, String, String) async -> Void)? = nil) {
+    init(creditTransactionHandler: (@Sendable (Int, String, String) async -> Void)? = nil) {
         // コールバックをリスナー開始前に設定（M8 修正: 割り当て順序の保証）
         self.onCreditTransaction = creditTransactionHandler
         // One-time migration: UserDefaults → Keychain
