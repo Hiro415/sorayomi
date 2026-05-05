@@ -133,6 +133,7 @@
   "settings" : {
     "_failTransactionsEnabled" : false,
     "_locale" : "ja",
+    "_storefront" : "JPN",
     "_storeKitErrors" : [
       {
         "current" : null,
