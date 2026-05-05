@@ -109,14 +109,12 @@ struct CreditPackCard: View {
     // MARK: - Helpers
 
     /// 1クレジットあたりの概算単価
+    /// product.priceFormatStyle を使うことで通貨・ロケールを自動適用
+    /// （JPY なら小数なし、USD なら2桁など、商品の通貨に合わせて正しくフォーマット）
     private var unitPrice: String? {
         guard credits > 0 else { return nil }
         let perCredit = product.price / Decimal(credits)
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.locale = Locale(identifier: "ja_JP")
-        formatter.maximumFractionDigits = 0
-        return formatter.string(from: perCredit as NSDecimalNumber)
+        return perCredit.formatted(product.priceFormatStyle)
     }
 }
 
