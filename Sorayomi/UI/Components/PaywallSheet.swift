@@ -286,7 +286,7 @@ struct PaywallSheet: View {
                     HStack(spacing: Spacing.xxs) {
                         Image(systemName: "arrow.up.right")
                             .font(.caption2)
-                        Text("パックより お得 — 履歴閲覧・広告非表示つき")
+                        Text("パックより お得 — 履歴閲覧・繰越上限30つき")
                             .font(SorayomiTypography.caption2)
                     }
                     .foregroundStyle(Color.white.opacity(0.9))

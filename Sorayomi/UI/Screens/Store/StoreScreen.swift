@@ -405,7 +405,8 @@ struct StoreScreen: View {
                                             .font(SorayomiTypography.title3)
                                             .fontWeight(.bold)
                                             .foregroundStyle(.white)
-                                        Text("¥33/回")
+                                        // 1クレジットあたりの単価を product.priceFormatStyle で算出
+                                        Text((monthly.price / 30).formatted(monthly.priceFormatStyle) + "/回")
                                             .font(SorayomiTypography.caption)
                                             .foregroundStyle(Color.white.opacity(0.7))
                                     }
@@ -415,7 +416,7 @@ struct StoreScreen: View {
                                     Image(systemName: "arrow.up.right")
                                         .font(.caption2)
                                         .foregroundStyle(Color.sorayomiGlow)
-                                    Text("履歴閲覧・広告非表示・繰越上限30")
+                                    Text("履歴閲覧・繰越上限30")
                                         .font(SorayomiTypography.caption)
                                         .foregroundStyle(Color.white.opacity(0.9))
                                     Spacer()
@@ -463,9 +464,6 @@ struct StoreScreen: View {
                         .font(SorayomiTypography.title3)
                         .fontWeight(.bold)
                         .foregroundStyle(.white)
-                    Text("¥33/回")
-                        .font(SorayomiTypography.caption)
-                        .foregroundStyle(Color.white.opacity(0.7))
                 }
             }
         }
