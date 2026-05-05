@@ -133,8 +133,6 @@
 		B463C5122B03C5743D273D51 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC9B7B63925CB3BAE71028 /* AppEnvironment.swift */; };
 		B5A2DE91160206C89424F093 /* ReadingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A30C3C48D5B840CDC95F553 /* ReadingMessage.swift */; };
 		B5E32A4C541B090C773A3E4C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 65B7AE6A75A3B2F34CD03DBA /* PrivacyInfo.xcprivacy */; };
-		FF00AA11BB22CC33DD44EE55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA00FF11BB22CC33DD44EE55 /* Assets.xcassets */; };
-		EE22FF33AA44BB55CC66DD77 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE11FF22AA33BB44CC55DD66 /* GoogleService-Info.plist */; };
 		B9F364023EF161404FA9163D /* DisclaimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0703D63D7F328AED7248EE /* DisclaimerManager.swift */; };
 		BDF7AE7286376168E83BDCDD /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B6D0060F5A8515DA5CBD38 /* AppTabView.swift */; };
 		BFE46FC2A596F7929D27558F /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131EBE54E36686D7272C0B9E /* CacheManager.swift */; };
@@ -162,6 +160,7 @@
 		EBFE8387C95DD195A4EBC79A /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87407F699B5302263F295AA1 /* UserProfile.swift */; };
 		EC13274030FA00984196F8A7 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1E7C26DF367F7786EAE636 /* Tab.swift */; };
 		EC47FB47A1B681C04EB12C3C /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD276337DB5DB5F752F3E221 /* Spacing.swift */; };
+		EE22FF33AA44BB55CC66DD77 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE11FF22AA33BB44CC55DD66 /* GoogleService-Info.plist */; };
 		EE28A3A4D011F27E54E48138 /* HoroscopePrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3537AC45F58750EE93D00AF /* HoroscopePrompt.swift */; };
 		EF33F4F98868D6EA3956A744 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0E1F0B501C80FC5CD1DB6 /* FirestoreService.swift */; };
 		F3554D700A3EE97545109DEC /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C216FFC1F97044E54BE2E8 /* AppConstants.swift */; };
@@ -176,6 +175,7 @@
 		FA9825B34DB15A51F9FDBE73 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3086383B6F69E27C1BB2930F /* StoreKitManager.swift */; };
 		FC80A9218EFEFDABCDE5E06C /* BirthdayPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38FBF8023437D8595A6FFDD /* BirthdayPrompt.swift */; };
 		FEA4DD779BA9128C953EC1DC /* BloodTypePrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F09ADAF0C7C031E5729F52 /* BloodTypePrompt.swift */; };
+		FF00AA11BB22CC33DD44EE55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA00FF11BB22CC33DD44EE55 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -299,10 +299,12 @@
 		9FCDB3754A4B63D6748460F9 /* DailyFortune.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyFortune.swift; sourceTree = "<group>"; };
 		A107DA8F7CE8F94244DC4939 /* ReadingLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLoadingView.swift; sourceTree = "<group>"; };
 		A127BFE01B8922936BF55E62 /* SafeResponseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeResponseProvider.swift; sourceTree = "<group>"; };
+		A29D700E2FA914EF006FCD88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A2F09ADAF0C7C031E5729F52 /* BloodTypePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodTypePrompt.swift; sourceTree = "<group>"; };
 		A6BE1F5D5DA3F771F0A2FC46 /* BirthdayPersonalityCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayPersonalityCalculator.swift; sourceTree = "<group>"; };
 		A6E8F000ED1FD26FB7D628CC /* PricingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingConfig.swift; sourceTree = "<group>"; };
 		A97C29AD63741CF438998CE6 /* Sorayomi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sorayomi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA00FF11BB22CC33DD44EE55 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AC633D41D7D7407F3381C78E /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		AC8D65E20E80ECFD50660A97 /* NineStarKiCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NineStarKiCalculator.swift; sourceTree = "<group>"; };
 		AD276337DB5DB5F752F3E221 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
@@ -321,8 +323,6 @@
 		CA5248D5BD8EF1463A0F21F5 /* NumerologyProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumerologyProfile.swift; sourceTree = "<group>"; };
 		CB5635698BFA221569858B0A /* StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakManager.swift; sourceTree = "<group>"; };
 		D0EDE58793F0AA5F1BE4E70F /* FortuneResultParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FortuneResultParser.swift; sourceTree = "<group>"; };
-		AA00FF11BB22CC33DD44EE55 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		EE11FF22AA33BB44CC55DD66 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D227558881C8C925AC3C1E06 /* Sorayomi.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Sorayomi.storekit; sourceTree = "<group>"; };
 		D38FBF8023437D8595A6FFDD /* BirthdayPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayPrompt.swift; sourceTree = "<group>"; };
 		D3DFFC53FAA125D4391E7C89 /* DailyContentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyContentService.swift; sourceTree = "<group>"; };
@@ -338,6 +338,7 @@
 		EC2658CF8A875E1EABE4FBF6 /* TarotCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotCard.swift; sourceTree = "<group>"; };
 		ECFC9B7B63925CB3BAE71028 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		EDA6F64E78BE884C62C50EE2 /* CreditWalletManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditWalletManager.swift; sourceTree = "<group>"; };
+		EE11FF22AA33BB44CC55DD66 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EF012E957114487F383F1869 /* BloodTypePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodTypePickerView.swift; sourceTree = "<group>"; };
 		F38B543DC3A201F064658E1E /* PromptTemplateEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptTemplateEngine.swift; sourceTree = "<group>"; };
 		F62823EE8B9EDA6188DEDD73 /* PaywallSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallSheet.swift; sourceTree = "<group>"; };
@@ -627,6 +628,7 @@
 		AB3AF3DB1E116A610D78B6CF /* Sorayomi */ = {
 			isa = PBXGroup;
 			children = (
+				A29D700E2FA914EF006FCD88 /* Info.plist */,
 				C765C6776D04A2CB394FAFCA /* Analytics */,
 				60B7A0449BE0BDC2017D3B1A /* App */,
 				90CE050DB35600927126643A /* Config */,
@@ -850,6 +852,8 @@
 		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2640;
 			};
 			buildConfigurationList = 9D908D8792E5642B2623649E /* Build configuration list for PBXProject "Sorayomi" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -1066,12 +1070,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
+				DEVELOPMENT_TEAM = 47877JT4KD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sorayomi/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "宙よみ";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "プロフィール写真の設定に使用します。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1149,6 +1156,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1205,6 +1213,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1216,12 +1225,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
+				DEVELOPMENT_TEAM = 47877JT4KD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sorayomi/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "宙よみ";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "プロフィール写真の設定に使用します。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

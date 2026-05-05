@@ -70,9 +70,9 @@ enum FortuneSystem: String, Codable, CaseIterable, Identifiable {
             return .standard
         case .omikuji, .rokuyo:
             return .daily
-        case .horoscope, .bloodType, .birthdayPersonality, .tarot:
+        case .horoscope, .bloodType, .birthdayPersonality:
             return .standard
-        case .numerology, .nineStarKi:
+        case .numerology, .nineStarKi, .tarot:
             return .premium
         case .flowerFortune, .stoneFortune:
             return .standard

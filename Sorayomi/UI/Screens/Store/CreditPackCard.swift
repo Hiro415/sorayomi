@@ -22,7 +22,7 @@ struct CreditPackCard: View {
             onPurchase()
         } label: {
             HStack(spacing: Spacing.md) {
-                // Credit icon and count
+                // Credit icon
                 ZStack {
                     Circle()
                         .fill(
@@ -45,14 +45,13 @@ struct CreditPackCard: View {
                         )
                 }
 
-                // Pack info
+                // Pack info — maxWidth: .infinity で横幅を確保し、バッジ圧縮を防ぐ
                 VStack(alignment: .leading, spacing: Spacing.xxs) {
                     HStack(spacing: Spacing.xs) {
                         Text("\(credits)クレジット")
                             .font(SorayomiTypography.headline)
                             .foregroundStyle(Color.sorayomiTextPrimary)
                             .lineLimit(1)
-                            .fixedSize(horizontal: true, vertical: false)
 
                         if let badge {
                             Text(badge)
@@ -63,6 +62,8 @@ struct CreditPackCard: View {
                                 .padding(.vertical, 3)
                                 .background(Color.sorayomiAccent)
                                 .clipShape(Capsule())
+                                // fixedSize でバッジが HStack 内で潰れるのを防ぐ
+                                .fixedSize(horizontal: true, vertical: false)
                         }
                     }
 
@@ -77,8 +78,8 @@ struct CreditPackCard: View {
                             .foregroundStyle(Color.sorayomiTextSecondary.opacity(0.7))
                     }
                 }
-
-                Spacer()
+                // Spacer() の代わりに maxWidth で中央カラムを広げ、バッジのスペースを確保
+                .frame(maxWidth: .infinity, alignment: .leading)
 
                 // Price / purchase button
                 VStack(spacing: Spacing.xxs) {

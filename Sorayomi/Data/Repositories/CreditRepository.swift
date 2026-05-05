@@ -63,7 +63,7 @@ final class CreditRepository {
         let defaultWallet = CreditWallet(
             userId: userId,
             balance: 0,
-            freeCreditsRemaining: 0,
+            freeCreditsRemaining: AppConstants.initialFreeCredits,
             lastUpdated: Date()
         )
         store.save(defaultWallet, forKey: walletKey(for: userId))

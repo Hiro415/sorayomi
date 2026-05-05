@@ -585,7 +585,6 @@ struct StoreScreen: View {
                         .font(SorayomiTypography.headline)
                         .foregroundStyle(Color.sorayomiTextPrimary)
                         .lineLimit(1)
-                        .fixedSize(horizontal: true, vertical: false)
 
                     if let badge {
                         Text(badge)
@@ -596,6 +595,7 @@ struct StoreScreen: View {
                             .padding(.vertical, 4)
                             .background(Color.sorayomiAccent)
                             .clipShape(Capsule())
+                            .fixedSize(horizontal: true, vertical: false)
                     }
                 }
 
@@ -603,8 +603,7 @@ struct StoreScreen: View {
                     .font(SorayomiTypography.caption)
                     .foregroundStyle(Color.sorayomiTextSecondary)
             }
-
-            Spacer()
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             Text(price)
                 .font(SorayomiTypography.title3)

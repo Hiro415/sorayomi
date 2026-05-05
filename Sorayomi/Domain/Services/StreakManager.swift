@@ -148,7 +148,7 @@ final class StreakManager {
 
             // 今日記録済みかチェック
             let today = Calendar.current.startOfDay(for: Date())
-            let lastDay = Calendar.current.startOfDay(for: lastActiveDate!)
+            let lastDay = Calendar.current.startOfDay(for: lastActiveDate ?? Date())
             hasLoggedToday = today == lastDay
 
             // 2日以上経過していたらストリークをリセット

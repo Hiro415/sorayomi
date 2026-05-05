@@ -67,20 +67,20 @@ final class StoreViewModel {
 
         env.analyticsService.track(.purchaseStarted(productId: product.id))
 
-        let credits = await env.storeKitManager.purchase(product)
+        let result = await env.storeKitManager.purchase(product)
 
-        if let credits, credits > 0 {
+        if let result, result.credits > 0 {
             await env.creditWalletService.addCredits(
-                credits,
+                result.credits,
                 productId: product.id,
-                transactionId: UUID().uuidString
+                transactionId: result.transactionId
             )
 
-            purchasedCredits = credits
+            purchasedCredits = result.credits
 
             env.analyticsService.track(.purchaseCompleted(
                 productId: product.id,
-                credits: credits,
+                credits: result.credits,
                 revenue: 0
             ))
 
@@ -90,7 +90,7 @@ final class StoreViewModel {
             }
 
             #if DEBUG
-            print("[StoreViewModel] Purchase successful: +\(credits) credits")
+            print("[StoreViewModel] Purchase successful: +\(result.credits) credits")
             #endif
         } else if case .failed(let error) = env.storeKitManager.purchaseState {
             errorMessage = "購入に失敗しました: \(error.localizedDescription)"

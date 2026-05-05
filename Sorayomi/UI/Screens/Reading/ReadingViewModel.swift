@@ -861,6 +861,9 @@ final class ReadingViewModel {
 
             messages.append(.assistantMessage(response))
         } catch {
+            #if DEBUG
+            print("[ReadingViewModel] sendConversationFollowUp error: \(error)")
+            #endif
             errorMessage = "応答の生成に失敗しました。"
         }
 

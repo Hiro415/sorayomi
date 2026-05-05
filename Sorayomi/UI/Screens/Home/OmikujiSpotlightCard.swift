@@ -139,14 +139,14 @@ private struct PreDrawContentView: View {
     private let goldColor = Color(red: 1.0, green: 0.86, blue: 0.46)
 
     var body: some View {
-        HStack(spacing: Spacing.lg) {
-            // 印章アニメーション（左）
+        HStack(spacing: Spacing.md) {
+            // 印章アニメーション（左）— コンパクトサイズ
             ZStack {
                 // Glow
                 Circle()
                     .fill(goldColor.opacity(0.10))
-                    .frame(width: 104, height: 104)
-                    .blur(radius: 14)
+                    .frame(width: 72, height: 72)
+                    .blur(radius: 10)
                     .scaleEffect(glowPulse)
 
                 // Outer ring
@@ -164,13 +164,13 @@ private struct PreDrawContentView: View {
                         ),
                         lineWidth: 1.2
                     )
-                    .frame(width: 88, height: 88)
+                    .frame(width: 58, height: 58)
                     .rotationEffect(.degrees(ringRotation))
 
                 // Inner circle
                 Circle()
                     .fill(Color(red: 0.12, green: 0.06, blue: 0.26))
-                    .frame(width: 64, height: 64)
+                    .frame(width: 42, height: 42)
                     .overlay(
                         Circle()
                             .strokeBorder(
@@ -181,7 +181,7 @@ private struct PreDrawContentView: View {
 
                 // 御 kanji
                 Text("御")
-                    .font(.system(size: 26, weight: .medium, design: .serif))
+                    .font(.system(size: 18, weight: .medium, design: .serif))
                     .foregroundStyle(
                         LinearGradient(
                             colors: [goldColor.opacity(0.95), goldColor.opacity(0.65)],
@@ -189,26 +189,15 @@ private struct PreDrawContentView: View {
                             endPoint: .bottom
                         )
                     )
-                    .shadow(color: goldColor.opacity(0.4), radius: 6)
+                    .shadow(color: goldColor.opacity(0.4), radius: 4)
             }
-            .frame(width: 96, height: 96)
+            .frame(width: 64, height: 64)
 
             // テキスト + CTA（右）
-            VStack(alignment: .leading, spacing: Spacing.sm) {
-                VStack(alignment: .leading, spacing: Spacing.xxs) {
-                    Text("本日のおみくじ")
-                        .font(SorayomiTypography.caption)
-                        .foregroundStyle(.white.opacity(0.65))
-
-                    Text("本日のおみくじ")
-                        .font(.system(size: 22, weight: .bold, design: .serif))
-                        .foregroundStyle(.white)
-                }
-
-                Text("今日の吉凶を確かめましょう")
-                    .font(SorayomiTypography.caption)
-                    .foregroundStyle(.white.opacity(0.80))
-                    .lineSpacing(4)
+            VStack(alignment: .leading, spacing: Spacing.xs) {
+                Text("本日のおみくじ")
+                    .font(.system(size: 20, weight: .bold, design: .serif))
+                    .foregroundStyle(.white)
 
                 // 引く CTA ボタン
                 HStack(spacing: 4) {
@@ -222,7 +211,7 @@ private struct PreDrawContentView: View {
                 }
                 .foregroundStyle(.white)
                 .padding(.horizontal, Spacing.sm)
-                .padding(.vertical, Spacing.xs)
+                .padding(.vertical, 6)
                 .background(Color.white.opacity(0.18))
                 .clipShape(Capsule())
             }
@@ -255,7 +244,7 @@ private struct PreDrawContentView: View {
 private extension View {
     func cardFrame() -> some View {
         self
-            .padding(Spacing.lg)
+            .padding(Spacing.sm)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 LinearGradient(

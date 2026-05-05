@@ -19,7 +19,9 @@ struct ReadingScreen: View {
                 }
             }
         }
-        .navigationTitle(viewModel.selectedSystem == nil ? "" : "対話鑑定")
+        .navigationTitle(viewModel.selectedSystem.map {
+            $0.requiresAIGeneration ? "対話鑑定" : $0.japaneseName
+        } ?? "")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $viewModel.showShareSheet) {
             if let system = viewModel.selectedSystem {

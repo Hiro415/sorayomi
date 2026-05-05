@@ -60,15 +60,15 @@ final class AppEnvironment {
     // MARK: - Onboarding State
 
     /// `true` after the user completes the first-run onboarding flow.
-    /// Persisted in Keychain (non-synchronizable) — survives app restarts and
-    /// UserDefaults clearing; resets on reinstall (acceptable: reinstall = fresh start).
-    /// Only FreeTrialManager uses synchronizable: true to survive reinstall.
+    /// UserDefaults に保存。アプリ削除時にリセットされるため、
+    /// 再インストール後は正しくオンボーディングが表示される。
+    /// （Keychain はシミュレータで削除をまたいで残存するため不適切）
     var isOnboardingComplete: Bool {
         didSet {
             if isOnboardingComplete {
-                KeychainStore.shared.saveString("1", forKey: Keys.onboardingComplete, synchronizable: false)
+                UserDefaults.standard.set(true, forKey: Keys.onboardingComplete)
             } else {
-                KeychainStore.shared.delete(forKey: Keys.onboardingComplete, synchronizable: false)
+                UserDefaults.standard.removeObject(forKey: Keys.onboardingComplete)
             }
         }
     }
@@ -91,12 +91,16 @@ final class AppEnvironment {
         self.reviewRequestManager = ReviewRequestManager(analyticsService: analyticsService, featureFlags: featureFlags)
         self.adRewardManager = AdRewardManager(featureFlags: featureFlags, walletService: creditWalletService, analyticsService: analyticsService)
         self.dailyFortuneTracker = DailyFortuneUsageTracker()
-        // One-time migration: UserDefaults → Keychain
-        if UserDefaults.standard.bool(forKey: Keys.onboardingComplete) {
-            KeychainStore.shared.saveString("1", forKey: Keys.onboardingComplete, synchronizable: false)
-            UserDefaults.standard.removeObject(forKey: Keys.onboardingComplete)
+        // ワンタイム移行: Keychain → UserDefaults
+        // 旧バージョンで Keychain に保存されていた場合は UserDefaults へ移行して Keychain を削除する。
+        if KeychainStore.shared.exists(forKey: Keys.onboardingComplete, synchronizable: false) {
+            UserDefaults.standard.set(true, forKey: Keys.onboardingComplete)
+            KeychainStore.shared.delete(forKey: Keys.onboardingComplete, synchronizable: false)
+            #if DEBUG
+            print("[AppEnvironment] Migrated onboarding flag: Keychain → UserDefaults")
+            #endif
         }
-        self.isOnboardingComplete = KeychainStore.shared.exists(forKey: Keys.onboardingComplete, synchronizable: false)
+        self.isOnboardingComplete = UserDefaults.standard.bool(forKey: Keys.onboardingComplete)
 
         // 起動時にウォレット残高をストレージから読み込み
         creditWalletService.loadWallet()
@@ -112,11 +116,7 @@ final class AppEnvironment {
             hasBloodType: userProfileService.currentProfile?.bloodType != nil,
             consentedToAI: userProfileService.currentProfile?.hasConsentedToAI ?? false
         ))
-
-        // オンボーディング完了後に通知許可をリクエスト
-        Task {
-            await notificationManager.requestAuthorization()
-        }
+        // 通知許可はオンボーディングの通知ページ（NotificationPermissionPageView）で処理する
     }
 
     /// アプリ起動時にサブスクリプション月次クレジットを付与

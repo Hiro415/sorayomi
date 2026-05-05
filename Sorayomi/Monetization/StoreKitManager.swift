@@ -188,7 +188,8 @@ final class StoreKitManager {
     /// - Parameter product: 購入するプロダクト
     /// - Returns: 付与されるクレジット数（クレジットパック購入成功時）、nil（キャンセル時）
     @discardableResult
-    func purchase(_ product: Product) async -> Int? {
+    /// - Returns: (付与クレジット数, StoreKitトランザクションID) または nil
+    func purchase(_ product: Product) async -> (credits: Int, transactionId: String)? {
         purchaseState = .purchasing
 
         do {
@@ -197,6 +198,7 @@ final class StoreKitManager {
             switch result {
             case .success(let verification):
                 let transaction = try ReceiptValidator.verify(verification)
+                let transactionId = String(transaction.id)
                 await transaction.finish()
 
                 // サブスクリプション購入の場合
@@ -220,10 +222,10 @@ final class StoreKitManager {
                 purchaseState = .success(credits: credits)
 
                 #if DEBUG
-                print("[StoreKitManager] Purchase successful: \(product.id), \(credits) credits")
+                print("[StoreKitManager] Purchase successful: \(product.id), \(credits) credits, txId: \(transactionId)")
                 #endif
 
-                return credits
+                return (credits: credits, transactionId: transactionId)
 
             case .pending:
                 purchaseState = .idle

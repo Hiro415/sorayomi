@@ -26,3 +26,10 @@ tmp/
 output/
 *.o
 *.d
+
+# Xcode workspace derived files
+Sorayomi.xcodeproj/project.xcworkspace/xcshareddata/
+Sorayomi.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Utility scripts
+generate_appicon.swift

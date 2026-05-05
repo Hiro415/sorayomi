@@ -54,6 +54,9 @@ struct HomeScreen: View {
             env.dailyFortuneTracker.refreshIfNeeded()
             await viewModel.loadDailyFortune(env: env)
             env.streakManager.recordActivity()
+            // 通知を更新（ストリーク記録後の hasLoggedToday を参照）
+            await env.notificationManager.checkAuthorizationStatus()
+            env.notificationManager.refresh(hasLoggedToday: env.streakManager.hasLoggedToday)
         }
         .sheet(isPresented: $showingStoredOmikuji) {
             if let result = env.dailyFortuneTracker.todayOmikujiResult {
@@ -166,36 +169,97 @@ struct HomeScreen: View {
     }
 
     private var streakCard: some View {
-        HStack(spacing: Spacing.sm) {
-            Image(systemName: "flame.fill")
-                .font(.title2)
-                .foregroundStyle(
-                    env.streakManager.currentStreak > 0
-                        ? Color.orange
-                        : Color.sorayomiTextSecondary.opacity(0.5)
-                )
+        HStack(alignment: .center, spacing: Spacing.sm) {
+            // 円弧プログレスリング（コンパクト）
+            streakProgressRing
 
+            // 中央テキスト
             VStack(alignment: .leading, spacing: 2) {
-                Text(env.streakManager.streakDisplayText)
-                    .font(SorayomiTypography.headline)
-                    .foregroundStyle(Color.sorayomiTextPrimary)
+                // インラインヘッダー
+                HStack(spacing: 3) {
+                    Image(systemName: "moon.stars.fill")
+                        .font(.system(size: 9))
+                    Text("宙よみの軌跡")
+                        .font(.system(size: 10, weight: .semibold))
+                }
+                .foregroundStyle(Color.sorayomiTextSecondary)
 
-                if let next = env.streakManager.nextMilestoneInfo {
-                    Text("あと\(next.days - env.streakManager.currentStreak)日で+\(next.credits)クレジット")
+                // ストリーク日数
+                if env.streakManager.currentStreak > 0 {
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
+                        Text("\(env.streakManager.currentStreak)")
+                            .font(.system(size: 22, weight: .bold, design: .rounded))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.sorayomiPrimary, .sorayomiSecondary],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                        Text("日連続")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundStyle(Color.sorayomiTextSecondary)
+                    }
+                } else {
+                    Text("今日から始めよう")
                         .font(SorayomiTypography.caption)
-                        .foregroundStyle(Color.sorayomiTextSecondary)
+                        .foregroundStyle(Color.sorayomiTextSecondary.opacity(0.7))
+                }
+
+                // 次マイルストーンラベル
+                if let next = env.streakManager.nextMilestoneInfo {
+                    HStack(spacing: 3) {
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 8))
+                            .foregroundStyle(Color.sorayomiSecondary)
+                        Text("\(next.days)日連続で +\(next.credits)クレジット")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.sorayomiTextSecondary)
+                    }
+                } else if env.streakManager.currentStreak > 0 {
+                    HStack(spacing: 3) {
+                        Image(systemName: "crown.fill")
+                            .font(.system(size: 8))
+                            .foregroundStyle(Color.sorayomiSecondary)
+                        Text("全マイルストーン達成！")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.sorayomiSecondary)
+                    }
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
-            Spacer()
-
-            if env.streakManager.currentStreak > 0 {
-                Text("\(env.streakManager.currentStreak)")
-                    .font(SorayomiTypography.metricNumber)
-                    .foregroundStyle(Color.orange)
+            // 右端：カウントダウンバッジ
+            if let next = env.streakManager.nextMilestoneInfo {
+                let remaining = next.days - env.streakManager.currentStreak
+                VStack(spacing: 0) {
+                    Text("あと")
+                        .font(.system(size: 8, weight: .medium))
+                        .foregroundStyle(Color.sorayomiTextSecondary)
+                    Text("\(remaining)")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.sorayomiPrimary, .sorayomiSecondary],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                    Text("日")
+                        .font(.system(size: 8, weight: .medium))
+                        .foregroundStyle(Color.sorayomiTextSecondary)
+                }
+                .padding(.horizontal, Spacing.xs)
+                .padding(.vertical, Spacing.xxs)
+                .background(Color.sorayomiPrimary.opacity(0.08))
+                .clipShape(RoundedRectangle(cornerRadius: Spacing.cornerRadiusSmall))
+            } else if env.streakManager.currentStreak > 0 {
+                Image(systemName: "crown.fill")
+                    .font(.system(size: 18))
+                    .foregroundStyle(Color.sorayomiSecondary)
             }
         }
-        .sorayomiPanel(tone: .elevated, padding: Spacing.md)
+        .sorayomiPanel(tone: .elevated, padding: Spacing.sm)
         .alert(
             "ストリーク報酬",
             isPresented: Binding(
@@ -204,16 +268,70 @@ struct HomeScreen: View {
             )
         ) {
             Button("受け取る") {
-            if let credits = env.streakManager.pendingMilestoneCredits {
-                env.creditWalletService.grantStreakReward(credits)
+                if let credits = env.streakManager.pendingMilestoneCredits {
+                    env.creditWalletService.grantStreakReward(credits)
+                }
+                env.streakManager.clearPendingMilestone()
             }
-            env.streakManager.clearPendingMilestone()
-        }
         } message: {
             if let credits = env.streakManager.pendingMilestoneCredits {
                 Text("\(env.streakManager.currentStreak)日連続達成！\(credits)クレジットを獲得しました 🎉")
             }
         }
+    }
+
+    /// 円弧のプログレスリング（前マイルストーン〜次マイルストーン間の進捗を表示）
+    private var streakProgressRing: some View {
+        ZStack {
+            // 背景弧（270° = 0.75 周）
+            Circle()
+                .trim(from: 0.0, to: 0.75)
+                .stroke(
+                    Color.sorayomiPrimary.opacity(0.12),
+                    style: StrokeStyle(lineWidth: 5, lineCap: .round)
+                )
+                .rotationEffect(.degrees(135))
+                .frame(width: 52, height: 52)
+
+            // プログレス弧
+            Circle()
+                .trim(from: 0.0, to: 0.75 * streakProgressFraction)
+                .stroke(
+                    LinearGradient(
+                        colors: [.sorayomiPrimary, .sorayomiSecondary],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ),
+                    style: StrokeStyle(lineWidth: 5, lineCap: .round)
+                )
+                .rotationEffect(.degrees(135))
+                .frame(width: 52, height: 52)
+                .animation(.easeOut(duration: 0.6), value: streakProgressFraction)
+
+            // 中央アイコン
+            Image(systemName: env.streakManager.currentStreak > 0 ? "moon.stars.fill" : "moon")
+                .font(.system(size: 15))
+                .foregroundStyle(
+                    env.streakManager.currentStreak > 0
+                        ? AnyShapeStyle(LinearGradient(
+                            colors: [.sorayomiPrimary, .sorayomiSecondary],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                          ))
+                        : AnyShapeStyle(Color.sorayomiTextSecondary.opacity(0.3))
+                )
+        }
+    }
+
+    /// 前後マイルストーン間でのストリーク進捗割合（0.0〜1.0）
+    private var streakProgressFraction: Double {
+        let streak = env.streakManager.currentStreak
+        guard streak > 0 else { return 0 }
+        let milestones = StreakManager.milestones
+        let prevDays = milestones.last  { $0.days <= streak }?.days ?? 0
+        let nextDays = milestones.first { $0.days >  streak }?.days
+        guard let next = nextDays, next > prevDays else { return 1.0 }
+        return min(1.0, Double(streak - prevDays) / Double(next - prevDays))
     }
 
     private var primaryActions: some View {
@@ -412,9 +530,10 @@ struct HomeScreen: View {
                                 .foregroundStyle(Color.sorayomiTextSecondary)
 
                             HStack(spacing: 5) {
+                                let completedCount = min(env.dailyFortuneTracker.usedSystemIDs.count, 5)
                                 ForEach(1...5, id: \.self) { i in
                                     Circle()
-                                        .fill(i <= dailyFortune.overallScore
+                                        .fill(i <= completedCount
                                               ? Color.sorayomiPrimary
                                               : Color.sorayomiPrimary.opacity(0.15))
                                         .frame(width: 9, height: 9)

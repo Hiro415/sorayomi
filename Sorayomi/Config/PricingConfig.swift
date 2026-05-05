@@ -18,7 +18,7 @@ final class PricingConfig {
     var costBirthdayPersonality: Int = 1
     var costOmikuji: Int = 0
     var costRokuyo: Int = 0
-    var costTarot: Int = 1
+    var costTarot: Int = 2
     var costNumerology: Int = 2
     var costNineStarKi: Int = 2
     var costGeneralConsultation: Int = 1

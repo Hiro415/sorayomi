@@ -22,7 +22,7 @@ final class RemoteConfigService {
         RemoteConfigKey.pricingCreditsPack12.rawValue: 12,
         RemoteConfigKey.pricingCreditsPack24.rawValue: 24,
         RemoteConfigKey.pricingCostHoroscope.rawValue: 0,
-        RemoteConfigKey.pricingCostTarot.rawValue: 1,
+        RemoteConfigKey.pricingCostTarot.rawValue: 2,
         RemoteConfigKey.pricingCostNumerology.rawValue: 2,
         RemoteConfigKey.pricingCostNineStarKi.rawValue: 2,
         RemoteConfigKey.pricingFreeCreditsInitial.rawValue: 3,

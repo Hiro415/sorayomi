@@ -349,6 +349,7 @@ private struct CreditPackOption: View {
                         Text("\(credits) クレジット")
                             .font(SorayomiTypography.headline)
                             .foregroundStyle(Color.sorayomiTextPrimary)
+                            .lineLimit(1)
                         if let badge {
                             Text(badge)
                                 .font(.caption2)
@@ -358,6 +359,7 @@ private struct CreditPackOption: View {
                                 .padding(.vertical, 2)
                                 .background(Color.sorayomiAccent)
                                 .clipShape(Capsule())
+                                .fixedSize(horizontal: true, vertical: false)
                         }
                     }
                     HStack(spacing: Spacing.xxs) {
@@ -372,8 +374,7 @@ private struct CreditPackOption: View {
                             .foregroundStyle(Color.sorayomiPrimary)
                     }
                 }
-
-                Spacer()
+                .frame(maxWidth: .infinity, alignment: .leading)
 
                 Text(price)
                     .font(SorayomiTypography.title3)
