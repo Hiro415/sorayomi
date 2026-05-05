@@ -96,7 +96,9 @@ struct ReadingScreen: View {
                     env.adRewardManager.startWatchingAd()
                     env.creditWalletService.loadWallet()
                 },
-                isAdRewardAvailable: env.featureFlags.isAdRewardEnabled && env.creditWalletService.isAdRewardAvailableToday && !env.storeKitManager.isSubscribed
+                isAdRewardAvailable: env.featureFlags.isAdRewardEnabled && env.creditWalletService.isAdRewardAvailableToday && !env.storeKitManager.isSubscribed,
+                prices: (env.storeKitManager.products + env.storeKitManager.subscriptions)
+                    .reduce(into: [:]) { $0[$1.id] = $1.displayPrice }
             )
         }
         .onAppear {

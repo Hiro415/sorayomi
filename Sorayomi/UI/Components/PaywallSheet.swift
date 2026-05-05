@@ -13,6 +13,14 @@ struct PaywallSheet: View {
     var onRestore: (() -> Void)? = nil
     var onWatchAd: (() -> Void)? = nil
     var isAdRewardAvailable: Bool = false
+    /// StoreKit から取得したライブ価格（productId → displayPrice）
+    /// 空の場合はビュー内のフォールバック価格を使用する
+    var prices: [String: String] = [:]
+
+    /// 指定プロダクトの表示価格を返す。StoreKit 価格が取得できない場合はフォールバックを使用。
+    private func price(for productId: String, fallback: String) -> String {
+        prices[productId] ?? fallback
+    }
 
     var body: some View {
         NavigationStack {
@@ -54,8 +62,8 @@ struct PaywallSheet: View {
                     VStack(spacing: Spacing.sm) {
                         CreditPackOption(
                             credits: 12,
-                            price: "¥480",
-                            unitPrice: "¥40/回",
+                            price: price(for: ProductIdentifiers.pack12, fallback: "¥480"),
+                            unitPrice: ProductIdentifiers.unitPrice(for: ProductIdentifiers.pack12),
                             label: "おすすめパック",
                             badge: "人気",
                             productId: ProductIdentifiers.pack12,
@@ -63,8 +71,8 @@ struct PaywallSheet: View {
                         )
                         CreditPackOption(
                             credits: 30,
-                            price: "¥980",
-                            unitPrice: "¥33/回",
+                            price: price(for: ProductIdentifiers.pack30, fallback: "¥980"),
+                            unitPrice: ProductIdentifiers.unitPrice(for: ProductIdentifiers.pack30),
                             label: "じっくり相談パック",
                             badge: nil,
                             productId: ProductIdentifiers.pack30,
@@ -72,8 +80,8 @@ struct PaywallSheet: View {
                         )
                         CreditPackOption(
                             credits: 60,
-                            price: "¥1,600",
-                            unitPrice: "¥27/回",
+                            price: price(for: ProductIdentifiers.pack60, fallback: "¥1,600"),
+                            unitPrice: ProductIdentifiers.unitPrice(for: ProductIdentifiers.pack60),
                             label: "たっぷり鑑定パック",
                             badge: "最安",
                             productId: ProductIdentifiers.pack60,
@@ -188,11 +196,11 @@ struct PaywallSheet: View {
                     Spacer()
 
                     VStack(alignment: .trailing, spacing: 2) {
-                        Text("¥160")
+                        Text(price(for: ProductIdentifiers.starterPack, fallback: "¥160"))
                             .font(SorayomiTypography.title3)
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
-                        Text("¥32/回")
+                        Text(ProductIdentifiers.unitPrice(for: ProductIdentifiers.starterPack))
                             .font(SorayomiTypography.caption)
                             .foregroundStyle(Color.white.opacity(0.7))
                     }
@@ -256,7 +264,7 @@ struct PaywallSheet: View {
                         }
                         Spacer()
                         VStack(alignment: .trailing, spacing: 0) {
-                            Text("¥980")
+                            Text(price(for: ProductIdentifiers.monthlyPremium, fallback: "¥980"))
                                 .font(SorayomiTypography.title3)
                                 .fontWeight(.bold)
                             Text("/月")

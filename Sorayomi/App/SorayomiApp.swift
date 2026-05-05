@@ -26,6 +26,11 @@ struct SorayomiApp: App {
                     case .active:
                         // フォアグラウンド復帰: ウォレット再読み込み
                         appEnvironment.creditWalletService.loadWallet()
+                        // サブスクリプション状態を再確認（期限切れ・支払い失敗を検出）
+                        Task {
+                            await appEnvironment.storeKitManager.checkSubscriptionStatus()
+                            appEnvironment.adRewardManager.isSubscribed = appEnvironment.storeKitManager.isSubscribed
+                        }
                     default:
                         break
                     }

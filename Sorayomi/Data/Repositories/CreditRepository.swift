@@ -35,6 +35,26 @@ final class CreditRepository {
         "credit_transactions_\(userId)"
     }
 
+    /// 処理済み StoreKit トランザクション ID のキー（重複付与防止）
+    private let processedTransactionsKey = "sorayomi_processed_storekit_transactions"
+
+    // MARK: - Idempotency Helpers
+
+    /// 指定トランザクションが処理済みかどうかを返す
+    private func hasProcessedTransaction(_ transactionId: String) -> Bool {
+        let ids: [String] = store.load(forKey: processedTransactionsKey) ?? []
+        return ids.contains(transactionId)
+    }
+
+    /// トランザクションを処理済みとしてマーク（最大200件保持）
+    private func markTransactionProcessed(_ transactionId: String) {
+        var ids: [String] = store.load(forKey: processedTransactionsKey) ?? []
+        guard !ids.contains(transactionId) else { return }
+        ids.insert(transactionId, at: 0)
+        if ids.count > 200 { ids = Array(ids.prefix(200)) }
+        store.save(ids, forKey: processedTransactionsKey)
+    }
+
     // MARK: - Wallet CRUD
 
     /// ウォレットを取得（存在しない場合は残高0の新規ウォレットを作成）
@@ -94,6 +114,8 @@ final class CreditRepository {
     // MARK: - Credit Operations
 
     /// クレジットを追加（購入・付与時）
+    /// - Parameters:
+    ///   - storeKitTransactionId: StoreKit トランザクション ID（指定時、重複付与を防止）
     /// - Returns: 更新後のウォレット
     @discardableResult
     func addCredits(
@@ -101,10 +123,21 @@ final class CreditRepository {
         amount: Int,
         type: TransactionType,
         productId: String? = nil,
-        description: String? = nil
+        description: String? = nil,
+        storeKitTransactionId: String? = nil
     ) -> CreditWallet {
         lock.lock()
         defer { lock.unlock() }
+
+        // StoreKit トランザクションの重複付与を防止
+        if let txId = storeKitTransactionId {
+            guard !hasProcessedTransaction(txId) else {
+                #if DEBUG
+                print("[CreditRepository] Skipping duplicate transaction: \(txId)")
+                #endif
+                return getWalletUnsafe(userId: userId)
+            }
+        }
 
         var wallet = getWalletUnsafe(userId: userId)
 
@@ -129,9 +162,14 @@ final class CreditRepository {
 
         store.save(wallet, forKey: walletKey(for: userId))
 
+        // StoreKit トランザクションを処理済みとしてマーク
+        if let txId = storeKitTransactionId {
+            markTransactionProcessed(txId)
+        }
+
         // 取引記録を保存
         let transaction = CreditTransaction(
-            id: UUID().uuidString,
+            id: storeKitTransactionId ?? UUID().uuidString,
             userId: userId,
             type: type,
             amount: amount,

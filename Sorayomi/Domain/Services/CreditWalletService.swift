@@ -211,7 +211,8 @@ final class CreditWalletService {
             amount: amount,
             type: .purchase,
             productId: productId,
-            description: "クレジット購入 (Transaction: \(transactionId))"
+            description: "クレジット購入 (Transaction: \(transactionId))",
+            storeKitTransactionId: transactionId
         )
 
         balance = updatedWallet.balance

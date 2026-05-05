@@ -104,6 +104,13 @@ final class AppEnvironment {
 
         // 起動時にウォレット残高をストレージから読み込み
         creditWalletService.loadWallet()
+
+        // トランザクションリスナーとウォレットを接続
+        // クラッシュ/中断後の未完了購入を復旧し、idempotency ガード付きでクレジットを付与する
+        let walletService = creditWalletService
+        storeKitManager.onCreditTransaction = { credits, productId, transactionId in
+            await walletService.addCredits(credits, productId: productId, transactionId: transactionId)
+        }
     }
 
     // MARK: - Actions

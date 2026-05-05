@@ -72,6 +72,11 @@ final class StoreKitManager {
     /// トランザクション監視タスク
     private var transactionListenerTask: Task<Void, Never>?
 
+    /// クラッシュ/中断後に未完了クレジットトランザクションを検出したときのコールバック
+    /// AppEnvironment が CreditWalletService と接続する。
+    /// - Parameters: (credits, productId, transactionId)
+    var onCreditTransaction: ((Int, String, String) async -> Void)?
+
     // MARK: - Starter Pack Persistence Key
 
     private let starterPackUsedKey = "sorayomi_starter_pack_used"
@@ -284,6 +289,13 @@ final class StoreKitManager {
                     } else {
                         let credits = ProductIdentifiers.creditsFor(productId: transaction.productID)
                         if credits > 0 {
+                            // クレジット付与: コールバック経由で CreditWalletService に通知
+                            // （クラッシュ/中断後の未完了トランザクション復旧も含む）
+                            let transactionId = String(transaction.id)
+                            let productId = transaction.productID
+                            if let handler = await self?.onCreditTransaction {
+                                await handler(credits, productId, transactionId)
+                            }
                             await self?.applyTransactionUpdate(credits: credits)
                         }
                         if ProductIdentifiers.isStarterPack(transaction.productID) {

@@ -119,6 +119,13 @@ final class StoreViewModel {
             isSubscribed = true
             didSubscribe = true
 
+            // 同セッション内でも月次クレジットを即時付与（次回起動まで待たない）
+            env.creditWalletService.grantMonthlyPremiumCredits(
+                allowance: env.pricingConfig.premiumMonthlyCredits,
+                carryoverCap: env.pricingConfig.creditCarryoverCap
+            )
+            env.creditWalletService.loadWallet()
+
             env.analyticsService.track(.subscriptionStarted(productId: product.id))
 
             #if DEBUG
