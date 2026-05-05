@@ -111,7 +111,14 @@ struct ReadingScreen: View {
                 isAdRewardAvailable: env.featureFlags.isAdRewardEnabled && env.creditWalletService.isAdRewardAvailableToday && !env.storeKitManager.isSubscribed,
                 isPurchasing: isPaywallPurchasing,
                 prices: (env.storeKitManager.products + env.storeKitManager.subscriptions)
-                    .reduce(into: [:]) { $0[$1.id] = $1.displayPrice }
+                    .reduce(into: [:]) { $0[$1.id] = $1.displayPrice },
+                unitPrices: env.storeKitManager.products
+                    .reduce(into: [:]) { dict, product in
+                        let credits = ProductIdentifiers.creditsFor(productId: product.id)
+                        guard credits > 0 else { return }
+                        let perCredit = product.price / Decimal(credits)
+                        dict[product.id] = perCredit.formatted(product.priceFormatStyle) + "/回"
+                    }
             )
         }
         .onChange(of: viewModel.showPaywall) { _, isShowing in
