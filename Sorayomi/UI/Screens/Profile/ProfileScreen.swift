@@ -632,6 +632,8 @@ private struct ProfileAvatarView: View {
             }
 
             // Camera badge
+            // ringSize = size + 7 なのでリングはアバターより片側 3.5pt はみ出す。
+            // offset でバッジをリング外縁の外側へ逃がし重なりを解消する。
             Circle()
                 .fill(Color.white)
                 .frame(width: cameraBadgeSize, height: cameraBadgeSize)
@@ -640,6 +642,7 @@ private struct ProfileAvatarView: View {
                         .font(.system(size: cameraBadgeSize * 0.4, weight: .bold))
                         .foregroundStyle(Color.sorayomiPrimary)
                 )
+                .offset(x: ringLineWidth + 1, y: ringLineWidth + 1)
         }
         // Progress ring — drawn as overlay so it doesn't affect layout
         .overlay(alignment: .center) {
